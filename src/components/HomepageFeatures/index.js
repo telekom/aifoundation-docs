@@ -5,34 +5,32 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: '',
-    videoUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7184294336417669120/?updateEntityUrn=urn%3Ali%3Afs_updateV2%3A%28urn%3Ali%3Aactivity%3A7184294336417669120%2CFEED_DETAIL%2CEMPTY%2CDEFAULT%2Cfalse%29&originTrackingId=q%2FXjK0YOQKaIzgxMXvzrcQ%3D%3D',
-    description: (
-      <>
-        Get started with create-tsi and make your first LLM powered project.
-      </>
-    ),
+    title: 'Create-TSI Demo',
+    videoUrl: 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7184578562316779521?compact=1',
+    //description: (
+   //   <>
+   //     Get started with create-tsi and make your first LLM powered project.
+   //   </>
+   // ),
   },
 ];
 
 function Feature({ videoUrl, title, description }) {
   return (
     <div className={clsx('col col--4')}>
-      <div className="text--center">
-        {/* Render the video */}
-        <iframe
-          width="200%"
-          height="500px"
-          src={videoUrl}
-          title={title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        ></iframe>
-      </div>
-      <div className="text--center padding-horiz--md">
+      <div >
+      <div >
         <Heading as="h3">{title}</Heading>
         <p>{description}</p>
+      </div>
+        <iframe
+          height="399" 
+          width="710"
+           frameborder="0" 
+           allowfullscreen=""
+          src={videoUrl}
+          title={title}
+        ></iframe>
       </div>
     </div>
   );

@@ -19,12 +19,11 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg" 
-            to="/docs/Quick Start" style={{ height: '150px', width: "250px" }}> 
-            Quick Start Tutorial
+            to="https://github.com/telekom/create-tsi" style={{ height: '150px', width: "250px" }}> 
+            💡Create-TSI Github
             <div className="description-container" style={{wordWrap: 'break-word' }}>
               <p className="description-text" style={{ fontSize: '14px', fontWeight: 'normal' }}>
-                Get started with create-tsi <br/>
-                and make your first LLM powered <br/> project.
+                Link to our Github repository
               </p>
             </div>
           </Link>
@@ -32,12 +31,11 @@ function HomepageHeader() {
           <div style={{ marginLeft: '20px' }}></div>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/Guides/chatbot" style={{ height: '150px', width: "250px" }}>
-            Examples
+            to="https://playground.llmhub.t-systems.net/" style={{ height: '150px', width: "250px" }}>
+            💻LLM Playground
           <div className="description-container" style={{wordWrap: 'break-word' }}>
               <p className="description-text" style={{ fontSize: '14px', fontWeight: 'normal' }}>
-              Explore use cases <br/>
-              and examples to get inspired.
+              Link to our LLM Playground
               </p>
             </div>
           </Link>

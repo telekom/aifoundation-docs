@@ -9,11 +9,11 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'AI Foundation Services',
-  tagline: 'create-tsi',
-  favicon: 'img/tsystems.png',
+  //tagline: 'create-tsi',
+  favicon: 'static/img/favicon_180x180.png',
 
   // Set the production url of your site here
-  url: 'https://t-systems.create-tsi.com',
+  url: 'https://docs.llmhub.t-systems.net',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -21,7 +21,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'T-Systems', // Usually your GitHub org/user name.
-  projectName: 'create-tsi', // Usually your repo name.
+  projectName: 'AI Foundation Services', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -41,101 +41,39 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
-        //blog: {
-          //showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          //editUrl:
-          //  'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        //},
+
         theme: {
           customCss: './src/css/custom.css',
         },
       }),
     ],
+    
   ],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/tsystems.png',
       navbar: {
-        title: 'Overview',
-        logo: {
-          alt: 'My Site Logo',
-          src: 'img/tsystems.png',
-        },
-        items: [
-          {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Tutorial',
-          },
-         // {to: '/blog', label: 'Blog', position: 'left'},
-          {
-            href: 'https://github.com/telekom/create-tsi/tree/main',
-            label: 'GitHub',
-            position: 'right',
-          },
-        ],
       },
       footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Tutorial',
-                to: '/docs/intro',
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                "label": "Website",
-                "href": "https://www.t-systems.com/de/en"
-              },
-              {
-                "label": "LinkedIn",
-                "href": "https://www.linkedin.com/company/t-systems/"
-              },
-             // {
-               // label: 'Twitter',
-               // href: 'https://twitter.com/docusaurus',
-              //},
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-             // {
-               // label: 'Blog',
-                // to: '/blog',
-              //},
-              {
-                label: 'GitHub',
-                href: 'https://github.com/telekom/create-tsi/tree/main',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} T-Systems.`,
       },
       prism: {
-        theme: prismThemes.github,
-        darkTheme: prismThemes.dracula,
       },
+      themes: [
+        [
+          /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+          ({
+            hashed: true,
+            highlightSearchTermsOnTargetPage: true,
+            explicitSearchResultPath: true,
+            baseUrl: "/search",
+          }),
+        ],
+      ],
     }),
+    
 };
 
 export default config;

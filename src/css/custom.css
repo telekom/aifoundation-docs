@@ -4,27 +4,55 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
-:root {
-  --ifm-color-primary: #E20074;
-  --ifm-color-primary-dark: #e20075;
-  --ifm-color-primary-darker: #E20074;
-  --ifm-color-primary-darkest: #E20074;
-  --ifm-color-primary-light: rgb(252, 40, 150);
-  --ifm-color-primary-lighter: #d63a8b;
-  --ifm-color-primary-lightest: #d978aa;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+ :root {
+  --ifm-color-primary:  var(--telekom-color-primary-standard);
+  --font-size: var(--telekom-typography-font-size-caption);
+  --font-color: var(--telekom-color-text-and-icon-standard);
+  --font-large: var(--telekom-text-style-ui);
+  font: var(--telekom-text-style-body)
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #E20074;
-  --ifm-color-primary-dark: #e20075;
-  --ifm-color-primary-darker: #E20074;
-  --ifm-color-primary-darkest: #E20074;
-  --ifm-color-primary-light: rgb(252, 40, 150);
-  --ifm-color-primary-lighter: #d63a8b;
-  --ifm-color-primary-lightest: #d978aa;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+scale-telekom-header {
+  --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15);
+  --background: var(--telekom-color-background-surface);
+  --background-logo: var(--telekom-color-primary-standard);
+  --transition-common-scrolled: height var(--telekom-motion-duration-immediate)
+    var(--telekom-motion-easing-standard),
+    width var(--telekom-motion-duration-immediate),
+    margin var(--telekom-motion-duration-immediate);
+  --font-size-app-name: var(--telekom-typography-font-size-body);
+  --line-height-app-name: var(--telekom-typography-line-spacing-tight);
+  --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold);
+}
+
+scale-telekom-nav-list {
+  --width: 100%;
+  --height: 100%;
+  --spacing-x-start: 0;
+  --flex-direction: row;
+}
+
+scale-telekom-nav-item {
+  --focus-outline: var(--telekom-line-weight-highlight) solid
+    var(--telekom-color-functional-focus-standard);
+  --color: var(--telekom-color-text-and-icon-standard);
+  
+}
+
+ :host {
+  --font-size: var(--telekom-typography-font-size-caption);
+  --font-color: var(--telekom-color-text-and-icon-white-standard);
+  --font-size: var(--telekom-typography-font-size-caption);
+  --font-color: var(--telekom-color-text-and-icon-white-standard);
+  --font-large: var(--telekom-text-style-ui);
+  --font-large: var(--telekom-text-style-ui);
+  --background-footer: var(--telekom-color-ui-black);
+  --background-footer-minimal: var(--telekom-color-background-canvas);
+} 
+
+
+body {
+  background-color: var(--telekom-color-background-canvas);
+  color: var(--telekom-color-text-and-icon-standard);
 }
