@@ -10,7 +10,7 @@ export default function Navbar() {
           <a href="/">Home</a>
         </scale-telekom-nav-item>
         <scale-telekom-nav-item>
-          <a href="docs/Overview">Overview</a>
+          <a href="docs/Overview">Tutorials</a>
         </scale-telekom-nav-item>
       </scale-telekom-nav-list>
       

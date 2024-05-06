@@ -10,7 +10,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'AI Foundation Services',
   //tagline: 'create-tsi',
-  favicon: 'static/img/favicon_180x180.png',
+  favicon: 'img/favicon_180x180.png',
 
   // Set the production url of your site here
   url: 'https://docs.llmhub.t-systems.net',
@@ -48,7 +48,10 @@ const config = {
         },
       }),
     ],
-    
+  ],
+  plugins: [
+    require.resolve("docusaurus-plugin-search-local"),
+
   ],
 
   themeConfig:
@@ -61,17 +64,18 @@ const config = {
       },
       prism: {
       },
-      themes: [
-        [
+      //themes: [
+        //[
           /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-          ({
-            hashed: true,
-            highlightSearchTermsOnTargetPage: true,
-            explicitSearchResultPath: true,
-            baseUrl: "/search",
-          }),
-        ],
-      ],
+         // ({
+          //  hashed: true,
+           // highlightSearchTermsOnTargetPage: true,
+           // explicitSearchResultPath: true,
+           // docsRouteBasePath: '/docs',
+           // searchRoute: '/search'
+         // }),
+        //],
+      //],
     }),
     
 };

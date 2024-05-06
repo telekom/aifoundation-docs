@@ -56,3 +56,11 @@ body {
   background-color: var(--telekom-color-background-canvas);
   color: var(--telekom-color-text-and-icon-standard);
 }
+
+#search-bar {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
