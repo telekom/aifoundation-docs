@@ -12,8 +12,7 @@
   font: var(--telekom-text-style-body)
 }
 
-
-scale-telekom-header {
+.navbar{
   --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15);
   --background: var(--telekom-color-background-surface);
   --background-logo: var(--telekom-color-primary-standard);
@@ -26,6 +25,21 @@ scale-telekom-header {
   --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold);
 }
 
+
+scale-telekom-header {
+  --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15);
+  --background: var(--telekom-color-background-surface);
+  --background-logo: var(--telekom-color-primary-standard);
+  --transition-common-scrolled: height var(--telekom-motion-duration-immediate)
+    var(--telekom-motion-easing-standard),
+    width var(--telekom-motion-duration-immediate),
+    margin var(--telekom-motion-duration-immediate);
+  --font-size-app-name: var(--telekom-typography-font-size-body);
+  --line-height-app-name: var(--telekom-typography-line-spacing-tight);
+  --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold);
+  padding: 0;
+}
+
 scale-telekom-nav-list {
   --width: 100%;
   --height: 100%;
@@ -36,8 +50,7 @@ scale-telekom-nav-list {
 scale-telekom-nav-item {
   --focus-outline: var(--telekom-line-weight-highlight) solid
     var(--telekom-color-functional-focus-standard);
-  --color: var(--telekom-color-text-and-icon-standard);
-  
+  --color: var(--telekom-color-text-and-icon-standard); 
 }
 
  :host {

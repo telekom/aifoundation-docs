@@ -40,6 +40,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          routeBasePath: '/',
           sidebarPath: './sidebars.js',
         },
 
@@ -51,7 +52,6 @@ const config = {
   ],
   plugins: [
     require.resolve("docusaurus-plugin-search-local"),
-
   ],
 
   themeConfig:

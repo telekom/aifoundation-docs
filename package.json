@@ -23,7 +23,8 @@
     "docusaurus-plugin-search-local": "^2.0.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.2.1",
