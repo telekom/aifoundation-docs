@@ -51,7 +51,7 @@ const config = {
     ],
   ],
   plugins: [
-    require.resolve("docusaurus-plugin-search-local"),
+    require.resolve("docusaurus-plugin-search-local"),       
   ],
 
   themeConfig:
@@ -63,6 +63,7 @@ const config = {
       footer: {
       },
       prism: {
+        darkTheme: prismThemes.dracula,
       },
       //themes: [
         //[

@@ -9,22 +9,24 @@
   --font-size: var(--telekom-typography-font-size-caption);
   --font-color: var(--telekom-color-text-and-icon-standard);
   --font-large: var(--telekom-text-style-ui);
-  font: var(--telekom-text-style-body)
+  --ifm-navbar-height: 80px;
+  font: var(--telekom-text-style-body);
+  
 }
 
-.navbar{
-  --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15);
-  --background: var(--telekom-color-background-surface);
-  --background-logo: var(--telekom-color-primary-standard);
+.navbar{  
+  --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15) !important; 
+  --background: var(--telekom-color-background-surface) !important;
+  --background-logo: var(--telekom-color-primary-standard) !important;
   --transition-common-scrolled: height var(--telekom-motion-duration-immediate)
     var(--telekom-motion-easing-standard),
     width var(--telekom-motion-duration-immediate),
-    margin var(--telekom-motion-duration-immediate);
-  --font-size-app-name: var(--telekom-typography-font-size-body);
-  --line-height-app-name: var(--telekom-typography-line-spacing-tight);
-  --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold);
+    margin var(--telekom-motion-duration-immediate) !important;
+  --font-size-app-name: var(--telekom-typography-font-size-body) !important;
+  --line-height-app-name: var(--telekom-typography-line-spacing-tight) !important;
+  --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold) !important;
+  padding: 0;
 }
-
 
 scale-telekom-header {
   --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15);
@@ -37,7 +39,6 @@ scale-telekom-header {
   --font-size-app-name: var(--telekom-typography-font-size-body);
   --line-height-app-name: var(--telekom-typography-line-spacing-tight);
   --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold);
-  padding: 0;
 }
 
 scale-telekom-nav-list {
@@ -68,6 +69,8 @@ scale-telekom-nav-item {
 body {
   background-color: var(--telekom-color-background-canvas);
   color: var(--telekom-color-text-and-icon-standard);
+  --telekom-highlighted-code-line-bg: rgb(0, 0, 0);
+  --ifm-code-background: #6c3bdb;
 }
 
 #search-bar {

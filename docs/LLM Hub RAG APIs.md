@@ -3,23 +3,23 @@ sidebar_position: 6
 ---
 # LLM HUB RAG APIs
 
-### Get Started
+## Get Started
 
-#### Introduction
+### Introduction
 
 You can interact with the API through HTTP requests from any language.
 
-#### Authentication
+### Authentication
 
 None as of now
 
-# Endpoints
+## Endpoints
 
-# Session Management
+### Session Management
 
 Session endpoints are used to manage user chat sessions.
 
-# List Sessions
+### List Sessions
 
 |
 
@@ -71,7 +71,7 @@ Response:
 
  |
 
-# Create Session
+### Create Session
 
 |
 
@@ -129,7 +129,7 @@ Response:
 
  |
 
-# Remove Session
+### Remove Session
 
 |
 
@@ -187,9 +187,9 @@ Response:
 
  |
 
-# Configuration Management
+## Configuration Management
 
-# Get Models
+### Get Models
 
 |
 
@@ -235,7 +235,7 @@ Response:
 
  |
 
-# Get Configuration
+### Get Configuration
 
 |
 
@@ -307,7 +307,7 @@ Response:
 
  |
 
-# Update Configuration
+### Update Configuration
 
 |
 
@@ -411,9 +411,9 @@ Response:
 
  |
 
-# File Management
+## File Management
 
-# Upload File
+### Upload File
 
 |
 
@@ -467,7 +467,7 @@ Response:
 
  |
 
-# Remove File
+### Remove File
 
 |
 
@@ -503,9 +503,9 @@ Example Request:
 
  |
 
-# Context Management
+## Context Management
 
-# Get Session Context
+### Get Session Context
 
 |
 
@@ -575,7 +575,7 @@ Response:
 
  |
 
-# Add Session Context
+### Add Session Context
 
 |
 
@@ -663,7 +663,7 @@ Response:
 
  |
 
-# Remove Session Context
+### Remove Session Context
 
 |
 
@@ -737,9 +737,9 @@ Response:
 
  |
 
-# Chat
+## Chat
 
-# AskChat
+### AskChat
 
 |
 

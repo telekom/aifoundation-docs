@@ -28,7 +28,8 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.2.1",
-    "@docusaurus/types": "3.2.1"
+    "@docusaurus/types": "3.2.1",
+    "postcss-preset-env": "^9.5.11"
   },
   "browserslist": {
     "production": [
