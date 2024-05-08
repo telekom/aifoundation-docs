@@ -11,7 +11,6 @@
   --font-large: var(--telekom-text-style-ui);
   --ifm-navbar-height: 80px;
   font: var(--telekom-text-style-body);
-  
 }
 
 .navbar{  
@@ -69,8 +68,9 @@ scale-telekom-nav-item {
 body {
   background-color: var(--telekom-color-background-canvas);
   color: var(--telekom-color-text-and-icon-standard);
-  --telekom-highlighted-code-line-bg: rgb(0, 0, 0);
-  --ifm-code-background: #6c3bdb;
+  --docusaurus-highlighted-code-line-bg: rgb(0, 0, 0);
+  --ifm-code-background: #e20074;
+  opacity: 1;
 }
 
 #search-bar {
