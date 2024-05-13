@@ -13,6 +13,81 @@
   font: var(--telekom-text-style-body);
 }
 
+body:not(.navigation-with-keyboard) *:not(input):focus {
+  outline: var(--telekom-color-text-and-icon-standard);
+}
+
+.menu__link:hover, .menu__caret:hover {
+  background: var(--ifm-menu-color-background-hover);
+}
+
+
+.clean-btn {
+  background: #ffffff48;
+  border: none;
+  color: var(--telekom-color-text-and-icon-standard);
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+
+
+.menu__caret:before {
+  content: '';
+  color: var(--telekom-color-text-and-icon-standard);
+  background: var(--ifm-menu-link-sublist-icon) 50% / 2rem 2rem;
+  filter: var(--ifm-menu-link-sublist-icon-filter);
+  height: 1.25rem;
+  transform: rotate(180deg);
+  width: 1.25rem;
+  transition: transform var(--ifm-transition-fast) linear;
+}
+
+.breadcrumbs__item {
+  display: inline-block;
+  color: var(--telekom-color-text-and-icon-standard);
+}
+
+.breadcrumbs__item::after {
+  background: #ffffff48;
+}
+
+.breadcrumbs__item:not(:last-child):after {
+  background: var(--ifm-breadcrumb-separator) center;
+  color: var(--telekom-color-text-and-icon-standard);
+  content: ' ';
+  display: inline-block;
+  filter: var(--ifm-breadcrumb-separator-filter);
+  height: calc(var(--ifm-breadcrumb-separator-size)* var(--ifm-breadcrumb-size-multiplier)* var(--ifm-breadcrumb-separator-size-multiplier));
+  margin: 0 var(--ifm-breadcrumb-spacing);
+  opacity: 0.5;
+  width: calc(var(--ifm-breadcrumb-separator-size)* var(--ifm-breadcrumb-size-multiplier)* var(--ifm-breadcrumb-separator-size-multiplier));
+}
+
+.breadcrumbs__link {
+  border-radius: var(--ifm-breadcrumb-border-radius);
+  color: var(--telekom-color-text-and-icon-standard);
+  display: inline-block;
+  font-size: calc(1rem * var(--ifm-breadcrumb-size-multiplier));
+  padding: calc(var(--ifm-breadcrumb-padding-vertical)* var(--ifm-breadcrumb-size-multiplier)) calc(var(--ifm-breadcrumb-padding-horizontal)* var(--ifm-breadcrumb-size-multiplier));
+  transition-property: background, color;
+  transition-duration: var(--ifm-transition-fast);
+  transition-timing-function: var(--ifm-transition-timing-default);
+}
+
+@media only screen and (min-width: 2000px){
+  div#__docusaurus_skipToContent_fallback {
+    padding-top: 35px;
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  div#__docusaurus_skipToContent_fallback {
+    padding-top: 0px;
+  }
+}
+
+
 .navbar{  
   --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15) !important; 
   --background: var(--telekom-color-background-surface) !important;
@@ -24,7 +99,11 @@
   --font-size-app-name: var(--telekom-typography-font-size-body) !important;
   --line-height-app-name: var(--telekom-typography-line-spacing-tight) !important;
   --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold) !important;
-  padding: 0;
+  max-width: var(--_max-width-container);
+  width : 100%;
+  z-index : 9999;
+  padding: 0px 0 0px 0px;
+  
 }
 
 scale-telekom-header {
@@ -38,6 +117,8 @@ scale-telekom-header {
   --font-size-app-name: var(--telekom-typography-font-size-body);
   --line-height-app-name: var(--telekom-typography-line-spacing-tight);
   --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold);
+  max-width: var(--_max-width-container);
+  z-index : 9999;
 }
 
 scale-telekom-nav-list {
@@ -65,6 +146,7 @@ scale-telekom-nav-item {
 } 
 
 
+
 body {
   background-color: var(--telekom-color-background-canvas);
   color: var(--telekom-color-text-and-icon-standard);
@@ -80,3 +162,4 @@ body {
 .visible {
   display: block;
 }
+
