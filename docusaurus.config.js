@@ -51,7 +51,16 @@ const config = {
     ],
   ],
   plugins: [
-    require.resolve("docusaurus-plugin-search-local"),       
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      {
+        hashed: true,
+        docsRouteBasePath: "/",
+        indexBlog: false,
+        
+        highlightSearchTermsOnTargetPage: true,
+      },
+    ],     
   ],
 
   themeConfig:
@@ -61,15 +70,6 @@ const config = {
       prism: {
         darkTheme: prismThemes.dracula,
       },
-      themes: [
-        [
-          /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-          ({
-            hashed: true,
-            docsRouteBasePath: '/',
-          }),
-        ],
-      ],
     }),
 };
 
