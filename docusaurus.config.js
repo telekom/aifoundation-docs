@@ -20,7 +20,7 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'T-Systems', // Usually your GitHub org/user name.
+  organizationName: 'Telekom', // Usually your GitHub org/user name.
   projectName: 'AI Foundation Services', // Usually your repo name.
 
   onBrokenLinks: 'throw',
@@ -58,27 +58,20 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      navbar: {
-      },
-      footer: {
-      },
       prism: {
         darkTheme: prismThemes.dracula,
       },
-      //themes: [
-        //[
+      themes: [
+        [
           /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-         // ({
-          //  hashed: true,
-           // highlightSearchTermsOnTargetPage: true,
-           // explicitSearchResultPath: true,
-           // docsRouteBasePath: '/docs',
-           // searchRoute: '/search'
-         // }),
-        //],
-      //],
+          ({
+            hashed: true,
+            docsRouteBasePath: '/',
+          }),
+        ],
+      ],
     }),
-    
 };
+
 
 export default config;

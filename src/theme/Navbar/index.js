@@ -16,7 +16,7 @@ main-nav-aria-label="Main navigation">
           <a href="/Introduction">Introduction</a>
         </scale-telekom-nav-item>
         <scale-telekom-nav-item>
-          <a href="/Guides/Chatbot">Examples</a>
+          <a href="/Guides/RAG%20Guide">Examples</a>
         </scale-telekom-nav-item>
       </scale-telekom-nav-list>
       
@@ -33,6 +33,14 @@ main-nav-aria-label="Main navigation">
         <a href="https://playground.llmhub.t-systems.net/">
             <scale-badge no-dot label="LLM Playground">
             <scale-icon-action-launch accessibility-title="launch"/>
+            </scale-badge>
+        </a>
+        </scale-telekom-nav-item>
+
+        <scale-telekom-nav-item>
+        <a href="https://github.com/telekom/create-tsi/tree/main">
+            <scale-badge no-dot label="Github">
+            <scale-icon-action-link accessibility-title="link"/>
             </scale-badge>
         </a>
         </scale-telekom-nav-item>
