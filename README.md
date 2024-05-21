@@ -15,10 +15,14 @@ $ npm init docusaurus
 ```
 #### Installing Telekom Design Dependencies
 
-From  [Telekom Guidelines](https://telekom.github.io/scale/?path=/docs/setup-info-getting-started-for-developers--page)
+From  [Telekom Guidelines](https://telekom.github.io/scale/?path=/docs/setup-info-getting-started-for-developers--page), run these commands to install dependencies.
 
 ```
 $ npm install @telekom/scale-components@next
+```
+
+```
+$ npm install @telekom/scale-components-react@next
 ```
 
 ### Local Development
