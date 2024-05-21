@@ -45,4 +45,4 @@ This command is used to test the build locally.
 
 ### Deployment
 
-The deployment to Github Pages is automates using Github actions.
+The deployment to Github Pages is automated using Github actions.
