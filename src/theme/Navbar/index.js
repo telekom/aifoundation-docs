@@ -52,8 +52,8 @@ main-nav-aria-label="Main navigation">
         </scale-badge>
         </button>
   </scale-telekom-nav-item>*/}
-        
 
+  
       </scale-telekom-nav-list> 
     </scale-telekom-header>
   </nav>   
