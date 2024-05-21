@@ -21,7 +21,7 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'Telekom', // Usually your GitHub org/user name.
+  organizationName: 'telekom', // Usually your GitHub org/user name.
   projectName: 'aifoundation-docs', // Usually your repo name.
 
   onBrokenLinks: 'ignore',
