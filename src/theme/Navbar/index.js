@@ -22,7 +22,7 @@ main-nav-aria-label="Main navigation">
       
       <scale-telekom-nav-list varibhant="functions" slot="functions" alignment="right">
         <scale-telekom-nav-item>
-        <a href="/aifoundation-docs/search">
+        <a href="/search">
             <scale-badge no-dot label="Search">
               <scale-icon-action-search></scale-icon-action-search>
             </scale-badge>
