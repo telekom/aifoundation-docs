@@ -13,10 +13,10 @@ main-nav-aria-label="Main navigation">
 
     <scale-telekom-nav-list slot="main-nav" variant="functions">
         <scale-telekom-nav-item>
-          <a href="/aifoundation-docs/Introduction">Introduction</a>
+          <a href="/Introduction">Introduction</a>
         </scale-telekom-nav-item>
         <scale-telekom-nav-item>
-          <a href="/aifoundation-docs/Guides/RAG%20Guide">Examples</a>
+          <a href="/Guides/RAG%20Guide">Examples</a>
         </scale-telekom-nav-item>
       </scale-telekom-nav-list>
       
@@ -37,13 +37,13 @@ main-nav-aria-label="Main navigation">
         </a>
         </scale-telekom-nav-item>
 
-        <scale-telekom-nav-item>
+        {/*<scale-telekom-nav-item>
         <a href="https://github.com/telekom/create-tsi/tree/main">
             <scale-badge no-dot label="Github">
             <scale-icon-action-link accessibility-title="link"/>
             </scale-badge>
         </a>
-        </scale-telekom-nav-item>
+        </scale-telekom-nav-item>*/}
 
        {/* <scale-telekom-nav-item>
         <button id="mode-toggle" class="click">
