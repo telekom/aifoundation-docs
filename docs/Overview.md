@@ -22,19 +22,23 @@ title: Overview
 ## Smartchat
 
 ![smart chat](smart-chat.png)
+
 SmartChat - an intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
 
 ## LLM Playground
 
 ![llm-playground](playground.png)
+
 Playground: Experiment with different LLMs, Prompt Templates and Documents by providing your API key. 
 
 ## Create-tsi
 
 ![create-tsi](create-tsi.png)
+
 LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, GPT-4, and Mistral AI models through a simple, OpenAI-compatible API.
 
 ## API Portal
 
 ![api-portal](api-portal.png)
+
 API Portal - Allows you to manage your LLM API Keys and monitor your token usage

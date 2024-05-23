@@ -40,7 +40,7 @@ main-nav-aria-label="Main navigation">
 
   
     <scale-telekom-nav-item variant="functions" class="scale-telekom-nav-item hydrated" role="none">
-      <button onclick={() => document.body.dataset.mode = isDark ? 'light' : 'dark'} id="mode-switch" >
+      <button id="mode-switch">
         <scale-badge no-dot="" label="Switch Mode" class="hydrated">
           <scale-icon-action-light-dark-mode accessibility-title="Switch Mode" size="24" class="hydrated" style={{display: "inline-flex"}}></scale-icon-action-light-dark-mode>
         </scale-badge>

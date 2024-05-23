@@ -51,6 +51,11 @@ const config = {
       }),
     ],
   ],
+
+  clientModules: [
+    require.resolve('./src/theme/Navbar/switchMode.js'),
+],
+
   plugins: [
     [
       require.resolve("@easyops-cn/docusaurus-search-local"),
