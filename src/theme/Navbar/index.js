@@ -2,10 +2,11 @@ import React from 'react';
 import '@telekom/scale-components/dist/scale-components/scale-components.css';
 import '@telekom/scale-components-react';
 
-export default function Navbar() {
 
+export default function Navbar() {
+  
   return (
-  <nav>
+<nav>
 <scale-telekom-header 
 class="scale-telekom-header navbar hydrate"
 app-name="AI Foundation Services" 
@@ -37,25 +38,19 @@ main-nav-aria-label="Main navigation">
         </a>
         </scale-telekom-nav-item>
 
-        <scale-telekom-nav-item>
-        <a href="https://github.com/telekom/create-tsi/tree/main">
-            <scale-badge no-dot label="Github">
-            <scale-icon-action-link accessibility-title="link"/>
-            </scale-badge>
-        </a>
-        </scale-telekom-nav-item>
-
-       {/* <scale-telekom-nav-item>
-        <button id="mode-toggle" class="click">
-        <scale-badge no-dot label="Mode">
-            <scale-icon-action-light-dark-mode accessibility-title="light-dark-mode"/>
+  
+    <scale-telekom-nav-item variant="functions" class="scale-telekom-nav-item hydrated" role="none">
+      <button onclick={() => document.body.dataset.mode = isDark ? 'light' : 'dark'} id="mode-switch" >
+        <scale-badge no-dot="" label="Switch Mode" class="hydrated">
+          <scale-icon-action-light-dark-mode accessibility-title="Switch Mode" size="24" class="hydrated" style={{display: "inline-flex"}}></scale-icon-action-light-dark-mode>
         </scale-badge>
-        </button>
-  </scale-telekom-nav-item>*/}
+      </button>
+    </scale-telekom-nav-item>
 
   
       </scale-telekom-nav-list> 
     </scale-telekom-header>
-  </nav>   
+  </nav>
   );
+  
 }
