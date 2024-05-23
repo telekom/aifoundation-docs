@@ -14,16 +14,16 @@ main-nav-aria-label="Main navigation">
 
     <scale-telekom-nav-list slot="main-nav" variant="functions">
         <scale-telekom-nav-item>
-          <a href="/aifoundation-docs/Introduction">Introduction</a>
+          <a href="/Introduction">Introduction</a>
         </scale-telekom-nav-item>
         <scale-telekom-nav-item>
-          <a href="/aifoundation-docs/Guides/RAG%20Guide">Examples</a>
+          <a href="/Guides/RAG%20Guide">Examples</a>
         </scale-telekom-nav-item>
       </scale-telekom-nav-list>
       
       <scale-telekom-nav-list varibhant="functions" slot="functions" alignment="right">
         <scale-telekom-nav-item>
-        <a href="/aifoundation-docs/search">
+        <a href="/search">
             <scale-badge no-dot label="Search">
               <scale-icon-action-search></scale-icon-action-search>
             </scale-badge>
