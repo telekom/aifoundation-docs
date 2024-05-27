@@ -6,7 +6,9 @@ title: Overview
 
 # Overview
 
-## Available LLMs on AI Foundation Service
+## Available LLM APIs on AI Foundation Services
+
+LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, Mistral open-source models through a simple, OpenAI-compatible API.
 
 | Models | Provider | Availability |
 | --------------- | --------------- | --------------- |
@@ -21,24 +23,32 @@ title: Overview
 
 ## Smartchat
 
-![smart chat](smart-chat.png)
-
 SmartChat - an intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
+
+[Magenta SmartChat](https://smartchat.llmhub.t-systems.net/)
+
+![smart chat](smart-chat.png)
 
 ## LLM Playground
 
-![llm-playground](playground.png)
-
 Playground: Experiment with different LLMs, Prompt Templates and Documents by providing your API key. 
+
+[LLM Playground](https://playground.llmhub.t-systems.net/)
+
+![llm-playground](playground.png)
 
 ## Create-tsi
 
-![create-tsi](create-tsi.png)
+create-tsi is a generative AI RAG toolkit that generates AI Applications using LlamaIndex with low code.
 
-LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, GPT-4, and Mistral AI models through a simple, OpenAI-compatible API.
+[Create TSI on GitHub](https://github.com/telekom/create-tsi)
+
+![create-tsi](create-tsi.png)
 
 ## API Portal
 
-![api-portal](api-portal.png)
+PI Portal - Allows you to manage your LLM API Keys and monitor your token usage
 
-API Portal - Allows you to manage your LLM API Keys and monitor your token usage
+[LLM API Key Portal](https://auth.llmhub.t-systems.net/)
+
+![api-portal](api-portal.png)
