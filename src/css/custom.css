@@ -37,10 +37,6 @@ slot[name="functions"] {
 }
 
 
-scale-icon, scale-data-grid, scale-telekom-header-data-back-compat, scale-app-shell, scale-date-picker, scale-notification-banner, scale-notification-toast, scale-checkbox-group, scale-dropdown, scale-notification-message, scale-segmented-button, scale-telekom-footer-data-back-compat, scale-textarea, scale-app-footer, scale-chip, scale-notification, scale-radio-button, scale-radio-button-group, scale-breadcrumb, scale-chart-stack-card, scale-input, scale-modal, scale-rating-stars, scale-segment, scale-sidebar-nav, scale-sidebar-nav-collapsible, scale-telekom-footer-extended-navigation-column, app-logo, scale-accordion, scale-alert, scale-callout, scale-carousel, scale-collapsible, scale-divider, scale-grid, scale-grid-item, scale-icon-action-add, scale-icon-action-add-card, scale-icon-action-arrange, scale-icon-action-arrow-down, scale-icon-action-arrow-left, scale-icon-action-arrow-right, scale-icon-action-arrow-up, scale-icon-action-auto-login, scale-icon-action-backspace, scale-icon-action-backward, scale-icon-action-changelog, scale-icon-action-circle-add, scale-icon-action-compare, scale-icon-action-copy-paste, scale-icon-action-cut-paste, scale-icon-action-disabled-microphone, scale-icon-action-download, scale-icon-action-download-from-cloud, scale-icon-action-drag-and-drop, scale-icon-action-edit, scale-icon-action-export, scale-icon-action-fast-forward, scale-icon-action-fast-forward-nb, scale-icon-action-filter, scale-icon-action-filter-2, scale-icon-action-forward, scale-icon-action-full-screen, scale-icon-action-import, scale-icon-action-install, scale-icon-action-launch, scale-icon-action-light-dark-mode, scale-icon-action-link, scale-icon-action-logout, scale-icon-action-loop, scale-icon-action-microphone, scale-icon-action-minimize-screen, scale-icon-action-minus-circle, scale-icon-action-more, scale-icon-action-move, scale-icon-action-mute, scale-icon-action-notification, scale-icon-action-pause, scale-icon-action-pause-nb, scale-icon-action-pin, scale-icon-action-play, scale-icon-action-play-nb, scale-icon-action-pop-up-window, scale-icon-action-power, scale-icon-action-previous-nb, scale-icon-action-print, scale-icon-action-publish, scale-icon-action-random, scale-icon-action-record-nb, scale-icon-action-refresh, scale-icon-action-remove, scale-icon-action-reply, scale-icon-action-reply-all, scale-icon-action-reply-forward, scale-icon-action-restart, scale-icon-action-search, scale-icon-action-send, scale-icon-action-share, scale-icon-action-shopping-cart, scale-icon-action-show-password, scale-icon-action-sound-on, scale-icon-action-star, scale-icon-action-stream-on, scale-icon-action-thumbs-down, scale-icon-action-thumbs-up, scale-icon-action-tiles-add, scale-icon-action-upload, scale-icon-action-upload-to-cloud, scale-icon-action-volume-down, scale-icon-action-volume-up, scale-icon-action-zoom-in, scale-icon-action-zoom-out, scale-icon-alert-antivirus-protection, scale-icon-alert-compliance, scale-icon-alert-cyber-security, scale-icon-alert-help, scale-icon-alert-high-priority-email, scale-icon-alert-imprint-dataprivacy, scale-icon-alert-legal, scale-icon-alert-network-disrupted, scale-icon-alert-password-breaking, scale-icon-alert-security, scale-icon-alert-traffic-disruption, scale-icon-alert-unknown, scale-icon-communication-available, scale-icon-communication-blog, scale-icon-communication-call-incoming, scale-icon-communication-call-outgoing, scale-icon-communication-chat, scale-icon-communication-chat-badge, scale-icon-communication-email, scale-icon-communication-end-call, scale-icon-communication-feedback, scale-icon-communication-flight-mode, scale-icon-communication-happy-person, scale-icon-communication-inbox, scale-icon-communication-landing-mobile-contact-client, scale-icon-communication-loyalty-earned, scale-icon-communication-loyalty-lost, scale-icon-communication-mail-opened, scale-icon-communication-message, scale-icon-communication-message-incoming, scale-icon-communication-message-outgoing, scale-icon-communication-mms-incoming, scale-icon-communication-mms-outgoing, scale-icon-communication-mobile-phone-number, scale-icon-communication-network-signal, scale-icon-communication-new-email, scale-icon-communication-outbox, scale-icon-communication-phone-number, scale-icon-communication-recipient, scale-icon-communication-save-emails-to-drafts, scale-icon-communication-sms, scale-icon-communication-spam, scale-icon-communication-voice-message, scale-icon-content-2fa-google-auth, scale-icon-content-achievement, scale-icon-content-android, scale-icon-content-apple, scale-icon-content-applications, scale-icon-content-available-keychain, scale-icon-content-bank, scale-icon-content-biometric, scale-icon-content-birthday, scale-icon-content-bookmark, scale-icon-content-clipboard, scale-icon-content-clock, scale-icon-content-cloud-security, scale-icon-content-code-scanner, scale-icon-content-color-selection, scale-icon-content-country, scale-icon-content-credit-card, scale-icon-content-data-visualisation, scale-icon-content-delivery, scale-icon-content-digital-banking, scale-icon-content-digital-media, scale-icon-content-discount, scale-icon-content-e-sim, scale-icon-content-eu, scale-icon-content-face-mask, scale-icon-content-features, scale-icon-content-flexible-tariffs, scale-icon-content-folder, scale-icon-content-food, scale-icon-content-gender-diverse, scale-icon-content-gender-female, scale-icon-content-gender-male, scale-icon-content-half-rating, scale-icon-content-heart, scale-icon-content-height, scale-icon-content-history, scale-icon-content-hour-glass, scale-icon-content-iban, scale-icon-content-id, scale-icon-content-in-stock, scale-icon-content-international, scale-icon-content-international-sms, scale-icon-content-interview, scale-icon-content-key, scale-icon-content-language, scale-icon-content-lock, scale-icon-content-loyalty, scale-icon-content-media-folder, scale-icon-content-money-at, scale-icon-content-music, scale-icon-content-news, scale-icon-content-out-of-stock, scale-icon-content-person-walking, scale-icon-content-prepaid-activate, scale-icon-content-price-tag, scale-icon-content-ratings, scale-icon-content-route, scale-icon-content-rss, scale-icon-content-shop, scale-icon-content-signal, scale-icon-content-sim-card, scale-icon-content-smile, scale-icon-content-sort-indicator-mini-down, scale-icon-content-sort-indicator-up-mini, scale-icon-content-status-inactive, scale-icon-content-status-recurring, scale-icon-content-stopwatch, scale-icon-content-support-chat, scale-icon-content-sustainable, scale-icon-content-tariffs, scale-icon-content-threats, scale-icon-content-todo-list, scale-icon-content-transport, scale-icon-content-unlock, scale-icon-content-voucher, scale-icon-content-waiting, scale-icon-content-wallet, scale-icon-device-add-device, scale-icon-device-camera, scale-icon-device-change-camera, scale-icon-device-computer, scale-icon-device-device-controller, scale-icon-device-device-ethernet, scale-icon-device-device-mesh, scale-icon-device-device-phone, scale-icon-device-device-router, scale-icon-device-device-tv, scale-icon-device-device-watch, scale-icon-device-dongle, scale-icon-device-fax, scale-icon-device-fixed-line-services, scale-icon-device-game-controller, scale-icon-device-media-receiver, scale-icon-device-mobile-data, scale-icon-device-mobile-devices-combination, scale-icon-device-mobile-equipment, scale-icon-device-mobile-phone-insurance, scale-icon-device-mobile-services, scale-icon-device-no-camera, scale-icon-device-phone-with-mobile-plan, scale-icon-device-phone-without-mobile-plan, scale-icon-device-photo-camera, scale-icon-device-remote-controller, scale-icon-device-replacement-mobilephone, scale-icon-device-screen-rotate, scale-icon-device-server, scale-icon-device-smart-speaker, scale-icon-device-tablet, scale-icon-device-tv-and-mobile, scale-icon-device-twitching-closed-state, scale-icon-device-twitching-open-state, scale-icon-home-home, scale-icon-home-internet-at-home, scale-icon-home-iot, scale-icon-home-light-bulb, scale-icon-home-network-secure, scale-icon-home-no-wifi, scale-icon-home-power-socket, scale-icon-home-preferred-wifi, scale-icon-home-reduced-wifi, scale-icon-home-slow-wifi, scale-icon-home-smarthome, scale-icon-home-unable-to-connect-to-router, scale-icon-home-wifi, scale-icon-home-wifi-connected, scale-icon-home-wifi-connection-error, scale-icon-home-wifi-manual-login, scale-icon-home-wifi-no-wired-internet, scale-icon-navigation-circle-top-up, scale-icon-navigation-external-link, scale-icon-navigation-internal-link, scale-icon-navigation-left-condensed, scale-icon-navigation-location, scale-icon-navigation-map, scale-icon-navigation-my-location, scale-icon-navigation-right-condensed, scale-icon-navigation-start, scale-icon-navigation-top-up, scale-icon-process-order-status, scale-icon-process-processing, scale-icon-process-sepa-transaction, scale-icon-service-devices-service, scale-icon-service-maintanance, scale-icon-service-manual, scale-icon-service-one-time-password, scale-icon-service-services, scale-icon-service-support, scale-icon-service-vpn, scale-icon-t-product-2fa-telekom-app, scale-icon-t-product-magenta-cloud, scale-icon-t-product-magenta-tv, scale-icon-t-product-magentaone, scale-icon-t-product-measure-internet-speed, scale-icon-t-product-seamless-connectivity, scale-icon-t-product-telekom-1t1, scale-icon-t-product-telekom-plan, scale-icon-t-product-telekom-shop-b, scale-icon-t-product-usage, scale-icon-t-product-voice, scale-icon-user-file-admin, scale-icon-user-file-analytics, scale-icon-user-file-attachment, scale-icon-user-file-audio-file, scale-icon-user-file-billing, scale-icon-user-file-boy, scale-icon-user-file-bussines-users, scale-icon-user-file-communities, scale-icon-user-file-contacts, scale-icon-user-file-contacts-from-cloud, scale-icon-user-file-contracts, scale-icon-user-file-draft-file, scale-icon-user-file-families, scale-icon-user-file-family, scale-icon-user-file-file, scale-icon-user-file-file-collection, scale-icon-user-file-girl, scale-icon-user-file-handshake, scale-icon-user-file-html-file, scale-icon-user-file-id-card, scale-icon-user-file-image-file, scale-icon-user-file-logout, scale-icon-user-file-man, scale-icon-user-file-pdf-file, scale-icon-user-file-switch-users, scale-icon-user-file-videos, scale-icon-user-file-woman, scale-icon-weather-cloudy, scale-icon-weather-cloudy-rain, scale-icon-weather-cloudy-sleet, scale-icon-weather-cloudy-snow, scale-icon-weather-cloudy-thunder-rain, scale-icon-weather-cloudy-thunder-snow, scale-icon-weather-heavy-sleet, scale-icon-weather-heavy-snow, scale-icon-weather-moon-clear, scale-icon-weather-moon-cloudy-a, scale-icon-weather-moon-cloudy-b, scale-icon-weather-moon-rain, scale-icon-weather-moon-sleet, scale-icon-weather-moon-snow, scale-icon-weather-moon-thunder-rain, scale-icon-weather-moon-thunder-snow, scale-icon-weather-overcast, scale-icon-weather-rain, scale-icon-weather-sunny, scale-icon-weather-thunder-rain, scale-icon-weather-thunder-snow, scale-list, scale-list-item, scale-loading-spinner, scale-menu-flyout-divider, scale-sidebar-nav-item, scale-slider, scale-ssr-slot-fix, scale-tab-header, scale-tab-nav, scale-tab-panel, scale-table, scale-telekom-app-shell, scale-telekom-footer-extended-navigation, scale-toast, scale-toggle-button, scale-toggle-group, scale-tooltip, scale-app-header, scale-card, scale-icon-action-favorite, scale-telekom-footer-content, scale-telekom-footer, duet-date-picker, scale-icon-content-calendar, scale-icon-navigation-collapse-up, scale-link, scale-icon-navigation-double-left, scale-icon-navigation-double-right, scale-checkbox, scale-icon-action-minus, scale-icon-action-close, scale-helper-text, scale-icon-navigation-collapse-down, scale-icon-alert-warning, scale-icon-action-circle-close, scale-icon-action-checkmark, scale-icon-navigation-left, scale-icon-navigation-right, scale-telekom-header, scale-telekom-mega-menu-column, scale-telekom-mobile-flyout-canvas, scale-telekom-mobile-menu, scale-telekom-mobile-menu-item, scale-badge, scale-icon-action-menu, scale-icon-user-file-user, scale-telekom-mega-menu, scale-telekom-nav-flyout, scale-telekom-nav-item, scale-telekom-nav-list, scale-dropdown-select, scale-pagination, scale-text-field, scale-menu-flyout-item, scale-progress-bar, scale-switch, scale-tag, scale-dropdown-select-item, scale-icon-action-hide-password, scale-icon-action-sort, scale-icon-content-sort-indicator-down, scale-icon-content-sort-indicator-up, scale-icon-service-settings, scale-menu-flyout, scale-menu-flyout-list, scale-button, scale-logo, scale-logo-svg, app-navigation-main-mobile, scale-nav-icon, app-mega-menu, app-navigation-sector-mobile, scale-nav-main, scale-nav-segment, app-navigation-user-menu, scale-notification-badge, scale-icon-action-success, scale-icon-alert-information, scale-icon-alert-error {
-    visibility: hidden;
-}
-
 .clean-btn {
   background: #ffffff48;
   border: none;
@@ -95,37 +91,63 @@ scale-icon, scale-data-grid, scale-telekom-header-data-back-compat, scale-app-sh
 }
 
 @media only screen and (min-width: 2000px){
-  div#__docusaurus_skipToContent_fallback {
+  .scale-telekom-header {
+    --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15) !important; 
+    --background: var(--telekom-color-background-surface) !important;
+    --background-logo: var(--telekom-color-primary-standard) !important;
+    --transition-common-scrolled: height var(--telekom-motion-duration-immediate)
+      var(--telekom-motion-easing-standard),
+      width var(--telekom-motion-duration-immediate),
+      margin var(--telekom-motion-duration-immediate) !important;
+    --font-size-app-name: var(--telekom-typography-font-size-body) !important;
+    --line-height-app-name: var(--telekom-typography-line-spacing-tight) !important;
+    --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold) !important;
+    max-width: var(--_max-width-container);
+    width : 100%;
+    z-index : 9999;
     padding-top: 35px;
   }
 }
 
-@media only screen and (max-width: 1300px) {
-  div#__docusaurus_skipToContent_fallback {
+@media only screen and (max-width: 1000px) {
+  .scale-telekom-header {
+    --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15) !important; 
+    --background: var(--telekom-color-background-surface) !important;
+    --background-logo: var(--telekom-color-primary-standard) !important;
+    --transition-common-scrolled: height var(--telekom-motion-duration-immediate)
+      var(--telekom-motion-easing-standard),
+      width var(--telekom-motion-duration-immediate),
+      margin var(--telekom-motion-duration-immediate) !important;
+    --font-size-app-name: var(--telekom-typography-font-size-body) !important;
+    --line-height-app-name: var(--telekom-typography-line-spacing-tight) !important;
+    --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold) !important;
+    max-width: var(--_max-width-container);
+    width : 100%;
+    z-index : 9999;
     padding-top: 0px;
   }
 }
 
-
-.navbar{  
-  --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15) !important; 
-  --background: var(--telekom-color-background-surface) !important;
-  --background-logo: var(--telekom-color-primary-standard) !important;
-  --transition-common-scrolled: height var(--telekom-motion-duration-immediate)
-    var(--telekom-motion-easing-standard),
-    width var(--telekom-motion-duration-immediate),
-    margin var(--telekom-motion-duration-immediate) !important;
-  --font-size-app-name: var(--telekom-typography-font-size-body) !important;
-  --line-height-app-name: var(--telekom-typography-line-spacing-tight) !important;
-  --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold) !important;
-  max-width: var(--_max-width-container);
-  width : 100%;
-  z-index : 9999;
-  padding: 0px 0 0px 0px;
-  
+@media only screen and (max-width: 1040px) {
+  .scale-telekom-header {
+    --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15) !important; 
+    --background: var(--telekom-color-background-surface) !important;
+    --background-logo: var(--telekom-color-primary-standard) !important;
+    --transition-common-scrolled: height var(--telekom-motion-duration-immediate)
+      var(--telekom-motion-easing-standard),
+      width var(--telekom-motion-duration-immediate),
+      margin var(--telekom-motion-duration-immediate) !important;
+    --font-size-app-name: var(--telekom-typography-font-size-body) !important;
+    --line-height-app-name: var(--telekom-typography-line-spacing-tight) !important;
+    --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold) !important;
+    max-width: var(--_max-width-container);
+    width : 100%;
+    z-index : 9999;
+  }
 }
 
-scale-telekom-header {
+
+.scale-telekom-header {
   --shadow: 0px 2px 9px rgba(0, 0, 0, 0.15);
   --background: var(--telekom-color-background-surface);
   --background-logo: var(--telekom-color-primary-standard);
@@ -137,17 +159,19 @@ scale-telekom-header {
   --line-height-app-name: var(--telekom-typography-line-spacing-tight);
   --font-weight-app-name: var(--telekom-typography-font-weight-extra-bold);
   max-width: var(--_max-width-container);
+  width : 100%;
   z-index : 9999;
+  padding: 0px 0 0px 0px;
 }
 
-scale-telekom-nav-list {
+.scale-telekom-nav-list {
   --width: 100%;
   --height: 100%;
   --spacing-x-start: 0;
   --flex-direction: row;
 }
 
-scale-telekom-nav-item {
+.scale-telekom-nav-item {
   --focus-outline: var(--telekom-line-weight-highlight) solid
     var(--telekom-color-functional-focus-standard);
   --color: var(--telekom-color-text-and-icon-standard); 
@@ -163,7 +187,6 @@ scale-telekom-nav-item {
   --background-footer: var(--telekom-color-ui-black);
   --background-footer-minimal: var(--telekom-color-background-canvas);
 } 
-
 
 
 body {
@@ -182,3 +205,16 @@ body {
   display: block;
 }
 
+body[data-mode='dark'] .menu__link {
+  color: rgb(255, 248, 248);
+  flex: 1;
+  line-height: 1.25;
+}
+body[data-mode='dark'] .table-of-contents__link toc-highlight{
+  color: rgb(255, 248, 248);
+}
+
+body[data-mode='dark'] .table-of-contents__link {
+  color: rgb(255, 248, 248);
+  display: block;
+}

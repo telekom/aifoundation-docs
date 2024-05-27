@@ -8,7 +8,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'AI Foundation Services',
+  title: 'AI Foundation Services Documentation',
   //tagline: 'create-tsi',
   favicon: 'img/favicon_180x180.png',
 
@@ -26,14 +26,20 @@ const config = {
 
   onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
-
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
+  
+    // Other configurations...
+  
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  scripts: [
+    {
+      src: '/setDefaultMode.js',
+      async: true,
+    },
+  ],
 
   presets: [
     [
@@ -72,10 +78,15 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      colorMode: {
+        defaultMode: "light", // Set the default mode to light
+        respectPrefersColorScheme: false, // Ignore the user's system preferences
+      },
       prism: {
         darkTheme: prismThemes.dracula,
       },
     }),
+
 };
 
 

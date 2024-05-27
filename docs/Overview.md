@@ -33,8 +33,9 @@ Playground: Experiment with different LLMs, Prompt Templates and Documents by pr
 
 ## Create-tsi
 
-![create-tsi](create-tsi.png)
-
+<video width="600" controls>
+  <source src="/img/create-tsi.mp4" type="video/mp4"> </source>
+</video>
 LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, GPT-4, and Mistral AI models through a simple, OpenAI-compatible API.
 
 ## API Portal

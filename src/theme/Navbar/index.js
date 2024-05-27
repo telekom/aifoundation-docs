@@ -9,7 +9,7 @@ export default function Navbar() {
 <nav>
 <scale-telekom-header 
 class="scale-telekom-header navbar hydrate"
-app-name="AI Foundation Services" 
+app-name="AI Foundation Services Documentation" 
 main-nav-aria-label="Main navigation">
 
     <scale-telekom-nav-list slot="main-nav" variant="functions">

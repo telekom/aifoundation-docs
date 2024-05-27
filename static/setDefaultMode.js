@@ -1,0 +1,1 @@
+document.body.setAttribute('data-mode', "light");
