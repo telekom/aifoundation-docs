@@ -6,7 +6,7 @@ title: Overview
 
 # Overview
 
-## Available LLM APIs on AI Foundation Services
+## Available LLM-APIs on AI Foundation Services
 
 LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, Mistral open-source models through a simple, OpenAI-compatible API.
 
@@ -23,7 +23,7 @@ LLM model serving, allowing you to effortlessly query open-source LLM models lik
 | Mistral-7b  | Mistral AI   | On request   |
 
 
-## Smartchat
+## Magenta SmartChat
 
 SmartChat - an intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
 
@@ -39,7 +39,7 @@ Playground: Experiment with different LLMs, Prompt Templates and Documents by pr
 
 ![llm-playground](playground.png)
 
-## Create-tsi
+## create-tsi
 
 create-tsi is a generative AI RAG toolkit that generates AI Applications using LlamaIndex with low code.
 
@@ -47,7 +47,7 @@ create-tsi is a generative AI RAG toolkit that generates AI Applications using L
 
 ![create-tsi](create-tsi.png)
 
-## API Portal
+## API Key Portal
 
 PI Portal - Allows you to manage your LLM API Keys and monitor your token usage
 
