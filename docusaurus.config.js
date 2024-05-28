@@ -37,7 +37,7 @@ const config = {
   scripts: [
     {
       src: '/setDefaultMode.js',
-      async: true,
+      async: true
     },
   ],
 
