@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 id: langchain
-title: LangChain Intergration
+title: LangChain Integration
 tags:
   - RAG
   - Vector search
