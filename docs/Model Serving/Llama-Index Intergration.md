@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 id: llama-index
-title: Llama-Index Intergration
+title: Llama-Index Integration
 tags:
   - RAG
   - Vector search
