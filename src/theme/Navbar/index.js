@@ -38,6 +38,13 @@ main-nav-aria-label="Main navigation">
         </a>
         </scale-telekom-nav-item>
 
+        <scale-telekom-nav-item>
+        <a href="https://uptime.llmhub.t-systems.net/status/health">
+            <scale-badge no-dot label="Model Status">
+            <scale-icon-navigation-external-link accessibility-title="external-link"/>
+            </scale-badge>
+        </a>
+        </scale-telekom-nav-item>
   
     <scale-telekom-nav-item variant="functions" class="scale-telekom-nav-item hydrated" role="none">
       <button id="mode-switch">
