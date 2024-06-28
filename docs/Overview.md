@@ -15,10 +15,12 @@ LLM model serving, allowing you to effortlessly query open-source LLM models lik
 | Models | Provider | Availability |
 | --------------- | --------------- | --------------- |
 | Mixtral-8x7b Instruct v.01   | Mistral AI  | Yes   |
-| Llama-3-70b   | Meta    | Yes   |
+| Llama-3-70B-Instruct   | Meta    | Yes   |
+| CodeLlama-2   | Meta    | Yes   |
 | GPT-4-Turbo-2024-05-09  | OpenAI (via Azure)    | Yes   |
 | GPT-3.5-Turbo-0314  | OpenAI (via Azure)     | On request   |
-| Claude 3 Sonnet  | Anthropic    | On request   |
+| Claude 3.5 Sonnet  | Anthropic    | On request   |
+| Gemini 1.5 Pro  | Google    | On request   |
 | Mistral-Large-2402  | Mistral AI   | On request   |
 | Mistral-7b  | Mistral AI   | On request   |
 
