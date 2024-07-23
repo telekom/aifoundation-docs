@@ -13,6 +13,38 @@
   font: var(--telekom-text-style-body);
 }
 
+@media screen and (max-width: 1039px) {
+  :root {
+    --ifm-navbar-height: 62px;
+    /* here is the different nav height when scrolling */
+    /* --ifm-navbar-height--when-scrolling: 62px; */
+  }
+}
+
+@media screen and (min-width: 1040px) {
+  :root {
+    --ifm-navbar-height: 85px;
+    /* here is the different nav height when scrolling */
+    /* --ifm-navbar-height--when-scrolling: 72px; */
+  }
+}
+
+@media screen and (min-width: 1296px) {
+  :root {
+    --ifm-navbar-height: 98px;
+    /* here is the different nav height when scrolling */
+    /* --ifm-navbar-height--when-scrolling: 72px; */
+  }
+}
+
+@media screen and (min-width: 1680px) {
+  :root {
+    --ifm-navbar-height: 122px;
+    /* here is the different nav height when scrolling */
+    /* --ifm-navbar-height--when-scrolling: 72px; */
+  }
+}
+
 body:not(.navigation-with-keyboard) *:not(input):focus {
   outline: var(--telekom-color-text-and-icon-standard);
 }
