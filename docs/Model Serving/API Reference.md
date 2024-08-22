@@ -17,6 +17,9 @@ It ensures seamless integration and functionality that matches the capabilities 
 The tutorials bellow will show you how to use the low level OpenAI python package with our service.
 Although it demonstrate a compatibility of our API with OpenAI, for RAG use case especially please check our Llama-Index and LangChain intergration section. 
 
+## Https API Reference
+If you want to look up the POST/GET API endpoints instead, please have a look at the Https API Reference [here](https://llm-server.llmhub.t-systems.net/redoc) and [here](https://llm-server.llmhub.t-systems.net/docs).
+
 ## Quickstart
 
 **Step 0: Install openai package**
