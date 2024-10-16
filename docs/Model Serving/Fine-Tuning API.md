@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-id: openai
+id: finetune
 title: Fine-tuning API
 tags:
   - OpenAI API
