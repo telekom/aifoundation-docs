@@ -53,14 +53,6 @@ curl $API_BASE
 curl -H "Authorization: Bearer $API_KEY" $API_BASE
 ```
 
-**Output:**
-
-```
-env: API_BASE=https://llm-server.llmhub.t-systems.net
-{"T-Systems Uploading Server":"online"}
-env: API_KEY=YOUR_LLMHUB_KEY
-```
-
 ### Initialize the Client
 
 Initialize the OpenAI client with the API key and base URL.
@@ -215,12 +207,6 @@ export API_BASE=https://llm-server.llmhub.t-systems.net
 export API_KEY=YOUR_LLMHUB_KEY
 curl -H "Authorization: Bearer $API_KEY" $API_BASE
 ```
-Output
-
-
-    env: API_BASE=https://llm-server.llmhub.t-systems.net
-    env: API_KEY=YOUR_LLMHUB_KEY
-    {"T-Systems Fine-Tuning Server":"online"}
 
 ### Setting up environment
 ```py
