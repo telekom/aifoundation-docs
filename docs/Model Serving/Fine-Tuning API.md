@@ -93,11 +93,11 @@ FileObject(id='fine-tune-upload1-demo', bytes=781, created_at='2024-06-25T11:24:
 
 #### Request Body
 
-**file** file: <span style="color: red; font-weight: bold;">Required</span> 
+**file** file: `Required`
 
 The File object (not file name) to be uploaded.
 
-**purpose** string: <span style="color: red; font-weight: bold;">Required</span> 
+**purpose** string:`Required`
 
 The intended purpose of the uploaded file. Use "fine-tune" for Fine-tuning.
 
@@ -149,7 +149,7 @@ FileDeleted(id='fine-tune-upload1-demo', deleted=True, object='file')
 
 #### Request Body
 
-**file_id** string: <span style="color: red; font-weight: bold;">Required</span> 
+**file_id** string: `Required` 
 
 The ID of the file to be deleted. This ID can be obtained from the list files function.
 
@@ -192,7 +192,7 @@ curl  -X  'POST'  \
 
 #### Request Body
 
-**file_id** string: <span style="color: red; font-weight: bold;">Required</span> 
+**file_id** string: `Required`
 
 The ID of the file to be validated.
 
@@ -231,8 +231,8 @@ Creates a fine-tuning job which begins the process of creating a new model from 
 **Description**: Create a fine-tuning job.
 
 **Parameters**:
-- **training_file** (string, required): File ID of the training file to use. This can be obtained via using **List Uploaded Files** endpoint.
-- **model** (string, required): The model to fine-tune.
+- **training_file** (string, `Required`): File ID of the training file to use. This can be obtained via using **List Uploaded Files** endpoint.
+- **model** (string, `Required`): The model to fine-tune.
 - **hyperparameters** (object, optional): Hyperparameters to use for fine-tuning.
 - **n_epochs** (integer): Number of epochs to train the model.
 
@@ -421,7 +421,7 @@ This endpoint allows the user to cancel a fine-tuning job that is in progress. I
 **Description**: Cancel a specific fine-tuning job.
 
 **Parameters**:
-- **fine_tuning_job_id** (string, required): The ID of the fine-tuning job to cancel.
+- **fine_tuning_job_id** (string, `Required`): The ID of the fine-tuning job to cancel.
 
 **Response**:
 - **id** (string): Unique identifier for the fine-tune job.
