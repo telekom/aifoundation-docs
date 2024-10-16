@@ -1,8 +1,25 @@
+# Introduction
+
+This document introduce our Fine-Tuning API and outlines how to use the Upload API for tasks like uploading, listing, and deleting files, as well as the Fine-Tuning Server for fine-tune purpose. It also details how to validate dataset formats, ensuring they are ready for use. Both APIs integrate with the OpenAI package in Python for easier streamlining data management.
+
+## Fine-Tuning API workflow
+The Fine-Tuning API includes 2 main components: 
+- **Upload API**  
+- **Fine-Tuning Server**
+
+The Upload API allows you to upload files for purposes like **fine-tune** and **embedding**. Supported formats include PDF, TXT, DOCX, CSV, JSON, JSONL, and ZIP. 
+
+For fine-tuning with multiple documents, you need to compress them into a ZIP file and upload with the purpose: **fine-tune**.
+
+**Raw Files**: Uploaded raw documents are temporarily stored and converted into OpenAI's JSONL format using our tool Query Generator and forward to Fine-Tuning Server.
+
+**Pre-Formatted Datasets**: If you upload a dataset already in the OpenAI JSONL format, it will be sent directly to the Fine-Tuning Server, ready for fine-tuning.
+You can also use the Validate Dataset endpoint to ensure your JSONL file follows the correct format.
+
+![image](https://github.com/user-attachments/assets/5e5f9672-5eb3-4217-b249-8694b174b963)
+
+
 ## Upload API
-### Introduction
-
-This document provides an overview of how to use the Upload API to upload files for various purposes, including fine-tuning, embedding, and ingestion. It also describes features for listing and deleting files, as well as a special endpoint for validating dataset formats. The Upload API can be integrated with the OpenAI package in Python.
-
 ### Dependencies requirements
 
 ```python
@@ -427,7 +444,9 @@ FineTuningJob(id='3b67a28a-6b96-429b-a7eb-7f2a00f664ec', created_at='2024-06-27T
 ```
 
 # LM Benchmarking & Monitoring
+
 In the Fine-Tuning API, an benchmarking pipeline for the fine-tuned LLM model is integrated using state-of-the-art benchmarking frameworks: LM Evaluation Harness and the Needle in a Haystack method for LLM evaluation.
+
 Additionally, MLflow is used to monitor both the training and benchmarking processes. You can view your training and benchmarking scores at: https://mlflow.llm-serving-dev.llmhub.t-systems.net.
 
 ## LM Benchmarking
