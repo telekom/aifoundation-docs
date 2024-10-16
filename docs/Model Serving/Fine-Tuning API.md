@@ -1,3 +1,14 @@
+---
+sidebar_position: 5
+id: openai
+title: Fine-tuning API
+tags:
+  - OpenAI API
+  - Fine Tuning LLM
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Introduction
 
 This document introduce our Fine-Tuning API and outlines how to use the Upload API for tasks like uploading, listing, and deleting files, as well as the Fine-Tuning Server for fine-tune purpose. It also details how to validate dataset formats, ensuring they are ready for use. Both APIs integrate with the OpenAI package in Python for easier streamlining data management.
@@ -22,7 +33,7 @@ You can also use the Validate Dataset endpoint to ensure your JSONL file follows
 ## Upload API
 ### Dependencies requirements
 
-```python
+```py
 pip install openai
 ```
 
@@ -56,7 +67,7 @@ Initialize the OpenAI client with the API key and base URL.
 
 In Python:
 
-```python
+```py
 import os
 from openai import OpenAI
 
@@ -75,7 +86,7 @@ client = OpenAI(
 
 To upload a file for fine-tuning purposes, provide "purpose" as "fine-tune".
 
-```python
+```py
 client.files.create(
     file=open("/Path/to/your/file/demo.txt", "rb"),
     purpose="fine-tune"
@@ -102,7 +113,7 @@ The intended purpose of the uploaded file. Use "fine-tune" for Fine-tuning.
 
 List all the files that have been uploaded.
 
-```python
+```py
 files_list = client.files.list()
 
 # Iterate over the files and print their details
@@ -134,7 +145,7 @@ Checksum: 1825e8c857c78e160109115c9857e592
 
 Delete a specific file by its ID.
 
-```python
+```py
 client.files.delete("fine-tune-upload1-demo")
 ```
 
@@ -176,7 +187,7 @@ Here's an example of a sample dataset in JSON format:
 
 ```bash
 curl  -X  'POST'  \
-'http://localhost:8017/v1/val_dataset?file_id=fine-tune-upload_4-Depth-aware_convolutional_neural_networks_for_accurate_3D_pose_estimation_in_RGB.jsonl' \
+'http://localhost:8017/v1/val_dataset?file_id=fine-tune-upload1-demo' \
 -H  'accept: application/json'  \
 -d ''
 ```
@@ -184,7 +195,7 @@ curl  -X  'POST'  \
 **Output:**
 
 ```
-{"id":"fine-tune-upload_4-Depth-aware_convolutional_neural_networks_for_accurate_3D_pose_estimation_in_RGB.jsonl","errors":["No errors found"],"object":"file"}
+{"id":"fine-tune-upload1-demo","errors":["No errors found"],"object":"file"}
 ```
 
 #### Request Body
@@ -199,7 +210,7 @@ This document provides a concise overview of how to use the Upload API to upload
 
 # Fine-Tune API
 In Terminal
-```python
+```py
 export API_BASE=https://llm-server.llmhub.t-systems.net
 export API_KEY=YOUR_LLMHUB_KEY
 curl -H "Authorization: Bearer $API_KEY" $API_BASE
@@ -212,7 +223,7 @@ Output
     {"T-Systems Fine-Tuning Server":"online"}
 
 ### Setting up environment
-```python
+```py
 import os
 from openai import OpenAI
 
@@ -234,7 +245,7 @@ Creates a fine-tuning job which begins the process of creating a new model from 
 **Description**: Create a fine-tuning job.
 
 **Parameters**:
-- **training_file** (string, required): File ID of the training file to use. This can be obtained via [List Uploaded Files](### List Uploaded Files) 
+- **training_file** (string, required): File ID of the training file to use. This can be obtained via using **List Uploaded Files** endpoint.
 - **model** (string, required): The model to fine-tune.
 - **hyperparameters** (object, optional): Hyperparameters to use for fine-tuning.
 - **n_epochs** (integer): Number of epochs to train the model.
@@ -248,7 +259,7 @@ Creates a fine-tuning job which begins the process of creating a new model from 
 - **training_file** (string): Training file used for fine-tuning.
 - **hyperparameters** (object): Hyperparameters used for fine-tuning.
 
-```python
+```py
 client.fine_tuning.jobs.create(
   training_file="fine-tune-fine-tune-jsonl-filtered_germanrag",
   model="Meta-Llama-3.1-8B-Instruct",
@@ -286,7 +297,7 @@ This endpoint retrieves a list of all fine-tuning jobs created by the user. It h
 - **training_file** (string): Training file used for fine-tuning.
 - **hyperparameters** (object): Hyperparameters used for fine-tuning.
 
-```python
+```py
 import json
 
 # Get the list of fine-tuning jobs
@@ -370,7 +381,7 @@ This endpoint retrieves a list of events for a specific fine-tuning job. It prov
   - **message** (string): Message describing the event.
   - **type** (string): Type of event (e.g., `start`, `submitted`, `succeeded`, `failed`).
 
-```python
+```py
 events = client.fine_tuning.jobs.list_events(
     fine_tuning_job_id="3b67a28a-6b96-429b-a7eb-7f2a00f664ec",
     limit=10
@@ -435,7 +446,7 @@ This endpoint allows the user to cancel a fine-tuning job that is in progress. I
 - **training_file** (string): Training file used for fine-tuning.
 - **hyperparameters** (object): Hyperparameters used for fine-tuning.
 
-```python
+```py
 client.fine_tuning.jobs.cancel("3b67a28a-6b96-429b-a7eb-7f2a00f664ec")
 ```
 Output
