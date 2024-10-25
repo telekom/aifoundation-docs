@@ -19,8 +19,8 @@ and refinement of user query. This section show a quick tutorial how you can use
 
 **Step 0: Install prerequiste package**
 ```
-pip install llama-index==0.10.18
-pip install llama-index-llms-openai-like==0.1.3
+pip install llama-index
+pip install llama-index-llms-azure-openai
 pip install llama-index-embeddings-openai
 ```
 
@@ -74,17 +74,14 @@ gpt-4-turbo-128k-france
     ```py showLineNumbers
     import os
     import httpx
-    from llama_index.llms.openai_like import OpenAILike
+    from llama_index.llms.azure_openai import AzureOpenAI
 
-    model = "Llama-3-70B-Instruct"
-
-    llm = OpenAILike(api_base=os.getenv('API_BASE'), api_key=os.getenv('API_KEY'),
-                    model=model,
-                    temperature=0.1,
-                    max_tokens=512,
-                    top_p=0.9,
-                    is_chat_model=True #this is important to make the model use the Chat API instead of completion API
-                    )
+    llm = AzureOpenAI(
+        deployment_name="gpt-4o",
+        api_key=api_key=os.getenv('API_KEY'),
+        azure_endpoint=os.getenv('API_BASE'),
+        api_version="2023-07-01-preview",
+    )
     
     # Test run
     response_iter = llm.stream_complete("""You are the funniest comedian. Tell me a joke.""")

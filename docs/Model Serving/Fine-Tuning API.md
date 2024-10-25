@@ -22,7 +22,9 @@ The Upload API allows you to upload files for purposes like **fine-tune** and **
 
 For fine-tuning with multiple documents, you need to compress them into a ZIP file and upload with the purpose: **fine-tune**.
 
-**Raw Files**: Uploaded raw documents are temporarily stored and converted into OpenAI's JSONL format using our tool Query Generator and forward to Fine-Tuning Server.
+**Documents Files**: In addition to OpenAI JSONL dataset, we allow user to upload a zip file that contain document files in following format: PDF, TXT, DOCX, CSV, JSON.
+Internaly, the compressed zip file will be unzip. All the document file will be chunked into multiple smaller chunk and use that to generate an synthesis RAG dataset.
+This dataset then will be used to fine tune, and hence improve the RAG accuracy on that specific user documents.
 
 **Pre-Formatted Datasets**: If you upload a dataset already in the OpenAI JSONL format, it will be sent directly to the Fine-Tuning Server, ready for fine-tuning.
 You can also use the Validate Dataset endpoint to ensure your JSONL file follows the correct format.
@@ -68,7 +70,7 @@ api_key = os.getenv('API_KEY')
 
 client = OpenAI(
     api_key=os.getenv('API_KEY'),
-    base_url=os.getenv('API_BASE') +'/v1'
+    base_url=os.getenv('API_BASE') +'/v2'
 )
 ```
 
@@ -79,16 +81,17 @@ client = OpenAI(
 To upload a file for fine-tuning purposes, provide "purpose" as "fine-tune".
 
 ```py
+file_path = "/path/to/your_dataset.jsonl"
 client.files.create(
-    file=open("/Path/to/your/file/demo.txt", "rb"),
-    purpose="fine-tune"
+  file=open(file_path, "rb"),
+  purpose="fine-tune"
 )
 ```
 
 **Output:**
 
 ```
-FileObject(id='fine-tune-upload1-demo', bytes=781, created_at='2024-06-25T11:24:17 (CEST)', filename='demo.txt', object='file', purpose='fine-tune', status=None, status_details=None, checksum='1825e8c857c78e160109115c9857e592')
+FileObject(id='file-abc123', bytes=1, created_at='2024-10-22T15:10:45.770750+02:00', filename='your_dataset.jsonl', object='file', purpose='fine-tune', status=None, status_details=None, validation={'object': 'validation', 'is_checked': False, 'is_valid': False, 'message': 'File is not yet validated.', 'errors': {}, 'is_generated_dataset': False})
 ```
 
 #### Request Body
@@ -106,7 +109,9 @@ The intended purpose of the uploaded file. Use "fine-tune" for Fine-tuning.
 List all the files that have been uploaded.
 
 ```py
-files_list = client.files.list()
+files_list = client.files.list(
+    purpose="fine-tune"
+)
 
 # Iterate over the files and print their details
 for file_obj in files_list.data:
@@ -116,20 +121,18 @@ for file_obj in files_list.data:
     print(f"Filename: {file_obj.filename}")
     print(f"Object: {file_obj.object}")
     print(f"Purpose: {file_obj.purpose}")
-    print(f"Checksum: {file_obj.checksum}")
     print("-" * 40)
 ```
 
 **Output:**
 
 ```
-ID: fine-tune-upload1-demo
-Bytes: 781
-Created At: 2024-06-25T11:24:17 (CEST)
-Filename: demo.txt
+ID: file-abc123
+Bytes: 1
+Created At: 2024-10-22T15:10:45.770750+02:00
+Filename: your_dataset.jsonl
 Object: file
 Purpose: fine-tune
-Checksum: 1825e8c857c78e160109115c9857e592
 ----------------------------------------
 ```
 
@@ -138,13 +141,13 @@ Checksum: 1825e8c857c78e160109115c9857e592
 Delete a specific file by its ID.
 
 ```py
-client.files.delete("fine-tune-upload1-demo")
+client.files.delete("file-abc123")
 ```
 
 **Output:**
 
 ```
-FileDeleted(id='fine-tune-upload1-demo', deleted=True, object='file')
+FileDeleted(id='file-abc123', deleted=True, object='file')
 ```
 
 #### Request Body
@@ -156,6 +159,7 @@ The ID of the file to be deleted. This ID can be obtained from the list files fu
 ## Validate Dataset
 
 The validate endpoint ensures the quality and correctness of datasets in the OpenAI template used for fine-tuning models. This endpoint helps identify and rectify potential issues in your dataset before proceeding with the fine-tuning process.
+If user did not call this API before trigger fine tuning jobs. It will be called automatically before the fine tuning job start. The same will be applied for the dataset generation api.
 
 ### Sample Dataset
 
@@ -177,17 +181,39 @@ Here's an example of a sample dataset in JSON format:
 
 ### Validate Dataset Example
 
-```bash
-curl  -X  'POST'  \
-'http://localhost:8017/v1/val_dataset?file_id=fine-tune-upload1-demo' \
--H  'accept: application/json'  \
--d ''
+```py
+import httpx
+
+# The URL you want to send the POST request to
+base_url = 'https://llm-server.llmhub.t-systems.net/v2'
+endpoint = '/files/validate/'
+file_id = 'file-abc123'
+
+url = f"{base_url}{endpoint}{file_id}"
+
+# The data you want to send in the POST request body
+data = {}
+
+# The headers, including the api-key
+headers = {
+    "Content-Type": "application/json",
+    "api-key": "YOUR_API_KEY"
+}
+
+# Send the POST request
+with httpx.Client() as httpx_client:
+    response = httpx_client.get(url, headers=headers)
+
+# Check the response
+print(f"Status Code: {response.status_code}")
+print(f"Response Content: {response.text}")
+
 ```
 
 **Output:**
 
 ```
-{"id":"fine-tune-upload1-demo","errors":["No errors found"],"object":"file"}
+Response Content: {"file_id":"file-abc123","object":"validation","message":"Your validation request is in progress. Please use retrieve file api to get update about the validation result after sometime."}
 ```
 
 #### Request Body
@@ -247,7 +273,7 @@ Creates a fine-tuning job which begins the process of creating a new model from 
 
 ```py
 client.fine_tuning.jobs.create(
-  training_file="fine-tune-fine-tune-jsonl-filtered_germanrag",
+  training_file="file-abc123",
   model="Meta-Llama-3.1-8B-Instruct",
   hyperparameters={
     "n_epochs":2,
@@ -257,7 +283,7 @@ client.fine_tuning.jobs.create(
 
 Output:
 ```
-FineTuningJob(id='3b67a28a-6b96-429b-a7eb-7f2a00f664ec', created_at='2024-06-27T09:24:33.443283+00:00', error=None, fine_tuned_model=None, finished_at=None, hyperparameters=Hyperparameters(n_epochs=2, batch_size=1), model='Meta-Llama-3.1-8B-Instruct', object='fine-tune.job', organization_id=None, result_files=None, status='queued', trained_tokens=None, training_file='fine-tune-fine-tune-jsonl-filtered_germanrag', validation_file=None, integrations=[])
+FineTuningJob(id='ftjob-abc123', created_at='2024-10-22T15:01:33.106192+02:00', error=None, fine_tuned_model='Meta-Llama-3.1-8B-Instruct-ft-e65f94', finished_at=None, hyperparameters=Hyperparameters(n_epochs=1, eval_batch_size=None, batch_size=None), model='Meta-Llama-3.1-8B-Instruct', object='fine-tune.job', organization_id=None, result_files=None, seed=None, status='queued', trained_tokens=None, training_file='file-abc123', validation_file=None, estimated_finish=None, integrations=None, suffix='ft', validation_ratio=None, message=None)
 ```
 
 ### List finetune jobs
@@ -319,27 +345,25 @@ Output
     "object": "list",
     "data": [
         {
-            "id": "3cd2a3ef-0a9a-491a-8f8c-de7f1560af6f",
+            "id": "ftjob-abc123",
             "object": "fine-tune",
             "model": "Meta-Llama-3-8B-Instruct",
             "created_at": "2024-06-27T09:21:22.712964+00:00",
             "status": "stopped",
-            "training_file": "modelperm-51b6b4d619a84dfa866d09c2bc6dcec2-fine-tune-demo",
+            "training_file": "file-abc123",
             "hyperparameters": {
                 "n_epochs": 2,
-                "batch_size": 1
             }
         },
         {
-            "id": "3b67a28a-6b96-429b-a7eb-7f2a00f664ec",
+            "id": "ftjob-abc1234",
             "object": "fine-tune",
             "model": "Meta-Llama-3.1-8B-Instruct",
             "created_at": "2024-06-27T09:24:33.443283+00:00",
             "status": "queued",
-            "training_file": "fine-tune-fine-tune-jsonl-filtered_germanrag",
+            "training_file": "file-abc1234",
             "hyperparameters": {
                 "n_epochs": 2,
-                "batch_size": 1
             }
         }
     ],
@@ -369,7 +393,7 @@ This endpoint retrieves a list of events for a specific fine-tuning job. It prov
 
 ```py
 events = client.fine_tuning.jobs.list_events(
-    fine_tuning_job_id="3b67a28a-6b96-429b-a7eb-7f2a00f664ec",
+    fine_tuning_job_id="ftjob-abc123",
     limit=10
 )
 
@@ -433,18 +457,20 @@ This endpoint allows the user to cancel a fine-tuning job that is in progress. I
 - **hyperparameters** (object): Hyperparameters used for fine-tuning.
 
 ```py
-client.fine_tuning.jobs.cancel("3b67a28a-6b96-429b-a7eb-7f2a00f664ec")
+client.fine_tuning.jobs.cancel("ftjob-abc123")
 ```
 Output
 ```
-FineTuningJob(id='3b67a28a-6b96-429b-a7eb-7f2a00f664ec', created_at='2024-06-27T09:24:33.443283+00:00', error=None, fine_tuned_model=None, finished_at=None, hyperparameters=Hyperparameters(n_epochs=2, batch_size=1), model='llama3_8b', object='fine-tune', organization_id=None, result_files=None, status='stopped', trained_tokens=None, training_file='modelperm-51b6b4d619a84dfa866d09c2bc6dcec2-fine-tune-demo', validation_file=None, integrations=[])
+FineTuningJob(id='ftjob-abc123', created_at='2024-06-27T09:24:33.443283+00:00', error=None, fine_tuned_model=None, finished_at=None, hyperparameters=Hyperparameters(n_epochs=2, batch_size=1), model='Meta-Llama-3-8B-Instruct', object='fine-tune', organization_id=None, result_files=None, status='stopped', trained_tokens=None, training_file='file-abc123', validation_file=None, integrations=[])
 ```
 
 # LM Benchmarking & Monitoring
 
-In the Fine-Tuning API, an benchmarking pipeline for the fine-tuned LLM model is integrated using state-of-the-art benchmarking frameworks: LM Evaluation Harness and the Needle in a Haystack method for LLM evaluation.
+In order to see the training metric, validation loss user need to provide us the W&B api-key and also the name of the W&B project.
 
-Additionally, MLflow is used to monitor both the training and benchmarking processes. You can view your training and benchmarking scores at: https://mlflow.llm-serving-dev.llmhub.t-systems.net.
+Addtionally to that, we also have an benchmarking API for the fine-tuned LLM model, where we choose widely used benchmarking frameworks & method: LM Evaluation Harness and the Needle in a Haystack method for LLM evaluation.
+
+In this case, MLflow is used to monitor both the training and benchmarking processes. You can view your training and benchmarking scores at: https://mlflow.llm-serving.llmhub.t-systems.net.
 
 ## LM Benchmarking
 ### LM Evaluation Harness Benchmark
