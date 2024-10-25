@@ -23,8 +23,8 @@ The Upload API allows you to upload files for purposes like **fine-tune** and **
 For fine-tuning with multiple documents, you need to compress them into a ZIP file and upload with the purpose: **fine-tune**.
 
 **Documents Files**: In addition to OpenAI JSONL dataset, we allow user to upload a zip file that contain document files in following format: PDF, TXT, DOCX, CSV, JSON.
-Internaly, the compressed zip file will be unzip. All the document file will be chunked into multiple smaller chunk and use that to generate an synthesis RAG dataset.
-This dataset then will be used to fine tune, and hence improve the RAG accuracy on that specific user documents.
+The zip file will be uncompressed in our server, where we filter out all the files with the supported format, then these files will be chunked into multiple smaller chunk to generate an synthesis RAG with context, question and answer dataset.
+After the model was fine tuned with these dataset, user can use our evaluate API to see how much the RAG accuracy on that specific document was improved.
 
 **Pre-Formatted Datasets**: If you upload a dataset already in the OpenAI JSONL format, it will be sent directly to the Fine-Tuning Server, ready for fine-tuning.
 You can also use the Validate Dataset endpoint to ensure your JSONL file follows the correct format.
