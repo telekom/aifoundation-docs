@@ -46,13 +46,11 @@ First, set the environment variables for the API base URL and API key.
 In terminal:
 
 ```
-export API_BASE=https://llm-server.llmhub.t-systems.net
+export API_BASE=https://llm-server.llmhub.t-systems.net/v2
 # Adding LLMHUB API key
-export API_KEY=YOUR_LLMHUB_KEY
-# Testing the API_BASE
-curl $API_BASE
+export API_KEY=YOUR_API_KEY
 # Testing the API_KEY
-curl -H "Authorization: Bearer $API_KEY" $API_BASE
+curl -H "Authorization: Bearer $API_KEY" $API_BASE/models
 ```
 
 ### Initialize the Client
@@ -70,7 +68,7 @@ api_key = os.getenv('API_KEY')
 
 client = OpenAI(
     api_key=os.getenv('API_KEY'),
-    base_url=os.getenv('API_BASE') +'/v2'
+    base_url=os.getenv('API_BASE')
 )
 ```
 
@@ -185,14 +183,11 @@ Here's an example of a sample dataset in JSON format:
 import httpx
 
 # The URL you want to send the POST request to
-base_url = 'https://llm-server.llmhub.t-systems.net/v2'
+base_url = os.getenv('API_BASE')
 endpoint = '/files/validate/'
 file_id = 'file-abc123'
 
 url = f"{base_url}{endpoint}{file_id}"
-
-# The data you want to send in the POST request body
-data = {}
 
 # The headers, including the api-key
 headers = {
@@ -227,24 +222,15 @@ The ID of the file to be validated.
 This document provides a concise overview of how to use the Upload API to upload, list, delete files, and validate datasets. This API is essential for preparing and managing files for fine-tuning models.
 
 # Fine-Tune API
-In Terminal
-```py
-export API_BASE=https://llm-server.llmhub.t-systems.net
-export API_KEY=YOUR_LLMHUB_KEY
-curl -H "Authorization: Bearer $API_KEY" $API_BASE
-```
 
 ### Setting up environment
 ```py
 import os
 from openai import OpenAI
 
-api_base = os.getenv('API_BASE')
-api_key = os.getenv('API_KEY')
-
 client = OpenAI(
     api_key=os.getenv('API_KEY'),
-    base_url=os.getenv('API_BASE') +'/v1'
+    base_url=os.getenv('API_BASE')
 )
 ```
 
@@ -468,7 +454,7 @@ FineTuningJob(id='ftjob-abc123', created_at='2024-06-27T09:24:33.443283+00:00', 
 
 In order to see the training metric, validation loss user need to provide us the W&B api-key and also the name of the W&B project.
 
-Addtionally to that, we also have an benchmarking API for the fine-tuned LLM model, where we choose widely used benchmarking frameworks & method: LM Evaluation Harness and the Needle in a Haystack method for LLM evaluation.
+Addtionally to that, we also have an benchmarking API for the fine-tuned LLM model, where it will be evaluate with the widely used benchmarking frameworks & metric: LM Evaluation Harness and the Needle in a Haystack method for LLM evaluation.
 
 In this case, MLflow is used to monitor both the training and benchmarking processes. You can view your training and benchmarking scores at: https://mlflow.llm-serving.llmhub.t-systems.net.
 
