@@ -19,8 +19,8 @@ and refinement of user query. This section show a quick tutorial how you can use
 
 **Step 0: Install prerequiste package**
 ```
-pip install llama-index==0.10.18
-pip install llama-index-llms-openai-like==0.1.3
+pip install llama-index
+pip install llama-index-llms-azure-openai
 pip install llama-index-embeddings-openai
 ```
 
@@ -55,17 +55,22 @@ Example output:
 
 ```
 ==========Available models==========
-Llama-3-70B-Instruct
+Llama-3.1-70B-Instruct
+Mistral-Nemo-Instruct-2407
 Mixtral-8x7B-Instruct-v0.1
-CodeLlama-2
+DeepSeek-Coder-V2-Lite-Instruct
 jina-embeddings-v2-base-de
 text-embedding-bge-m3
 gpt-35-turbo
 text-embedding-ada-002
-gpt-4-32k-canada
-gpt-4-32k-france
-mistral-large-32k-france
+gpt-4o
 gpt-4-turbo-128k-france
+claude-3-5-sonnet
+gemini-1.5-pro
+gemini-1.5-flash
+Llama-3.1-405B-Instruct-US
+Mistral-Large-2407
+claude-3-5-sonnet-v2-US
 ```
 
 **Step 2: Initialize LLM with OpenAILike class.**
@@ -74,17 +79,14 @@ gpt-4-turbo-128k-france
     ```py showLineNumbers
     import os
     import httpx
-    from llama_index.llms.openai_like import OpenAILike
+    from llama_index.llms.azure_openai import AzureOpenAI
 
-    model = "Llama-3-70B-Instruct"
-
-    llm = OpenAILike(api_base=os.getenv('API_BASE'), api_key=os.getenv('API_KEY'),
-                    model=model,
-                    temperature=0.1,
-                    max_tokens=512,
-                    top_p=0.9,
-                    is_chat_model=True #this is important to make the model use the Chat API instead of completion API
-                    )
+    llm = AzureOpenAI(
+        deployment_name="gpt-4o",
+        api_key=api_key=os.getenv('API_KEY'),
+        azure_endpoint=os.getenv('API_BASE'),
+        api_version="2023-07-01-preview",
+    )
     
     # Test run
     response_iter = llm.stream_complete("""You are the funniest comedian. Tell me a joke.""")

@@ -58,17 +58,22 @@ Example output:
 
 ```
 ==========Available models==========
-Llama-3-70B-Instruct
+Llama-3.1-70B-Instruct
+Mistral-Nemo-Instruct-2407
 Mixtral-8x7B-Instruct-v0.1
-CodeLlama-2
+DeepSeek-Coder-V2-Lite-Instruct
 jina-embeddings-v2-base-de
 text-embedding-bge-m3
 gpt-35-turbo
 text-embedding-ada-002
-gpt-4-32k-canada
-gpt-4-32k-france
-mistral-large-32k-france
+gpt-4o
 gpt-4-turbo-128k-france
+claude-3-5-sonnet
+gemini-1.5-pro
+gemini-1.5-flash
+Llama-3.1-405B-Instruct-US
+Mistral-Large-2407
+claude-3-5-sonnet-v2-US
 ```
 
 **You can get the specific meta data of each model:**
@@ -92,7 +97,7 @@ That will output:
 <Tabs>
   <TabItem value="py" label="Python" default>
     ```py showLineNumbers
-    model = "Llama-3-70B-Instruct" # choose one of available LLM (not the embedding model)
+    model = "Llama-3.1-70B-Instruct" # choose one of available LLM (not the embedding model)
     stream = True 
 
     chat_response = client.chat.completions.create(
@@ -121,7 +126,7 @@ That will output:
 <Tabs>
   <TabItem value="py" label="Python" default>
     ```py showLineNumbers
-    model = "Llama-3-70B-Instruct" # choose one of available LLM (not the embedding model)
+    model = "Llama-3.1-70B-Instruct" # choose one of available LLM (not the embedding model)
     stream = True 
 
     completion = client.completions.create(
