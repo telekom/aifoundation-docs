@@ -6,68 +6,10 @@ title: Overview
 
 import React, { useState } from 'react';
 import AvailableModels from '@site/src/components/AvailableModels';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Overview
-<div style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: '32px',
-  padding: '24px',
-  borderRadius: '8px',
-  border: '1px solid var(--ifm-color-emphasis-200)',
-  backgroundColor: 'var(--ifm-background-color)',
-  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-}}>
-  <div style={{ flex: 1 }}>
-    <h3 style={{
-      margin: '0 0 8px',
-      fontSize: '1.2em',
-      fontWeight: 'bold',
-      color: 'var(--ifm-heading-color)',
-    }}>
-      Developer quickstart
-    </h3>
-    <p style={{ margin: '0 0 16px', color: 'var(--ifm-color-emphasis-600)' }}>
-      Set up your environment and make your first API request in minutes
-    </p>
-    <p style={{
-      display: 'flex',
-      alignItems: 'center',
-      color: 'var(--ifm-color-emphasis-500)',
-    }}>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{ width: '20px', height: '20px', marginRight: '4px' }}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l3 3"></path>
-      </svg>
-      5 min
-    </p>
-  </div>
-
-  <div style={{
-    flex: 1,
-    position: 'relative',
-    borderRadius: '8px',
-    padding: '16px',
-    backgroundColor: 'var(--ifm-color-emphasis-100)',
-    color: 'var(--ifm-code-color)',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    maxWidth: '100%',
-  }}>
-    <pre style={{ margin: 0, fontSize: '0.85em', color: 'var(--ifm-code-color)' }}>
-      <code>
-        {`import openai
-client = OpenAI()
-
-completion = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "user", "content": "write a haiku about ai"}
-    ]
-)`}
-      </code>
-    </pre>
-  </div>
-</div>
 
 ## Available LLM-APIs on AI Foundation Services
 
@@ -114,3 +56,55 @@ Our LLM model serving enables effortless querying of open-source LLM models like
 </div>
 
 </div>
+
+
+---
+
+## Our API Suite
+:::tip
+Begin with our APIs by exploring the [**Quickstart Guide**](./Quickstart.md) 🚀 for setup and integration instructions.
+Our API suite provides everything you need to interact seamlessly with advanced language models, allowing for customization, secure data handling, and efficient deployment across various applications.
+:::
+---
+
+**Our API services offer** 
+
+<Tabs>
+  <TabItem label="API Reference" value="api-reference">
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#faf8eb', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+        <a href="/Model Serving/openai" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+          <h3>API Reference</h3>
+          <p>A comprehensive guide covering every endpoint, parameter, and example to streamline the integration of our APIs into your applications.</p>
+        </a>
+        <img src="/img/api.png" alt="API Reference Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '160px', height: '100px', objectFit: 'cover', opacity: '0.2', transform: 'scale(1.2)', zIndex: 0 }} />
+      </div>
+    </div>
+  </TabItem>
+
+  <TabItem label="Fine-Tuning API" value="fine-tune">
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+        <a href="/Model Serving/finetune" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+          <h3>Fine-Tuning API</h3>
+          <p>Customize and enhance models by fine-tuning them with your unique data, helping you achieve higher accuracy and relevance for specific use cases.</p>
+        </a>
+        <img src="/img/artificial-intelligence-deep-learning-22108.png" alt="Fine-Tuning API Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(1.2)', zIndex: 0 }} />
+      </div>
+    </div>
+  </TabItem>
+
+  <TabItem label="RAG API" value="rag">
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#EFE7DD', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+        <a href="/RAG%20API%20Reference" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+          <h3>RAG API</h3>
+          <p>Efficiently search and retrieve information to augment responses with the most relevant data, making your models contextually aware and information-rich.</p>
+        </a>
+        <img src="/img/RAG_image.png" alt="RAG API Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(1.2)', zIndex: 0 }} />
+      </div>
+    </div>
+  </TabItem>
+</Tabs>
+
+
