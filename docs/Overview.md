@@ -4,63 +4,113 @@ slug: /
 title: Overview
 ---
 
+import React, { useState } from 'react';
+import AvailableModels from '@site/src/components/AvailableModels';
+
 # Overview
+<div style={{
+  display: 'flex',
+  alignItems: 'center',
+  gap: '32px',
+  padding: '24px',
+  borderRadius: '8px',
+  border: '1px solid var(--ifm-color-emphasis-200)',
+  backgroundColor: 'var(--ifm-background-color)',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+}}>
+  <div style={{ flex: 1 }}>
+    <h3 style={{
+      margin: '0 0 8px',
+      fontSize: '1.2em',
+      fontWeight: 'bold',
+      color: 'var(--ifm-heading-color)',
+    }}>
+      Developer quickstart
+    </h3>
+    <p style={{ margin: '0 0 16px', color: 'var(--ifm-color-emphasis-600)' }}>
+      Set up your environment and make your first API request in minutes
+    </p>
+    <p style={{
+      display: 'flex',
+      alignItems: 'center',
+      color: 'var(--ifm-color-emphasis-500)',
+    }}>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{ width: '20px', height: '20px', marginRight: '4px' }}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l3 3"></path>
+      </svg>
+      5 min
+    </p>
+  </div>
+
+  <div style={{
+    flex: 1,
+    position: 'relative',
+    borderRadius: '8px',
+    padding: '16px',
+    backgroundColor: 'var(--ifm-color-emphasis-100)',
+    color: 'var(--ifm-code-color)',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    maxWidth: '100%',
+  }}>
+    <pre style={{ margin: 0, fontSize: '0.85em', color: 'var(--ifm-code-color)' }}>
+      <code>
+        {`import openai
+client = OpenAI()
+
+completion = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "user", "content": "write a haiku about ai"}
+    ]
+)`}
+      </code>
+    </pre>
+  </div>
+</div>
 
 ## Available LLM-APIs on AI Foundation Services
 
-LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, Mistral open-source models through a simple, OpenAI-compatible API.
+Our LLM model serving enables effortless querying of open-source LLM models like Llama3, Mistral, and other open-source models through a simple, OpenAI-compatible API.
 
-[Introduction](https://docs.llmhub.t-systems.net/Introduction)
+<AvailableModels />
 
-| Models | Provider | Availability |
-| --------------- | --------------- | --------------- |
-| Llama-3.1-70B-Instruct   | Meta    | Yes   |
-| Mixtral-8x7b Instruct v.01   | Mistral AI  | Yes   |
-| CodeLlama-2   | Meta    | Yes   |
-| LLaVA-NeXT   | Community    | Yes   |
-| GPT-4-Omni  | OpenAI (via Azure)    | Yes   |
-| GPT-4-Turbo-2024-05-09  | OpenAI (via Azure)    | Yes   |
-| GPT-3.5-Turbo-0314  | OpenAI (via Azure)     | On request   |
-| Claude 3.5 Sonnet  | Anthropic    | On request   |
-| Claude 3 Opus  | Anthropic    | On request   |
-| Gemini 1.5 Pro  | Google    | On request   |
-| Gemini 1.5 Flash  | Google    | On request   |
-| Llama-3.1-405B-Instruct  | Google    | On request   |
-| Mistral-Large-2407  | Mistral AI   | On request   |
-| Mistral-Nemo-2407  | Mistral AI   | On request   |
+---
 
+## Our Services
 
-## Magenta SmartChat
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
 
-SmartChat - an intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
+<div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#E6EAF0', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+  <a href="/introduction#magenta-smartchat" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+    <h3>Magenta SmartChat</h3>
+    <p>Build conversational assistants using our LLM endpoints and RAG API.</p>
+  </a>
+  <img src="/img/smart-chat.png" alt="Magenta SmartChat" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.3', transform: 'scale(1.2)', zIndex: 0 }} />
+</div>
 
-[Magenta SmartChat](https://smartchat.llmhub.t-systems.net/)
+<div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+  <a href="/introduction#llm-playground" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+    <h3>LLM Playground</h3>
+    <p>Experiment with different LLMs, prompt templates, and documents with your API key.</p>
+  </a>
+  <img src="/img/playground.png" alt="LLM Playground" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.3', transform: 'scale(1.2)', zIndex: 0 }} />
+</div>
 
-![smart chat](smart-chat.png)
+<div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#EFE7DD', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+  <a href="/introduction#create-tsi" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+    <h3>Create TSI</h3>
+    <p>A generative AI RAG toolkit that generates AI applications with low code.</p>
+  </a>
+  <img src="/img/create-tsi.png" alt="Create TSI" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.3', transform: 'scale(1.2)', zIndex: 0 }} />
+</div>
 
-## LLM Playground
+<div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#F9E0DD', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+  <a href="/introduction#api-key-portal" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+    <h3>API Key Portal</h3>
+    <p>Manage your LLM API keys and monitor token usage effectively.</p>
+  </a>
+  <img src="/img/api-portal.png" alt="API Key Portal" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.3', transform: 'scale(1.2)', zIndex: 0 }} />
+</div>
 
-Playground: Experiment with different LLMs, Prompt Templates and Documents by providing your API key. 
-
-[LLM Playground](https://playground.llmhub.t-systems.net/)
-
-![llm-playground](playground.png)
-
-## create-tsi
-
-create-tsi is a generative AI RAG toolkit that generates AI Applications using LlamaIndex with low code.
-
-[Create TSI on GitHub](https://github.com/telekom/create-tsi)
-
-<video width="600" controls>
-  <source src="/img/create-tsi.mp4" type="video/mp4"> </source>
-</video>
-LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, GPT-4, and Mistral AI models through a simple, OpenAI-compatible API.
-
-## API Key Portal
-
-PI Portal - Allows you to manage your LLM API Keys and monitor your token usage
-
-[LLM API Key Portal](https://auth.llmhub.t-systems.net/)
-
-![api-portal](api-portal.png)
+</div>
