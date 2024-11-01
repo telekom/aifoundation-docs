@@ -3,6 +3,7 @@
 
 # Production
 /build
+note.txt
 
 # Generated files
 .docusaurus

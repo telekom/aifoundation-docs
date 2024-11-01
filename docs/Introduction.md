@@ -18,7 +18,7 @@ Welcome to AI Foundation Services - your gateway to private, secure, and scalabl
 2. **Run your first query:** Once you have your API key, dive into querying LLMs and unlocking their potential.
 
 ## Our Product
-### Magenta SmartChat
+### Magenta SmartChat {#magenta-smartchat}
 
 SmartChat - an intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
 
@@ -26,7 +26,7 @@ SmartChat - an intelligent chat application powered by our LLM endpoints and RAG
 
 ![smart chat](smart-chat.png)
 
-### LLM Playground
+### LLM Playground {#llm-playground}
 
 Playground: Experiment with different LLMs, Prompt Templates and Documents by providing your API key. 
 
@@ -34,7 +34,7 @@ Playground: Experiment with different LLMs, Prompt Templates and Documents by pr
 
 ![llm-playground](playground.png)
 
-### create-tsi
+### Create-TSI {#create-tsi}
 
 create-tsi is a generative AI RAG toolkit that generates AI Applications using LlamaIndex with low code.
 
@@ -45,7 +45,7 @@ create-tsi is a generative AI RAG toolkit that generates AI Applications using L
 </video>
 LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, GPT-4, and Mistral AI models through a simple, OpenAI-compatible API.
 
-### API Key Portal
+### API Key Portal {#api-key-portal}
 
 PI Portal - Allows you to manage your LLM API Keys and monitor your token usage
 
