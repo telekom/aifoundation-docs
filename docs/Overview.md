@@ -24,7 +24,7 @@ Our LLM model serving enables effortless querying of open-source LLM models like
 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
 
 <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#E6EAF0', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
-  <a href="/introduction#magenta-smartchat" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+  <a href="./introduction#magenta-smartchat" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
     <h3>Magenta SmartChat</h3>
     <p>Build conversational assistants using our LLM endpoints and RAG API.</p>
   </a>
@@ -32,7 +32,7 @@ Our LLM model serving enables effortless querying of open-source LLM models like
 </div>
 
 <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
-  <a href="/introduction#llm-playground" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+  <a href="./introduction#llm-playground" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
     <h3>LLM Playground</h3>
     <p>Experiment with different LLMs, prompt templates, and documents with your API key.</p>
   </a>
@@ -40,7 +40,7 @@ Our LLM model serving enables effortless querying of open-source LLM models like
 </div>
 
 <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#EFE7DD', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
-  <a href="/introduction#create-tsi" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+  <a href="./introduction#create-tsi" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
     <h3>Create TSI</h3>
     <p>A generative AI RAG toolkit that generates AI applications with low code.</p>
   </a>
@@ -48,7 +48,7 @@ Our LLM model serving enables effortless querying of open-source LLM models like
 </div>
 
 <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#F9E0DD', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
-  <a href="/introduction#api-key-portal" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+  <a href="./introduction#api-key-portal" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
     <h3>API Key Portal</h3>
     <p>Manage your LLM API keys and monitor token usage effectively.</p>
   </a>
