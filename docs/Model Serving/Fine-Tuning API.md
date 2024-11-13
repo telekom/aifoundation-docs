@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 id: finetune
 title: Fine-tuning API
 tags:
@@ -9,7 +9,7 @@ tags:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Introduction
+## Introduction
 
 This document introduce our Fine-Tuning API and outlines how to use the Upload API for tasks like uploading, listing, and deleting files, as well as the Fine-Tuning Server for fine-tune purpose. It also details how to validate dataset formats, ensuring they are ready for use. Both APIs integrate with the OpenAI package in Python for easier streamlining data management.
 

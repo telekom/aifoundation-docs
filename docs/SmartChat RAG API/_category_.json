@@ -1,0 +1,8 @@
+{
+  "label": "SmartChat RAG API",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Get started with the SmartChat RAG API"
+  }
+}
