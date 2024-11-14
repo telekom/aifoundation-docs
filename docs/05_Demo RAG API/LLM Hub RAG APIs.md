@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 id: RAG API Reference
 title: API reference for Demo RAG (Deprecated)
 tags:

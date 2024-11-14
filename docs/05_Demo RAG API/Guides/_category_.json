@@ -1,0 +1,8 @@
+{
+  "label": "Guides (Deprecated)",
+  "position": 9,
+  "link": {
+    "type": "generated-index",
+    "description": "Get started with the Demo RAG API Guides"
+  }
+}
