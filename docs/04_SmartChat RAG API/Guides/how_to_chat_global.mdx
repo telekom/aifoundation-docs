@@ -1,0 +1,72 @@
+---
+sidebar_position: 9
+id: global_chat_guide
+title: How to Chat using the global KB?
+tags:
+  - Demo
+  - Getting started
+  - RAG
+---
+
+# How to Chat using the global KB?
+
+## 0. Prerequisites
+
+* **Credentials** to authenticate to a hosted SmartChat RAG API on **BASE_URL** with a user with a `CHAT_USER` role.
+* A **pre-configured** SmartChat RAG API server.
+
+## 1. Authenticate
+```py showLineNumbers
+import requests
+import json
+
+base_url = "<BASE_URL>"
+
+payload = json.dumps({
+  "username": "<USERNAME>",
+  "password": "<PASSWORD>"
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.post(f"{base_url}/api/v1/auth/user", headers=headers, data=payload)
+
+headers["Authorization"] = f"Bearer {response.json()['access_token']}"
+```
+
+## 2. Obtain the default Chat Configuration
+```py showLineNumbers
+response = requests.get(f"{base_url}/config-manager/api/v1/user/configs", headers=headers )
+
+configs = response.json()
+default_config = [config for config in configs if config["userGroupId"] == "default"][0]
+
+default_local_config_id = default_config["localKbConfigs"][0]["id"]
+allowed_llms = default_config["localKbConfigs"][0]["allowed_llms"]
+```
+
+## 3. Create a global Chat Session
+```py showLineNumbers
+body = {
+  "title": "Testing the SmartChat RAG API",
+  "config": {
+    "localConfigId": default_local_config_id,
+    "globalContext": True,
+    "chatModel": allowed_llms[0]["name"]
+  }
+}
+response = requests.post(f"{base_url}/chat-session-manager/api/v1/sessions/", headers=headers, json=body)
+session_id = response.json()["sessionId"]
+```
+
+## 4. Chat
+```py showLineNumbers
+body = {
+  "sessionId": session_id,
+  "userPrompt": "Can you summarize the context to me?"
+}
+response = requests.post(f"{base_url}/query-pipelines/api/v1/chat", headers=headers, json=body)
+
+print(response.json())
+```

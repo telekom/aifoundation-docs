@@ -25,7 +25,7 @@ For registration please contact the AIFS team via example@t-systems.com
 
 ## Authentication
 
-To authenticate you need to obtain a **Bearer Token** from the [authentication endpoint](https://api-gateway.erag.dev.llmhub.t-systems.net/redoc#tag/Auth/operation/get_user_token_api_v1_auth_user_post) and then set the **access_token** in the header of all your subsequent requests.
+To authenticate you need to obtain a **Bearer Token** from the [authentication endpoint](https://api-gateway.erag.prod.llmhub.t-systems.net/redoc#tag/Auth/operation/get_user_token_api_v1_auth_user_post) and then set the **access_token** in the header of all your subsequent requests.
 
 ### Example Authentication
 <Tabs>
@@ -74,17 +74,13 @@ To authenticate you need to obtain a **Bearer Token** from the [authentication e
 
 ## Services
 
-:::warning
-Below we provide the API doc links of the development environment which could be unstable. We will replace them with the prod environment once they're released.
-:::
-
 | Name  | \<service_path\>  | Docs  | Description |
 |:---:|:---:|:---:|:---:|
-| **API Gateway** | - | [link](https://api-gateway.erag.dev.llmhub.t-systems.net/redoc)  | Entrypoint for authentication and all backend services. |
-| **Config Manager** | **config-manager** | [link](https://api-gateway.erag.dev.llmhub.t-systems.net/config-manager/redoc)  | Management of Tenant and RAG Configurations. |
-| **User Manager** | **user-manager** | [link](https://api-gateway.erag.dev.llmhub.t-systems.net/user-manager/redoc)  | Management of Users, Roles, and User-Groups. |
-| **File Manager** | **file-manager** | [link](https://api-gateway.erag.dev.llmhub.t-systems.net/file-manager/redoc)  | Management of Files, File-Groups, Knowledge Bases (KBs) and File-Access-Management. |
-| **Ingest Master** | **ingest-master** | [link](https://api-gateway.erag.dev.llmhub.t-systems.net/ingest-master/redoc)  | Orchestration of file ingestion tasks, based on the selected ingestion pipeline via the Config Manager. |
-| **Chat Session Manager** | **chat-session-manager** | [link](https://api-gateway.erag.dev.llmhub.t-systems.net/chat-session-manager/redoc)  | Management of chat sessions, session configurations, session history, and messages feedback. |
-| **Query Pipelines** | **query-pipelines** | [link](https://api-gateway.erag.dev.llmhub.t-systems.net/query-pipelines/redoc)  | Generation of chat responses based on the selected query pipeline via the Config Manager. |
-| **Web Extraction** | **web-extraction-api** | [link](https://api-gateway.erag.dev.llmhub.t-systems.net/web-extraction-api/redoc)  | Web crawling with built-in file management and ingestion. |
+| **API Gateway** | - | [link](https://api-gateway.erag.prod.llmhub.t-systems.net/redoc)  | Entrypoint for authentication and all backend services. |
+| **Config Manager** | **config-manager** | [link](https://api-gateway.erag.prod.llmhub.t-systems.net/config-manager/redoc)  | Management of Tenant and RAG Configurations. |
+| **User Manager** | **user-manager** | [link](https://api-gateway.erag.prod.llmhub.t-systems.net/user-manager/redoc)  | Management of Users, Roles, and User-Groups. |
+| **File Manager** | **file-manager** | [link](https://api-gateway.erag.prod.llmhub.t-systems.net/file-manager/redoc)  | Management of Files, File-Groups, Knowledge Bases (KBs) and File-Access-Management. |
+| **Ingest Master** | **ingest-master** | [link](https://api-gateway.erag.prod.llmhub.t-systems.net/ingest-master/redoc)  | Orchestration of file ingestion tasks, based on the selected ingestion pipeline via the Config Manager. |
+| **Chat Session Manager** | **chat-session-manager** | [link](https://api-gateway.erag.prod.llmhub.t-systems.net/chat-session-manager/redoc)  | Management of chat sessions, session configurations, session history, and messages feedback. |
+| **Query Pipelines** | **query-pipelines** | [link](https://api-gateway.erag.prod.llmhub.t-systems.net/query-pipelines/redoc)  | Generation of chat responses based on the selected query pipeline via the Config Manager. |
+| **Web Extraction** | **web-extraction-api** | [link](https://api-gateway.erag.prod.llmhub.t-systems.net/web-extraction-api/redoc)  | Web crawling with built-in file management and ingestion. |
