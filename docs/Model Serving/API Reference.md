@@ -49,6 +49,13 @@ pip install openai
       print(model.id)
     ```
   </TabItem>
+
+  <TabItem value="curl" label="cURL">
+    ```bash showLineNumbers
+    curl -X GET https://llm-server.llmhub.t-systems.net/v2/models \
+    -H "Authorization: Bearer YOUR_API_KEY"
+    ```
+  </TabItem>
 </Tabs>
 
 :::info
@@ -124,6 +131,24 @@ That will output:
                     print(chunk.choices[0].delta.content, end="", flush=True)
     ```
   </TabItem>
+
+  <TabItem value="curl" label="cURL">
+    ```bash showLineNumbers
+    curl -X POST https://llm-server.llmhub.t-systems.net/v2/chat/completions \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "Llama-3.1-70B-Instruct",
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant named Llama-3."},
+            {"role": "user", "content": "What is Open Telekom Cloud?"}
+        ],
+        "temperature": 0.1,
+        "max_tokens": 256,
+        "stream": true
+    }'
+    ```
+  </TabItem>
 </Tabs>
 
 ### Completion API 
@@ -132,29 +157,42 @@ That will output:
 
 <Tabs>
   <TabItem value="py" label="Python" default>
+    ```python showLineNumbers
+    model = "Llama-3.1-70B-Instruct"  # choose one of the available LLMs (not the embedding model)
+    stream = True 
 
-```python showLineNumbers
-model = "Llama-3.1-70B-Instruct"  # choose one of the available LLMs (not the embedding model)
-stream = True 
+    completion = client.completions.create(
+        model=model,
+        prompt="What is Python programming language?",
+        stream=stream,
+        temperature=0.2,
+        max_tokens=128
+    )
 
-completion = client.completions.create(
-    model=model,
-    prompt="What is Python programming language?",
-    stream=stream,
-    temperature=0.2,
-    max_tokens=128
-)
+    if not stream:
+        print(completion.choices[0].text)
 
-if not stream:
-    print(completion.choices[0].text)
+    else:
+        for chunk in completion:
+            if chunk.choices:
+                if chunk.choices[0].text is not None:
+                    print(chunk.choices[0].text, end="", flush=True)
+    ```
+  </TabItem>
 
-else:
-    for chunk in completion:
-        if chunk.choices:
-            if chunk.choices[0].text is not None:
-                print(chunk.choices[0].text, end="", flush=True)
-```
-
+  <TabItem value="curl" label="cURL">
+    ```bash showLineNumbers
+    curl -X POST https://llm-server.llmhub.t-systems.net/v2/completions \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "Llama-3.1-70B-Instruct",
+        "prompt": "What is Python programming language?",
+        "temperature": 0.2,
+        "max_tokens": 128,
+        "stream": true
+    }'
+    ```
   </TabItem>
 </Tabs>
 
@@ -179,6 +217,18 @@ The completions API is only available for open-source models. To get the correct
     print('Embedding dimension: ',len(embeddings.data[0].embedding))
     print('Number of embedding vector: ',len(embeddings.data))
     print('Token usage: ',embeddings.usage)
+    ```
+  </TabItem>
+
+  <TabItem value="curl" label="cURL">
+    ```bash showLineNumbers
+    curl -X POST https://llm-server.llmhub.t-systems.net/v2/embeddings \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "jina-embeddings-v2-base-de",
+        "input": ["I am Batman and I'm rich","I am Spiderman","I am Ironman and I'm a bilionaire", "I am Flash", "I am the president of USA"]
+    }'
     ```
   </TabItem>
 </Tabs>
@@ -207,7 +257,9 @@ Usage(prompt_tokens=31, total_tokens=31)
                 "properties": {
                     "location": {
                         "type": "string",
-                        "description": "The city and state, e.g. San Francisco, CA",
+                        "description":
+
+ "The city and state, e.g. San Francisco, CA",
                     },
                     "format": {
                         "type": "string",
@@ -231,6 +283,45 @@ Usage(prompt_tokens=31, total_tokens=31)
     messages.append(assistant_message) #update the conversation
 
     print(assistant_message)
+    ```
+  </TabItem>
+
+  <TabItem value="curl" label="cURL">
+    ```bash showLineNumbers
+    curl -X POST https://llm-server.llmhub.t-systems.net/v2/chat/completions \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "gpt-4-turbo-128k-france",
+        "messages": [
+            {"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."},
+            {"role": "user", "content": "What's the weather like today in Hamburg"}
+        ],
+        "tools": [
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_current_weather",
+                    "description": "Get the current weather",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "location": {
+                                "type": "string",
+                                "description": "The city and state, e.g. San Francisco, CA"
+                            },
+                            "format": {
+                                "type": "string",
+                                "enum": ["celsius", "fahrenheit"],
+                                "description": "The temperature unit to use."
+                            }
+                        },
+                        "required": ["location", "format"]
+                    }
+                }
+            }
+        ]
+    }'
     ```
   </TabItem>
 </Tabs>
@@ -270,6 +361,13 @@ Here is an example of how to use OpenAI Vision API for Llava-1.6-34b.
     models = client.models.list()
     for model in models.data:
       print(model.id)
+    ```
+  </TabItem>
+
+  <TabItem value="curl" label="cURL">
+    ```bash showLineNumbers
+    curl -X GET https://llm-server.llmhub.t-systems.net/vision/models \
+    -H "Authorization: Bearer YOUR_API_KEY"
     ```
   </TabItem>
 </Tabs>
@@ -325,6 +423,32 @@ llava-v1.6-vicuna-13b
                     print(chunk.choices[0].delta.content, end="")
     else:
         print(chat_response.choices[0].message.content)
+    ```
+  </TabItem>
+
+  <TabItem value="curl" label="cURL">
+    ```bash showLineNumbers
+    curl -X POST https://llm-server.llmhub.t-systems.net/vision/completions \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "llava-v1.6-vicuna-13b",
+        "messages": [
+            {
+                "role": "system",
+                "content": [{"type": "text", "text": "You are an helpful AI assistant named LLava help people answer their question base on the image and text provided."}]
+            },
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "What’s in this image?"},
+                    {"type": "image_url", "image_url": {"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"}}
+                ]
+            }
+        ],
+        "max_tokens": 300,
+        "temperature": 0.01
+    }'
     ```
   </TabItem>
 </Tabs>
@@ -400,7 +524,37 @@ The overall scene is peaceful and invites one to imagine a walk through the fiel
                 if chunk.choices[0].delta.content is not None:
                     print(chunk.choices[0].delta.content, end="")
     else:
-        print(chat_response.choices[0].message.content)
+        print(chat_response
+
+.choices[0].message.content)
     ```
   </TabItem>
+  <TabItem value="curl" label="cURL">
+    ```bash showLineNumbers
+    curl -X POST https://llm-server.llmhub.t-systems.net/v2/chat/completions \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "llava-v1.6-34b",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {"type": "text", "text": "What’s in this image?"},
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/jpeg;base64,YOUR_BASE64_IMAGE_STRING"
+              }
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1000,
+      "temperature": 0.01,
+      "stream": true
+    }'
+    ```
+  </TabItem>
+
 </Tabs>

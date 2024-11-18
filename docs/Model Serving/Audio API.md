@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5  
 id: audio-api  
-title: Audio API Reference  
+title: Audio API
 tags:  
   - Audio API  
   - Transcription  
@@ -26,7 +26,7 @@ To interact with the audio API, set up your environment variables as follows:
 
 ```bash
 # Set API base URL
-export API_BASE=https://llm-server.llmhub.t-systems.net
+export API_BASE=https://llm-server.llmhub.t-systems.net/v2
 
 # Set your API key
 export API_KEY=YOUR_LLMHUB_KEY
