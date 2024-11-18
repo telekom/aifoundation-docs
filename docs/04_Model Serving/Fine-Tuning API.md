@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 id: finetune
 title: Fine-tuning API
 tags:
@@ -29,7 +29,9 @@ After the model was fine tuned with these dataset, user can use our evaluate API
 **Pre-Formatted Datasets**: If you upload a dataset already in the OpenAI JSONL format, it will be sent directly to the Fine-Tuning Server, ready for fine-tuning.
 You can also use the Validate Dataset endpoint to ensure your JSONL file follows the correct format.
 
-![image](https://github.com/user-attachments/assets/5e5f9672-5eb3-4217-b249-8694b174b963)
+<div style={{ backgroundColor: 'white', padding: '10px', borderRadius: '8px', display: 'inline-block' }}>
+  <img src="https://github.com/user-attachments/assets/5e5f9672-5eb3-4217-b249-8694b174b963" alt="Pre-Formatted Datasets Workflow" style={{ display: 'block' }} />
+</div>
 
 
 ## Upload API

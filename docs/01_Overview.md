@@ -4,63 +4,106 @@ slug: /
 title: Overview
 ---
 
+import React, { useState } from 'react';
+import AvailableModels from '@site/src/components/AvailableModels';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Link from '@docusaurus/Link';
+
 # Overview
 
 ## Available LLM-APIs on AI Foundation Services
 
-LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, Mistral open-source models through a simple, OpenAI-compatible API.
+Our LLM model serving enables effortless querying of open-source LLM models like Llama3, Mistral, and other open-source models through a simple, OpenAI-compatible API.
 
-[Introduction](https://docs.llmhub.t-systems.net/Introduction)
+<AvailableModels />
 
-| Models | Provider | Availability |
-| --------------- | --------------- | --------------- |
-| Llama-3.1-70B-Instruct   | Meta    | Yes   |
-| Mixtral-8x7b Instruct v.01   | Mistral AI  | Yes   |
-| CodeLlama-2   | Meta    | Yes   |
-| LLaVA-NeXT   | Community    | Yes   |
-| GPT-4-Omni  | OpenAI (via Azure)    | Yes   |
-| GPT-4-Turbo-2024-05-09  | OpenAI (via Azure)    | Yes   |
-| GPT-3.5-Turbo-0314  | OpenAI (via Azure)     | On request   |
-| Claude 3.5 Sonnet  | Anthropic    | On request   |
-| Claude 3 Opus  | Anthropic    | On request   |
-| Gemini 1.5 Pro  | Google    | On request   |
-| Gemini 1.5 Flash  | Google    | On request   |
-| Llama-3.1-405B-Instruct  | Google    | On request   |
-| Mistral-Large-2407  | Mistral AI   | On request   |
-| Mistral-Nemo-2407  | Mistral AI   | On request   |
+---
 
+## Our Services
 
-## Magenta SmartChat
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
 
-SmartChat - an intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
+  <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#E6EAF0', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+    <Link to="./introduction#magenta-smartchat" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+      <h3>Magenta SmartChat</h3>
+      <p>Build conversational assistants using our LLM endpoints and RAG API.</p>
+    </Link>
+    <img src="/img/smart-chat.png" alt="Magenta SmartChat" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.3', transform: 'scale(1.2)', zIndex: 0 }} />
+  </div>
 
-[Magenta SmartChat](https://smartchat.llmhub.t-systems.net/)
+  <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+    <Link to="./introduction#llm-playground" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+      <h3>LLM Playground</h3>
+      <p>Experiment with different LLMs, prompt templates, and documents with your API key.</p>
+    </Link>
+    <img src="/img/playground.png" alt="LLM Playground" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.3', transform: 'scale(1.2)', zIndex: 0 }} />
+  </div>
 
-![smart chat](smart-chat.png)
+  <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#EFE7DD', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+    <Link to="./introduction#create-tsi" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+      <h3>Create TSI</h3>
+      <p>A generative AI RAG toolkit that generates AI applications with low code.</p>
+    </Link>
+    <img src="/img/create-tsi.png" alt="Create TSI" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.3', transform: 'scale(1.2)', zIndex: 0 }} />
+  </div>
 
-## LLM Playground
+  <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#F9E0DD', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+    <Link to="./introduction#api-key-portal" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+      <h3>API Key Portal</h3>
+      <p>Manage your LLM API keys and monitor token usage effectively.</p>
+    </Link>
+    <img src="/img/api-portal.png" alt="API Key Portal" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.3', transform: 'scale(1.2)', zIndex: 0 }} />
+  </div>
 
-Playground: Experiment with different LLMs, Prompt Templates and Documents by providing your API key. 
+</div>
 
-[LLM Playground](https://playground.llmhub.t-systems.net/)
+---
 
-![llm-playground](playground.png)
+## Our API Suite
+:::tip
+Begin with our APIs by exploring the [**Quickstart Guide**](./Quickstart.md) 🚀 for setup and integration instructions.
+Our API suite provides everything you need to interact seamlessly with advanced language models, allowing for customization, secure data handling, and efficient deployment across various applications.
+:::
 
-## create-tsi
+---
 
-create-tsi is a generative AI RAG toolkit that generates AI Applications using LlamaIndex with low code.
+**Our API services offer** 
 
-[Create TSI on GitHub](https://github.com/telekom/create-tsi)
+<Tabs>
+  <TabItem label="API Reference" value="api-reference">
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#faf8eb', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+        <a href="/Model Serving/openai" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+          <h3>API Reference</h3>
+          <p>A comprehensive guide covering every endpoint, parameter, and example to streamline the integration of our APIs into your applications.</p>
+        </a>
+        <img src="/img/api.png" alt="API Reference Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '160px', height: '100px', objectFit: 'cover', opacity: '0.2', transform: 'scale(1.2)', zIndex: 0 }} />
+      </div>
+    </div>
+  </TabItem>
 
-<video width="600" controls>
-  <source src="/img/create-tsi.mp4" type="video/mp4"> </source>
-</video>
-LLM model serving, allowing you to effortlessly query open-source LLM models like Llama3, GPT-4, and Mistral AI models through a simple, OpenAI-compatible API.
+  <TabItem label="Fine-Tuning API" value="fine-tune">
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+        <a href="/Model Serving/finetune" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+          <h3>Fine-Tuning API</h3>
+          <p>Customize and enhance models by fine-tuning them with your unique data, helping you achieve higher accuracy and relevance for specific use cases.</p>
+        </a>
+        <img src="/img/artificial-intelligence-deep-learning-22108.png" alt="Fine-Tuning API Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(1.2)', zIndex: 0 }} />
+      </div>
+    </div>
+  </TabItem>
 
-## API Key Portal
-
-PI Portal - Allows you to manage your LLM API Keys and monitor your token usage
-
-[LLM API Key Portal](https://auth.llmhub.t-systems.net/)
-
-![api-portal](api-portal.png)
+  <TabItem label="RAG API" value="rag">
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#EFE7DD', color: '#333', textAlign: 'center', height: '200px', overflow: 'hidden' }}>
+        <a href="/RAG%20API%20Reference" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+          <h3>RAG API</h3>
+          <p>Efficiently search and retrieve information to augment responses with the most relevant data, making your models contextually aware and information-rich.</p>
+        </a>
+        <img src="/img/RAG_image.png" alt="RAG API Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(1.2)', zIndex: 0 }} />
+      </div>
+    </div>
+  </TabItem>
+</Tabs>

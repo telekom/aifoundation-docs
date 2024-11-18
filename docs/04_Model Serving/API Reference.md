@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 id: openai
 title: API Reference
 tags:
@@ -20,7 +20,8 @@ Although it demonstrate a compatibility of our API with OpenAI, for RAG use case
 ## Https API Reference
 If you want to look up the POST/GET API endpoints instead, please have a look at the Https API Reference [here](https://llm-server.llmhub.t-systems.net/redoc) and [here](https://llm-server.llmhub.t-systems.net/docs).
 
-## Quickstart
+## Guides
+### List of available models
 
 **Step 0: Install openai package**
 ```
@@ -93,7 +94,10 @@ That will output:
 
 
 
-**Step 2: Chat API. The role and the content of prompt for each role is required.**
+### Chat completion API
+
+**The role and the content of prompt for each role is required.**
+
 <Tabs>
   <TabItem value="py" label="Python" default>
     ```py showLineNumbers
@@ -122,40 +126,45 @@ That will output:
   </TabItem>
 </Tabs>
 
-**Step 3: Completion API. With this api, the raw text will be sent directly to the LLM without special tag template.**
+### Completion API 
+
+**With this API, the raw text will be sent directly to the LLM without a special tag template.**
+
 <Tabs>
   <TabItem value="py" label="Python" default>
-    ```py showLineNumbers
-    model = "Llama-3.1-70B-Instruct" # choose one of available LLM (not the embedding model)
-    stream = True 
 
-    completion = client.completions.create(
-        model=model,
-        prompt="What is python program language?",
-        stream=stream,
-        temperature=0.2,
-        max_tokens=128
-    )
+```python showLineNumbers
+model = "Llama-3.1-70B-Instruct"  # choose one of the available LLMs (not the embedding model)
+stream = True 
 
-    if not stream:
-        print(completion.choices[0].text)
+completion = client.completions.create(
+    model=model,
+    prompt="What is Python programming language?",
+    stream=stream,
+    temperature=0.2,
+    max_tokens=128
+)
 
-    else:
-        for chunk in completion:
-            if chunk.choices:
-                if chunk.choices[0].text is not None:
-                    print(chunk.choices[0].text, end="",flush=True)
+if not stream:
+    print(completion.choices[0].text)
 
-    ```
+else:
+    for chunk in completion:
+        if chunk.choices:
+            if chunk.choices[0].text is not None:
+                print(chunk.choices[0].text, end="", flush=True)
+```
+
   </TabItem>
 </Tabs>
+
 :::info
-The completions API only available for open-source models.
-In order to get the correct behavior of models, you need to follow a specific set of template that the author used during the instruction fine-tuning phase of the LLM. e.g: ## System, ## Assistant.
-**We recommend alway make use of Chat API instead**.
+The completions API is only available for open-source models. To get the correct behavior from the models, you need to follow a specific set of templates that the author used during the instruction fine-tuning phase of the LLM (e.g., `## System`, `## Assistant`).
+
+**We recommend always using the Chat API instead**.
 :::
 
-**Step 4: Embedding API**
+### Embedding API
 
 <Tabs>
   <TabItem value="py" label="Python" default>
@@ -182,7 +191,7 @@ Number of embedding vector:  5
 Usage(prompt_tokens=31, total_tokens=31)
 ```
 
-**Step 5: Function calling**
+### Function calling**
 
 <Tabs>
   <TabItem value="py" label="Python" default>

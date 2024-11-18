@@ -20,6 +20,7 @@
     "@mdx-js/react": "^3.0.0",
     "@telekom/scale-components": "^3.0.0-beta.153",
     "@telekom/scale-components-react": "^3.0.0-beta.153",
+    "caniuse-lite": "^1.0.30001675",
     "clsx": "^2.0.0",
     "docusaurus-plugin-search-local": "^2.0.1",
     "prism-react-renderer": "^2.3.0",
