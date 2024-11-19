@@ -197,3 +197,9 @@ body[data-mode='dark'] .table-of-contents__link {
 body[data-mode='dark'] .table-of-contents__link--active{
   color: #e20074;
 }
+
+table {
+  display: table;
+  width: initial;
+  margin: 0 auto;
+}

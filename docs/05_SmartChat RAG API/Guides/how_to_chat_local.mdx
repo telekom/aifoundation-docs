@@ -1,0 +1,147 @@
+---
+sidebar_position: 8
+id: local_chat_guide
+title: How to Chat using the local KB?
+tags:
+  - Demo
+  - Getting started
+  - RAG
+---
+
+# How to Chat using the local KB?
+
+## 0. Prerequisites
+
+* **Credentials** to authenticate to a hosted SmartChat RAG API on **BASE_URL** with a user with a `CHAT_USER` role.
+* A **pre-configured** SmartChat RAG API server.
+* A **pdf file**.
+
+## 1. Authenticate
+```py showLineNumbers
+import requests
+import json
+
+base_url = "<BASE_URL>"
+
+payload = json.dumps({
+  "username": "<USERNAME>",
+  "password": "<PASSWORD>"
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.post(f"{base_url}/api/v1/auth/user", headers=headers, data=payload)
+
+headers["Authorization"] = f"Bearer {response.json()['access_token']}"
+```
+
+## 2. Obtain the default Chat Configuration
+```py showLineNumbers
+response = requests.get(f"{base_url}/config-manager/api/v1/user/configs", headers=headers )
+
+configs = response.json()
+default_config = [config for config in configs if config["userGroupId"] == "default"][0]
+
+default_local_config_id = default_config["localKbConfigs"][0]["id"]
+allowed_llms = default_config["localKbConfigs"][0]["allowed_llms"]
+```
+
+## 3. Upload files
+```py showLineNumbers
+import time
+
+file_paths = [
+    "PATH_TO_FILE_1",
+    "PATH_TO_FILE_2",
+]
+params = {"kb": "local"}
+files = [("files", open(file_path, "rb")) for file_path in file_paths]
+
+response = requests.post(f"{base_url}/file-manager/api/v1/files/", headers=headers, params=params, files=files)
+
+pending_files = response.json()
+pending_file_ids = [pending_file["fileId"] for pending_file in pending_files]
+
+# Poll the upload jobs
+while True:
+    params = {
+        "kb": "local",
+        "fileIds": pending_file_ids
+    }
+    response = requests.get(f"{base_url}/file-manager/api/v1/files/", headers=headers, params=params)
+
+    files = response.json()
+
+    if all(file["status"] in ["uploaded", "duplicated"] for file in files):
+        break
+    
+    if all(file["status"] in ["error", "file_too_large", "file_type_not_supported"] for file in files):
+        raise Exception("couldn't upload files")
+
+    time.sleep(2)
+
+uploaded_files = files
+```
+
+## 4. Ingest files
+```py showLineNumbers
+
+for uploaded_file in uploaded_files:
+    url = f"{base_url}/ingest-master/api/v1/task"
+    metadata = {
+        "file_id": uploaded_file["fileId"],
+        "user_id": uploaded_file["userId"],
+        "file_name": uploaded_file["fileName"],
+        "file_uri": uploaded_file["fileUri"],  # most important one. Retrieval doesn't work properly without it.
+    }
+    body = {
+        "filePath": uploaded_file["fileUri"],
+        "role": "user",
+        "metadata": metadata,
+    }
+
+    response = requests.post(f"{base_url}/ingest-master/api/v1/task", headers=headers, json=body)
+
+    # Poll the ingestion task
+    while True:
+        params = {"file_path": uploaded_file["fileUri"], "role": "user"}
+        response = requests.post(f"{base_url}/ingest-master/api/v1/tasks/file", headers=headers, params=params)
+
+        status = response.json()[-1]["status"]  # for simplicity, only take the latest ingestion task
+        
+        if status == "ingested":
+            break
+
+        if status == "ingestion_failed":
+            raise Exception("Couldn't ingest file")
+
+ingested_files = uploaded_files
+```
+
+
+## 5. Create a local Chat Session
+```py showLineNumbers
+body = {
+  "title": "Testing the SmartChat RAG API",
+  "config": {
+    "localConfigId": default_local_config_id,
+    "globalContext": False,
+    "activeFiles": [ingested_files["fileId"] for uploaded_file in uploaded_files]  # you can also leave empty. In that case, all files in the local context will be used for retrieval.
+    "chatModel": allowed_llms[0]["name"]
+  }
+}
+response = requests.post(f"{base_url}/chat-session-manager/api/v1/sessions/", headers=headers, json=body)
+session_id = response.json()["sessionId"]
+```
+
+## 6. Chat
+```py showLineNumbers
+body = {
+  "sessionId": session_id,
+  "userPrompt": "Can you summarize the context to me?"
+}
+response = requests.post(f"{base_url}/query-pipelines/api/v1/chat", headers=headers, json=body)
+
+print(response.json())
+```

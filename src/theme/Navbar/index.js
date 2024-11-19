@@ -17,7 +17,7 @@ main-nav-aria-label="Main navigation">
           <a href="/Introduction">Introduction</a>
         </scale-telekom-nav-item>
         <scale-telekom-nav-item>
-          <a href="/Guides/RAG%20Guide">Examples</a>
+          <a href="/category/guides">Examples</a>
         </scale-telekom-nav-item>
       </scale-telekom-nav-list>
       
