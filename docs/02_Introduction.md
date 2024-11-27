@@ -14,7 +14,7 @@ Welcome to AI Foundation Services - your gateway to private, secure, and scalabl
  
 ### Get Started
  
-1. **Generate an API key:** [Fill out our form](https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform) to receive your API key.
+1. **Request a Trial API key:** [Fill out our form](https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform) to receive your API key.
 2. **Run your first query:** Once you have your API key, [dive into querying LLMs](./Quickstart.md) to unlock their potential.
 
 ## Our Product
