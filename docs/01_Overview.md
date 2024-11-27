@@ -14,6 +14,8 @@ import Link from '@docusaurus/Link';
 
 ## Available LLM-APIs on AI Foundation Services
 
+**Request a Trial API key:** [Fill out our form](https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform)
+
 Our LLM model serving enables effortless querying of open-source LLM models like Llama3, Mistral, and other open-source models through a simple, OpenAI-compatible API.
 
 <AvailableModels />
@@ -64,7 +66,7 @@ Our LLM model serving enables effortless querying of open-source LLM models like
 :::tip
 Begin with our APIs by exploring the [**Quickstart Guide**](./Quickstart.md) 🚀 for setup and integration instructions.
 Our API suite provides everything you need to interact seamlessly with advanced language models, allowing for customization, secure data handling, and efficient deployment across various applications.
-:::
+::: 
 
 ---
 

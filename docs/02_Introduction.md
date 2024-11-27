@@ -14,13 +14,13 @@ Welcome to AI Foundation Services - your gateway to private, secure, and scalabl
  
 ### Get Started
  
-1. **Generate an API key:** [Fill out our form](https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform) to receive your API key.
-2. **Run your first query:** Once you have your API key, dive into querying LLMs and unlocking their potential.
+1. **Request a Trial API key:** [Fill out our form](https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform) to receive your API key.
+2. **Run your first query:** Once you have your API key, [dive into querying LLMs](./Quickstart.md) to unlock their potential.
 
 ## Our Product
 ### Magenta SmartChat {#magenta-smartchat}
 
-SmartChat - an intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
+SmartChat: An intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
 
 [Magenta SmartChat](https://smartchat.llmhub.t-systems.net/)
 
@@ -36,7 +36,7 @@ Playground: Experiment with different LLMs, Prompt Templates and Documents by pr
 
 ### Create-TSI {#create-tsi}
 
-create-tsi is a generative AI RAG toolkit that generates AI Applications using LlamaIndex with low code.
+Create-TSI: A generative AI RAG toolkit that generates AI Applications using LlamaIndex with low code.
 
 [Create TSI on GitHub](https://github.com/telekom/create-tsi)
 
@@ -47,7 +47,7 @@ LLM model serving, allowing you to effortlessly query open-source LLM models lik
 
 ### API Key Portal {#api-key-portal}
 
-PI Portal - Allows you to manage your LLM API Keys and monitor your token usage
+API Portal: Allows you to manage your LLM API Keys and monitor your token usage
 
 [LLM API Key Portal](https://auth.llmhub.t-systems.net/)
 

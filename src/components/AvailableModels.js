@@ -8,20 +8,21 @@ function AvailableModels() {
   };
 
   const models = [
+    { name: "Teuken 7B Instruct", provider: "OpenGPT-X", availability: "Available" },
     { name: "GPT-4-Omni", provider: "OpenAI (Azure)", availability: "Available" },
-    { name: "Llama-3.1-70B-Instruct", provider: "Meta", availability: "Available" },
     { name: "Claude 3.5 Sonnet", provider: "Anthropic", availability: "Available" },
+    { name: "Llama-3.1-70B-Instruct", provider: "Meta", availability: "Available" },
+    { name: "Mixtral-8x7b-Instruct-v.01", provider: "Mistral AI", availability: "Available" },
+    { name: "LLaVa-v1.6-13B", provider: "Community", availability: "Available" },
     { name: "Llama-3.1-405B-Instruct", provider: "Google", availability: "Available" },
     { name: "Gemini 1.5 Pro", provider: "Google", availability: "Available" },
-    { name: "GPT-4-Turbo-2024-05-09", provider: "OpenAI (Azure)", availability: "Available" },
-    { name: "Mixtral-8x7b Instruct v.01", provider: "Mistral AI", availability: "Available" },
-    { name: "CodeLlama-2", provider: "Meta", availability: "Available" },
-    { name: "LLaVA-NeXT", provider: "Community", availability: "Available" },
-    { name: "GPT-3.5-Turbo-0314", provider: "OpenAI (Azure)", availability: "On request" },
-    { name: "Claude 3 Opus", provider: "Anthropic", availability: "On request" },
-    { name: "Gemini 1.5 Flash", provider: "Google", availability: "On request" },
+    { name: "GPT-4-Turbo-128k-France", provider: "OpenAI (Azure)", availability: "Available" },
+    { name: "GPT-3.5-Turbo-0314", provider: "OpenAI (Azure)", availability: "Available" },
+    { name: "Mistral-Nemo-Instruct-2407", provider: "Mistral AI", availability: "On request" },
     { name: "Mistral-Large-2407", provider: "Mistral AI", availability: "On request" },
-    { name: "Mistral-Nemo-2407", provider: "Mistral AI", availability: "On request" },
+    { name: "Gemini 1.5 Flash", provider: "Google", availability: "On request" },
+    { name: "DeepSeek-Coder-V2-Lite-Instruct", provider: "DeepSeek", availability: "On request" },
+    { name: "Qwen2-VL", provider: "Alibaba", availability: "On request" },
   ];
 
   return (
