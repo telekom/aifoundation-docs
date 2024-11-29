@@ -64,7 +64,7 @@ Our LLM model serving enables effortless querying of open-source LLM models like
 
 ## Our API Suite
 :::tip
-Begin with our APIs by exploring the [**Quickstart Guide**](./Quickstart.md) 🚀 for setup and integration instructions.
+Begin with our APIs by exploring the [**Quickstart Guide**](./03_Quickstart.md) 🚀 for setup and integration instructions.
 Our API suite provides everything you need to interact seamlessly with advanced language models, allowing for customization, secure data handling, and efficient deployment across various applications.
 ::: 
 
