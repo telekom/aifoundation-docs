@@ -10,7 +10,7 @@ Welcome to AI Foundation Services - your gateway to private, secure, and scalabl
 - **Ease of use:** We provide simple APIs for querying LLMs, with upcoming support for fine-tuning.
 - **Fully managed:** Enjoy features like auto-scaling and pay-as-you-go, ensuring your models are always operational without the need for manual intervention.
 - **German/EU-Hosted Security:** Your data is in safe hands with our GDPR-compliant hosting in Germany and the EU.
-- **Diverse LLM Options:** Access a wide range of open-source and proprietary LLMs with our T-Systems LLM API Key, including the upcoming Mixtral 8x22B.
+- **Diverse LLM Options:** Access a wide range of open-source and proprietary LLMs with our T-Systems LLM API Key.
  
 ### Get Started
  
