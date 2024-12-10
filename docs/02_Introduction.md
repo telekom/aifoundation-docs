@@ -49,6 +49,6 @@ LLM model serving, allowing you to effortlessly query open-source LLM models lik
 
 API Portal: Allows you to manage your LLM API Keys and monitor your token usage
 
-[LLM API Key Portal](https://auth.llmhub.t-systems.net/)
+[LLM API Key Portal](https://apikey.llmhub.t-systems.net/)
 
 ![api-portal](api-portal.png)
