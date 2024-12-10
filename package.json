@@ -22,6 +22,7 @@
     "@telekom/scale-components-react": "^3.0.0-beta.153",
     "caniuse-lite": "^1.0.30001675",
     "clsx": "^2.0.0",
+    "country-flag-icons": "^1.5.13",
     "docusaurus-plugin-search-local": "^2.0.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
