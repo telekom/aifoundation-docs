@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DE, US, FR, CN , EU} from 'country-flag-icons/react/3x2'; // Importiere die benötigten Flaggen-Icons
 
 function AvailableModels() {
   const [showAll, setShowAll] = useState(false);
@@ -8,21 +9,21 @@ function AvailableModels() {
   };
 
   const models = [
-    { name: "Teuken 7B Instruct", provider: "OpenGPT-X", availability: "Available" },
-    { name: "GPT-4-Omni", provider: "OpenAI (Azure)", availability: "Available" },
-    { name: "Claude 3.5 Sonnet", provider: "Anthropic", availability: "Available" },
-    { name: "Llama-3.1-70B-Instruct", provider: "Meta", availability: "Available" },
-    { name: "Mixtral-8x7b-Instruct-v.01", provider: "Mistral AI", availability: "Available" },
-    { name: "LLaVa-v1.6-13B", provider: "Community", availability: "Available" },
-    { name: "Llama-3.1-405B-Instruct", provider: "Google", availability: "Available" },
-    { name: "Gemini 1.5 Pro", provider: "Google", availability: "Available" },
-    { name: "GPT-4-Turbo-128k-France", provider: "OpenAI (Azure)", availability: "Available" },
-    { name: "GPT-3.5-Turbo-0314", provider: "OpenAI (Azure)", availability: "Available" },
-    { name: "Mistral-Nemo-Instruct-2407", provider: "Mistral AI", availability: "On request" },
-    { name: "Mistral-Large-2407", provider: "Mistral AI", availability: "On request" },
-    { name: "Gemini 1.5 Flash", provider: "Google", availability: "On request" },
-    { name: "DeepSeek-Coder-V2-Lite-Instruct", provider: "DeepSeek", availability: "On request" },
-    { name: "Qwen2-VL", provider: "Alibaba", availability: "On request" },
+    { name: "Teuken 7B Instruct", provider: "OpenGPT-X", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "GPT-4-Omni", provider: "OpenAI", hosted:"Azure" ,availability: "Available", flag: EU },
+    { name: "Claude 3.5 Sonnet", provider: "Anthropic", hosted:"GCP" ,availability: "Available", flag: EU },
+    { name: "Llama-3.1-70B-Instruct", provider: "Meta", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Mixtral-8x7b-Instruct-v.01", provider: "Mistral AI", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "LLaVa-v1.6-13B", provider: "Community", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Llama-3.1-405B-Instruct", provider: "Google", hosted:"GCP" ,availability: "Available", flag: EU },
+    { name: "Gemini 1.5 Pro", provider: "Google", hosted:"GCP" ,availability: "Available", flag: EU },
+    { name: "GPT-4-Turbo-128k-France", provider: "OpenAI", hosted:"Azure" ,availability: "Available", flag: EU },
+    { name: "GPT-3.5-Turbo-0314", provider: "OpenAI", hosted:"Azure" ,availability: "Available", flag: EU },
+    { name: "Mistral-Nemo-Instruct-2407", provider: "Mistral AI", hosted:"OTC" ,availability: "On request", flag: DE },
+    { name: "Mistral-Large-2407", provider: "Mistral AI", hosted:"GCP" ,availability: "On request", flag: EU },
+    { name: "Gemini 1.5 Flash", provider: "Google", hosted:"GCP" ,availability: "On request", flag: EU },
+    { name: "DeepSeek-Coder-V2-Lite-Instruct", provider: "DeepSeek", hosted:"OTC" ,availability: "On request", flag: DE },
+    { name: "Qwen2-VL", provider: "Alibaba", hosted:"OTC" ,availability: "On request", flag: DE },
   ];
 
   return (
@@ -32,7 +33,7 @@ function AvailableModels() {
           key={index}
           style={{
             flex: '1 1 30%',
-            border: '1px solid #ddd',
+            border: '1px solid \#ddd',
             borderRadius: '8px',
             padding: '16px',
             textAlign: 'center',
@@ -43,8 +44,12 @@ function AvailableModels() {
           }}
         >
           <h4 style={{ color: 'var(--ifm-heading-color)' }}>{model.name}</h4>
-          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)' }}>
+          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)',marginBottom: '2px'  }}>
             Provider: <strong>{model.provider}</strong>
+          </p>
+          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', alignItems: 'center', marginBottom: '14px'}}>
+            Hosted on: <strong style={{ marginLeft: '4px' }}>{model.hosted}</strong>
+            <model.flag style={{ marginLeft: '8px', width: '30px', height: '18px', position: 'relative', top: '4px' }} />
           </p>
           <span
             style={{
@@ -56,7 +61,7 @@ function AvailableModels() {
           >
             {model.availability}
           </span>
-        </div>
+          </div>
       ))}
 
       <div style={{ flexBasis: '100%', textAlign: 'center', marginTop: '16px' }}>
