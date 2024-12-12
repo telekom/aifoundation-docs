@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DE, US, FR, CN , EU} from 'country-flag-icons/react/3x2'; // Importiere die benötigten Flaggen-Icons
+import { DE, US, FR, CN , EU, CH} from 'country-flag-icons/react/3x2'; // Importiere die benötigten Flaggen-Icons
 
 function AvailableModels() {
   const [showAll, setShowAll] = useState(false);
@@ -13,17 +13,28 @@ function AvailableModels() {
     { name: "GPT-4-Omni", provider: "OpenAI", hosted:"Azure" ,availability: "Available", flag: EU },
     { name: "Claude 3.5 Sonnet", provider: "Anthropic", hosted:"GCP" ,availability: "Available", flag: EU },
     { name: "Llama-3.1-70B-Instruct", provider: "Meta", hosted:"OTC" ,availability: "Available", flag: DE },
-    { name: "Mixtral-8x7b-Instruct-v.01", provider: "Mistral AI", hosted:"OTC" ,availability: "Available", flag: DE },
     { name: "LLaVa-v1.6-13B", provider: "Community", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Qwen2-VL-7B", provider: "Alibaba", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Mixtral-8x7b-Instruct-v.01", provider: "Mistral AI", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Mistral-Nemo-Instruct-2407", provider: "Mistral AI", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Text-Embedding-Bge-m3", provider: "BAAI", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Jina-Embeddings-V2-Base-de", provider: "Community", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Jina-Embeddings-V2-Base-code", provider: "Community", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "DeepSeek-Coder-V2-Lite-Instruct", provider: "DeepSeek", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Mistral-Nemo-Instruct-2407-Swiss", provider: "Mistral AI", hosted:"OTC" ,availability: "Available", flag: CH },
+    { name: "Qwen2.5-Coder-7B-Instruct-Swiss", provider: "Alibaba", hosted:"OTC" ,availability: "Available", flag: CH },
+    { name: "Qwen2-VL-7B-Instruct-Swiss", provider: "Alibaba", hosted:"OTC" ,availability: "Available", flag: CH },
+    { name: "Bce-Reranker", provider: "BAAI", hosted:"OTC" ,availability: "Available", flag: DE },
     { name: "Llama-3.1-405B-Instruct", provider: "Google", hosted:"GCP" ,availability: "Available", flag: EU },
     { name: "Gemini 1.5 Pro", provider: "Google", hosted:"GCP" ,availability: "Available", flag: EU },
+    { name: "Gemini 1.5 Flash", provider: "Google", hosted:"GCP" ,availability: "Available", flag: EU },
+    { name: "Mistral-Large-2407", provider: "Mistral AI", hosted:"GCP" ,availability: "Available", flag: EU },
+    { name: "GPT-4-32k", provider: "OpenAI", hosted:"Azure" ,availability: "Available", flag: EU },
     { name: "GPT-4-Turbo-128k-France", provider: "OpenAI", hosted:"Azure" ,availability: "Available", flag: EU },
     { name: "GPT-3.5-Turbo-0314", provider: "OpenAI", hosted:"Azure" ,availability: "Available", flag: EU },
-    { name: "Mistral-Nemo-Instruct-2407", provider: "Mistral AI", hosted:"OTC" ,availability: "On request", flag: DE },
-    { name: "Mistral-Large-2407", provider: "Mistral AI", hosted:"GCP" ,availability: "On request", flag: EU },
-    { name: "Gemini 1.5 Flash", provider: "Google", hosted:"GCP" ,availability: "On request", flag: EU },
-    { name: "DeepSeek-Coder-V2-Lite-Instruct", provider: "DeepSeek", hosted:"OTC" ,availability: "On request", flag: DE },
-    { name: "Qwen2-VL", provider: "Alibaba", hosted:"OTC" ,availability: "On request", flag: DE },
+    { name: "text-embedding-ada-002", provider: "OpenAI", hosted:"Azure" ,availability: "Available", flag: EU }
+    
+    
   ];
 
   return (
