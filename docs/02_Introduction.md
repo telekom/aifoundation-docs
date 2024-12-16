@@ -7,8 +7,8 @@ Welcome to AI Foundation Services - your gateway to private, secure, and scalabl
  
 ### Key Features
  
-- **Ease of use:** We provide simple APIs for querying LLMs, with upcoming support for fine-tuning.
-- **Fully managed:** Enjoy features like auto-scaling and pay-as-you-go, ensuring your models are always operational without the need for manual intervention.
+- **Ease of use:** We provide simple APIs for querying and fine-tuning LLMs, tailored to your specific needs.
+- **Fully managed:** Enjoy features like auto-scaling and pay-as-you-go, keeping your models operational without manual intervention.
 - **German/EU-Hosted Security:** Your data is in safe hands with our GDPR-compliant hosting in Germany and the EU.
 - **Diverse LLM Options:** Access a wide range of open-source and proprietary LLMs with our T-Systems LLM API Key.
  
@@ -20,7 +20,7 @@ Welcome to AI Foundation Services - your gateway to private, secure, and scalabl
 ## Our Product
 ### Magenta SmartChat {#magenta-smartchat}
 
-SmartChat: An intelligent chat application powered by our LLM endpoints and RAG API. SmartChat allows you to build dynamic conversational interfaces for customer service, internal knowledge bases, and more.
+Build dynamic conversational interfaces for customer service, internal knowledge bases, and more with our intelligent chat application powered by LLM endpoints and RAG API.
 
 [Magenta SmartChat](https://smartchat.llmhub.t-systems.net/)
 
@@ -28,7 +28,7 @@ SmartChat: An intelligent chat application powered by our LLM endpoints and RAG 
 
 ### LLM Playground {#llm-playground}
 
-Playground: Experiment with different LLMs, Prompt Templates and Documents by providing your API key. 
+Experiment with various LLMs, prompt templates, and documents by providing your API key.
 
 [LLM Playground](https://playground.llmhub.t-systems.net/)
 
@@ -36,7 +36,7 @@ Playground: Experiment with different LLMs, Prompt Templates and Documents by pr
 
 ### Create-TSI {#create-tsi}
 
-Create-TSI: A generative AI RAG toolkit that generates AI Applications using LlamaIndex with low code.
+Generate AI applications with low code using our generative AI RAG toolkit and LlamaIndex.
 
 [Create TSI on GitHub](https://github.com/telekom/create-tsi)
 
@@ -47,7 +47,7 @@ LLM model serving, allowing you to effortlessly query open-source LLM models lik
 
 ### API Key Portal {#api-key-portal}
 
-API Portal: Allows you to manage your LLM API Keys and monitor your token usage
+Manage your LLM API keys and monitor token usage efficiently.
 
 [LLM API Key Portal](https://apikey.llmhub.t-systems.net/)
 

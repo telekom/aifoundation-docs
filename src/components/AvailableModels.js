@@ -15,7 +15,7 @@ function AvailableModels() {
     { name: "Llama-3.1-70B-Instruct", provider: "Meta", hosted:"OTC" ,availability: "Available", flag: DE },
     { name: "LLaVa-v1.6-13B", provider: "Community", hosted:"OTC" ,availability: "Available", flag: DE },
     { name: "Qwen2-VL-7B", provider: "Alibaba", hosted:"OTC" ,availability: "Available", flag: DE },
-    { name: "Mixtral-8x7b-Instruct-v.01", provider: "Mistral AI", hosted:"OTC" ,availability: "Available", flag: DE },
+    { name: "Mixtral-8x7b-Instruct", provider: "Mistral AI", hosted:"OTC" ,availability: "Available", flag: DE },
     { name: "Mistral-Nemo-Instruct-2407", provider: "Mistral AI", hosted:"OTC" ,availability: "Available", flag: DE },
     { name: "Text-Embedding-Bge-m3", provider: "BAAI", hosted:"OTC" ,availability: "Available", flag: DE },
     { name: "Jina-Embeddings-V2-Base-de", provider: "Community", hosted:"OTC" ,availability: "Available", flag: DE },

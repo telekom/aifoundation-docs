@@ -283,7 +283,7 @@ llava-v1.6-vicuna-13b
 ```
 
 
-**Step 2: Sent question together with the image url**
+**Step 2: Send question together with the image url**
 
 <Tabs>
   <TabItem value="py" label="Python" default>
