@@ -49,6 +49,15 @@ pip install openai
       print(model.id)
     ```
   </TabItem>
+
+  </TabItem>
+
+  <TabItem value="json" label="JSON">
+  
+  <FetchJson url="https://llm-server.llmhub.t-systems.net/v1/chat/completions" method="POST" body={{ key: 'value' }} />
+
+  </TabItem>
+  
 </Tabs>
 
 :::info
