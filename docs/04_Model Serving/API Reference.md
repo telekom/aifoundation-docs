@@ -10,6 +10,8 @@ tags:
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import FetchJson from '@site/src/components/FetchJson';
+
 
 ## Introduction
 T-System LLM Serving have an API Interface compatible with OpenAI's Chat, Completion, Vision and Embedding API.
@@ -49,10 +51,17 @@ pip install openai
       print(model.id)
     ```
   </TabItem>
+
+  <TabItem value="json" label="JSON">
+  
+  <FetchJson url="https://llm-server.llmhub.t-systems.net/v1/chat/completions" method="POST" body={{ key: 'value' }} />
+
+  </TabItem>
+
 </Tabs>
 
 :::info
-Above code will show all the LLM and Embedding models that available dedicated for your key.  
+Above code will show all the LLMs and Embedding models that are dedicated to your key.  
 :::
 
 Example output:
