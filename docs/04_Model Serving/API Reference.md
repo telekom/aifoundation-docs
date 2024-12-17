@@ -50,7 +50,7 @@ pip install openai
     ```
   </TabItem>
 
-  </TabItem>
+  <TabItem>
 
   <TabItem value="json" label="JSON">
   
