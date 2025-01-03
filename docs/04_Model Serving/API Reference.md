@@ -54,7 +54,7 @@ pip install openai
 
   <TabItem value="json" label="JSON">
   
-  <FetchJson url="https://llm-server.llmhub.t-systems.net/v1/chat/completions" method="POST" body={{ key: 'value' }} />
+  <FetchJson url="https://llm-server.llmhub.t-systems.net/v1/models" method="GET" headers={{ 'Authorization': 'Bearer DABqauWDSQB6mpIQvI8wqlQzujIw3SD4' }} />
 
   </TabItem>
 

@@ -16,7 +16,7 @@ import Link from '@docusaurus/Link';
 
 **Request a Trial API key:** [Fill out our form](https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform)
 
-Our LLM model serving enables effortless querying of LLM models like Llama3, Mistral, and other open-source models through a simple, OpenAI-compatible API.
+Our LLM model serving enables effortless querying of LLM models such as Llama3, Mistral, and other open-source models through a simple, OpenAI-compatible API. All provided models are hosted in compliance with data protection regulations within the EU or Switzerland.
 
 <AvailableModels />
 
@@ -66,19 +66,19 @@ Our API suite provides everything you need to interact seamlessly with advanced 
 
 
 <Tabs>
-  <TabItem label="API Reference" value="api-reference">
+  <TabItem label="LLM Serving API" value="api-reference">
     <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', margin: '0 auto' }}>
-      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#faf8eb', color: '#333', textAlign: 'center', height: '140px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.005)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#E6EAF0', color: '#333', textAlign: 'center', height: '140px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.005)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
         <a href="/Model Serving/openai" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
           <h3>API Reference</h3>
           <p style={{ paddingRight: '150px' }}>Access a comprehensive guide detailing every endpoint, parameter, and example to seamlessly integrate our APIs into your applications.</p>
         </a>
-        <img src="/img/api.png" alt="API Reference Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '160px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(0.9)', zIndex: 0 }} />
+        <img src="/img/api.png" alt="API Reference Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '160px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(0.8)', zIndex: 0 }} />
       </div>
     </div>
   </TabItem>
 
-  <TabItem label="Fine-Tuning API" value="fine-tune">
+  <TabItem label="LLM Fine-Tuning API" value="fine-tune">
     <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', margin: '0 auto' }}>
       <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '140px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.005)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
         <a href="/Model Serving/finetune" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
