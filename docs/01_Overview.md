@@ -12,93 +12,59 @@ import Link from '@docusaurus/Link';
 
 # Overview
 
-## Available LLM-APIs on AI Foundation Services
-
+Welcome to AI Foundation Services - your gateway to private, secure, and scalable model inference. Hosted in Germany and the EU, our platform ensures your data remains in safe hands, adhering strictly to GDPR guidelines. With our T-Systems LLM API Key, you unlock access to a diverse range of open-source and proprietary LLMs, all formatted with an OpenAI-compatible API. Get started effortlessly with zero-effort migration and integration of your existing AI applications.
+ 
 **Request a Trial API key:** [Fill out our form](https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform)
 
-Our LLM model serving enables effortless querying of LLM models such as Llama3, Mistral, and other open-source models through a simple, OpenAI-compatible API. All provided models are hosted in compliance with data protection regulations within the EU or Switzerland.
+
+### Key Features
+ 
+- **Ease of use:** We provide simple APIs for querying and fine-tuning LLMs, tailored to your specific needs.
+- **Fully managed:** Enjoy features like auto-scaling and pay-as-you-go, keeping your models operational without manual intervention.
+- **German/EU-Hosted Security:** Your data is in safe hands with our GDPR-compliant hosting in Germany and the EU.
+- **Diverse LLM Options:** Access a wide range of open-source and proprietary LLMs with our T-Systems LLM API Key.
+- **SmartChat/RAG:** Enhance your conversational AI with SmartChat and RAG solutions, enabling more accurate and context-aware interactions.
+-  **Additional Tools:** Benefit from tools like the LLM Playground and API Key Portal, designed to streamline your development process and enhance your user experience.
+ 
+---
+
+
+## Available LLM-APIs on AI Foundation Services
 
 <AvailableModels />
 
 ---
 
-## Our Product
+## AI Foundations Services at a Glance
 
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-
-   <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#E6EAF0', color: '#333', textAlign: 'center', height: '130px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; }}>
-    <Link to="./introduction#magenta-smartchat" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
-      <h3>Magenta SmartChat</h3>
-      <p>Create advanced conversational assistants using our LLM endpoints and RAG API.</p>
-    </Link>
-  </div>
-
-  <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '130px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; }}>
-    <Link to="./introduction#llm-playground" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
-      <h3>LLM Playground</h3>
-      <p>Explore various LLMs, prompt templates, and documents with your API key.</p>
-    </Link>
-  </div>
-
-  <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#EFE7DD', color: '#333', textAlign: 'center', height: '130px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; }}>
-    <Link to="./introduction#create-tsi" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
-      <h3>Create TSI</h3>
-      <p>Utilize our generative AI RAG toolkit to develop AI applications with minimal coding.</p>
-    </Link>
-  </div>
-
-  <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#F9E0DD', color: '#333', textAlign: 'center', height: '130px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; }}>
-    <Link to="./introduction#api-key-portal" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
-      <h3>API Key Portal</h3>
-      <p>Efficiently manage your LLM API keys and monitor token usage.</p>
-    </Link>
-  </div>
-
+<div style={{ width: '100%', margin: '0 auto' }}>
+  <img src="/img/AIFS-Overview.png" alt="AIFS-Overview" style={{ width: '100%', height: 'auto', display: 'block' }} />
 </div>
 
 ---
 
-## Our API Suite
-:::tip
-Begin with our APIs by exploring the [**Quickstart Guide**](./03_Quickstart.md) 🚀 for setup and integration instructions.
-Our API suite provides everything you need to interact seamlessly with advanced language models, allowing for customization, secure data handling, and efficient deployment across various applications.
-::: 
+## Get Started
 
+<div style={{ display: 'flex', justifyContent: 'space-around', gap: '16px', marginTop: '20px' }}>
+  <div style={{ flex: '1 1 30%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#E6EAF0', color: '#333', textAlign: 'center', height: '130px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, boxShadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; }}>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+      <h3>Trial API Key</h3>
+      <p>Get started with a trial API key to explore our services.</p>
+    </a>
+  </div>
 
-<Tabs>
-  <TabItem label="LLM Serving API" value="api-reference">
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', margin: '0 auto' }}>
-      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#E6EAF0', color: '#333', textAlign: 'center', height: '140px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.005)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-        <a href="/Model Serving/openai" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
-          <h3>API Reference</h3>
-          <p style={{ paddingRight: '150px' }}>Access a comprehensive guide detailing every endpoint, parameter, and example to seamlessly integrate our APIs into your applications.</p>
-        </a>
-        <img src="/img/api.png" alt="API Reference Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '160px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(0.8)', zIndex: 0 }} />
-      </div>
-    </div>
-  </TabItem>
+  <div style={{ flex: '1 1 30%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '130px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, boxShadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; }}>
+    <a href="./Introduction" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+      <h3>Further Information</h3>
+      <p>Discover the full range of features and services we offer.</p>
+    </a>
+  </div>
 
-  <TabItem label="LLM Fine-Tuning API" value="fine-tune">
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', margin: '0 auto' }}>
-      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#D8E2F1', color: '#333', textAlign: 'center', height: '140px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.005)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-        <a href="/Model Serving/finetune" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
-          <h3>Fine-Tuning API</h3>
-          <p style={{ paddingRight: '150px' }}>Customize and enhance models by fine-tuning them with your unique data to achieve higher accuracy and relevance for specific use cases.</p>
-        </a>
-        <img src="/img/artificial-intelligence-deep-learning-22108.png" alt="Fine-Tuning API Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(1.0)', zIndex: 0 }} />
-      </div>
-    </div>
-  </TabItem>
+  <div style={{ flex: '1 1 30%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#EFE7DD', color: '#333', textAlign: 'center', height: '130px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, boxShadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; }}>
+    <a href="./Quickstart" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
+      <h3>Quickstart</h3>
+      <p>Follow our guides to quickly get up and running with our services.</p>
+    </a>
+  </div>
+</div>
 
-  <TabItem label="RAG API" value="rag">
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', margin: '0 auto' }}>
-      <div style={{ flex: '1 1 45%', position: 'relative', borderRadius: '8px', padding: '16px', backgroundColor: '#EFE7DD', color: '#333', textAlign: 'center', height: '140px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.005)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-        <a href="/SmartChat RAG API/eRAG API Reference" style={{ textDecoration: 'none', color: 'inherit', position: 'relative', zIndex: 1 }}>
-          <h3>RAG API</h3>
-          <p style={{ paddingRight: '150px' }}>Efficiently search and retrieve information to augment responses with the most relevant data, making your models contextually aware and information-rich.</p>
-        </a>
-        <img src="/img/RAG_image.png" alt="RAG API Icon" style={{ position: 'absolute', bottom: '10px', right: '10px', width: '120px', height: '120px', objectFit: 'cover', opacity: '0.2', transform: 'scale(1.2)', zIndex: 0 }} />
-      </div>
-    </div>
-  </TabItem>
-</Tabs>
