@@ -1,0 +1,51 @@
+name: Deploy static content to Pages from modifications-florian branch
+
+on:
+  push:
+    branches: ["modifications-florian"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-modifications-florian"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages-modifications-florian
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 20.x
+          cache: npm
+      - name: install dependencies
+        run: npm install
+      - name: install telekom design requirements
+        run: npm install @telekom/scale-components@next
+      - name: install telekom design requirements for react
+        run: npm install @telekom/scale-components-react@next
+      - name: install local search dependency
+        run: npm install --save @easyops-cn/docusaurus-search-local
+      - name: build
+        run: npm run build --if-present
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          branch: modifications-florian
