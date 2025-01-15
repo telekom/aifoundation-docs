@@ -3,6 +3,7 @@ sidebar_position: 2
 ---
 
 import React from 'react';
+import AvailableModels from '@site/src/components/AvailableModels';
 
  # Introduction
 
@@ -46,7 +47,9 @@ We offer deployment on multiple cloud platforms to provide you with the best pos
 - **Open-Source LLMs on Open Telekom Cloud:** Leverage open-source models hosted on the secure and reliable Open Telekom Cloud in Germany or Swiss.
 - **Proprietary Models from MS Azure/AWS/GCP:** Access proprietary models from leading cloud providers such as Microsoft Azure, Amazon Web Services (AWS), and Google Cloud Platform (GCP).
 
-Explore the power and flexibility of our LLM Hub Serving API to elevate your AI applications with ease and efficiency.
+Explore the power and flexibility of our LLM Hub Serving API to elevate your AI applications with ease and efficiency. Below, you can find a list of the currently available models along with their respective hosting regions.
+
+<AvailableModels />
 
 ---
 
