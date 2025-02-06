@@ -15,6 +15,7 @@ import Link from '@docusaurus/Link';
 Welcome to AI Foundation Services - your gateway to private, secure, and scalable model inference. Our platform integrates cloud services, tools, and APIs to support your AI implementation. With the T-Systems LLM API Key, you can access a variety of open-source and proprietary LLMs. Hosted in Germany and the EU, our platform ensures GDPR-compliant data security. Get started and integrate existing or build new AI applications.
  
 **Request a Trial API key:** [Fill out our form](https://docs.google.com/forms/d/e/1FAIpQLSdBDhCijYUIUeyJVTLzCy0rm55XgD2nG5supwtGRHXVfaX-fw/viewform)
+
 **Purchase an Open-Source Model API key via Open Telekom Cloud:** [OTC Marketplace](https://marketplace.otc.t-systems.com/)
 
 ### Key Features
