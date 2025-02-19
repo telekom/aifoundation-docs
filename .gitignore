@@ -22,3 +22,5 @@ yarn-error.log*
 
 # IDEA
 .idea
+package-lock.json
+package.json

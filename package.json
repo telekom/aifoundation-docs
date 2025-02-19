@@ -14,12 +14,12 @@
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
-    "@docusaurus/core": "3.2.1",
-    "@docusaurus/preset-classic": "3.2.1",
+    "@docusaurus/core": "^3.7.0",
+    "@docusaurus/preset-classic": "^3.7.0",
     "@easyops-cn/docusaurus-search-local": "^0.40.1",
     "@mdx-js/react": "^3.0.0",
-    "@telekom/scale-components": "^3.0.0-beta.153",
-    "@telekom/scale-components-react": "^3.0.0-beta.153",
+    "@telekom/scale-components": "^3.0.0-beta.155",
+    "@telekom/scale-components-react": "^3.0.0-beta.155",
     "caniuse-lite": "^1.0.30001675",
     "clsx": "^2.0.0",
     "country-flag-icons": "^1.5.13",
@@ -30,7 +30,7 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.2.1",
+    "@docusaurus/module-type-aliases": "^3.7.0",
     "@docusaurus/types": "3.2.1",
     "postcss-preset-env": "^9.5.11"
   },
