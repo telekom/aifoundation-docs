@@ -31,7 +31,7 @@ export default function Navbar() {
           </scale-telekom-nav-item>
 
           <scale-telekom-nav-item>
-            <a href="https://oweb-chat.llmhub.t-systems.net/">
+            <a href="https://public.oweb-chat.llmhub.t-systems.net/">
               <scale-badge no-dot label="SmartChat">
                 <scale-icon-communication-chat accessibility-title="SmartChat" />
                 {/* <span 
