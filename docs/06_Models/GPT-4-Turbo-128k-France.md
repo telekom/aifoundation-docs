@@ -2,8 +2,8 @@
 sidebar_position: 8
 ---
 
-# GPT4 Turbo 128k
-
+# GPT4 Turbo 128k France
+ 
 ## 🚀 Model Overview
 
 | Attribute           | Detail                             |

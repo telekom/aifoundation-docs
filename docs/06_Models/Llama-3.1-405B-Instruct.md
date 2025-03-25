@@ -2,7 +2,7 @@
 sidebar_position: 13
 ---
 
-# Llama-3.1-405B-Instruct
+# Llama 3.1 405B Instruct
 
 ## 🚀 Model Overview
 

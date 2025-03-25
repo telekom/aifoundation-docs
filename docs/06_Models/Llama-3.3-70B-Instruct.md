@@ -2,7 +2,7 @@
 sidebar_position: 12
 ---
 
-# Llama-3.3-70B-Instruct
+# Llama 3.3 70B Instruct
 
 ## 🚀 Model Overview
 

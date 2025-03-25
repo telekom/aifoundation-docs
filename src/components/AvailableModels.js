@@ -58,9 +58,6 @@ function AvailableModels() {
     { name: "GPT-4, ada", provider: "OpenAI", hosted: "Azure", availability: "Available", flag: EU }
   ];
 
-  const normalizeSlug = (name) => {
-    return name.toLowerCase().replace(/[ ,]+/g, '-').replace(/-+/g, '-');
-  };
 
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
@@ -80,7 +77,7 @@ function AvailableModels() {
           }}
         >
           <h4 style={{ color: 'var(--ifm-heading-color)' }}>
-            <Link to={`/models/${normalizeSlug(model.name)}`}>{model.name}</Link>
+            <Link to={`/models/${model.name}`}>{model.name}</Link>
           </h4>
           <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', marginBottom: '2px' }}>
             Provider: <strong>{model.provider}</strong>
