@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { DE, US, FR, CN , EU, CH} from 'country-flag-icons/react/3x2'; // Importiere die benötigten Flaggen-Icons
+import { DE, US, FR, CN, EU, CH } from 'country-flag-icons/react/3x2';
+import Link from '@docusaurus/Link';
 
 function AvailableModels() {
   const [showAll, setShowAll] = useState(false);
@@ -55,9 +56,11 @@ function AvailableModels() {
 
     // Dedicated LLMs
     { name: "GPT-4, ada", provider: "OpenAI", hosted: "Azure", availability: "Available", flag: EU }
-];
+  ];
 
-
+  const normalizeSlug = (name) => {
+    return name.toLowerCase().replace(/[ ,]+/g, '-').replace(/-+/g, '-');
+  };
 
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
@@ -66,21 +69,23 @@ function AvailableModels() {
           key={index}
           style={{
             flex: '1 1 30%',
-            border: '1px solid \#ddd',
+            border: '1px solid #ddd',
             borderRadius: '8px',
             padding: '16px',
             textAlign: 'center',
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
             position: 'relative',
-            backgroundColor: 'var(--ifm-card-background-color)', // Ensures background adapts to theme
-            color: 'var(--ifm-font-color-base)' // Ensures text color adapts to theme
+            backgroundColor: 'var(--ifm-card-background-color)',
+            color: 'var(--ifm-font-color-base)'
           }}
         >
-          <h4 style={{ color: 'var(--ifm-heading-color)' }}>{model.name}</h4>
-          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)',marginBottom: '2px'  }}>
+          <h4 style={{ color: 'var(--ifm-heading-color)' }}>
+            <Link to={`/models/${normalizeSlug(model.name)}`}>{model.name}</Link>
+          </h4>
+          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', marginBottom: '2px' }}>
             Provider: <strong>{model.provider}</strong>
           </p>
-          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', alignItems: 'center', marginBottom: '14px'}}>
+          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', alignItems: 'center', marginBottom: '14px' }}>
             Hosted on: <strong style={{ marginLeft: '4px' }}>{model.hosted}</strong>
             <model.flag style={{ marginLeft: '8px', width: '30px', height: '18px', position: 'relative', top: '4px' }} />
           </p>
@@ -89,12 +94,12 @@ function AvailableModels() {
               backgroundColor: model.availability === 'Available' ? '#4caf50' : '#f57c00',
               color: 'white',
               padding: '4px 8px',
-              borderRadius: '12px',
+              borderRadius: '12px'
             }}
           >
             {model.availability}
           </span>
-          </div>
+        </div>
       ))}
 
       <div style={{ flexBasis: '100%', textAlign: 'center', marginTop: '16px' }}>
@@ -107,7 +112,7 @@ function AvailableModels() {
             borderRadius: '8px',
             border: 'none',
             cursor: 'pointer',
-            fontWeight: 'bold',
+            fontWeight: 'bold'
           }}
         >
           {showAll ? 'Show Less' : 'Show More'}
