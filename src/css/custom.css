@@ -203,3 +203,7 @@ table {
   width: initial;
   margin: 0 auto;
 }
+.markdown table {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
