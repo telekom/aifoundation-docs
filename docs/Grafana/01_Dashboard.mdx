@@ -1,0 +1,131 @@
+---
+sidebar_position: 1
+slug: /Grafana/dashboard
+title: Dashboard
+---
+
+import React, { useState } from 'react';
+
+# Grafana dashboard
+
+export function GrafanaDashboard() {
+    const [selectedModel, setSelectedModel] = useState("DeepSeek-Coder-V2-Lite-Instruct");
+
+    const models = [
+        "DeepSeek-Coder-V2-Lite-Instruct",
+        "DeepSeek-R1-Distill-Llama-70B",
+        "DeepSeek-R1-Distill-Qwen-32B-Swiss",
+        "Llama-3.1-405B-Instruct-US",
+        "Llama-3.1-70B-Instruct",
+        "Llama-3.3-70B-Instruct",
+        "Llama-3.3-70B-Instruct-S",
+        "Mistral-Large-2407",
+        "Mistral-Nemo-Instruct-2407",
+        "Mistral-Nemo-Instruct-2407-Swiss",
+        "Mistral-Small-24B-Instruct-2501",
+        "Mixtral-8x7B-Instruct-v0.1-FP8",
+        "Mixtral-8x7B-Instruct-v0.1-TDU",
+        "Phi-4-S",
+        "QWEN-VL2-7B",
+        "Qwen2-VL-7B-Instruct-Swiss",
+        "Qwen2.5-Coder-32B-Instruct-FP8",
+        "Qwen2.5-Coder-7B-Base",
+        "Qwen2.5-Coder-7B-Instruct-Swiss",
+        "Qwen2.5-VL-72B-Instruct",
+        "Qwen3-32B-FP8",
+        "Teuken-7B-Instruct-v04",
+        "claude-3-5-sonnet",
+        "claude-3-5-sonnet-v2",
+        "claude-3-7-sonnet",
+        "gemini-1.5-flash",
+        "gemini-1.5-pro",
+        "gemini-2.0-flash",
+        "gemini-2.5-flash",
+        "gemini-2.5-pro",
+        "gpt-35-turbo",
+        "gpt-35-turbo-16k-france-1",
+        "gpt-35-turbo-16k-subs02",
+        "gpt-35-turbo-16k-subs03",
+        "gpt-35-turbo-16k-subs04",
+        "gpt-4-0613-france-subs610",
+        "gpt-4-32k-1",
+        "gpt-4-subs02",
+        "gpt-4-subs03",
+        "gpt-4-subs04",
+        "gpt-4-subs05",
+        "gpt-4-turbo-128k-france",
+        "gpt-4-turbo-subs03",
+        "gpt-4o",
+        "gpt-4o-france-1",
+        "gpt-4o-france-subs610",
+        "gpt-4o-mini-subs02",
+        "gpt-4o-mini-subs03",
+        "gpt-4o-mini-subs04",
+        "gpt-4o-subs02",
+        "gpt-4o-subs03",
+        "gpt-4o-subs04",
+        "jina-embeddings-v2-base-code",
+        "jina-embeddings-v2-base-de",
+        "o3-mini",
+        "text-embedding-3-large",
+        "text-embedding-3-large-subs02",
+        "text-embedding-3-large-subs03",
+        "text-embedding-3-large-subs04",
+        "text-embedding-ada-002",
+        "text-embedding-ada-002-france-1",
+        "text-embedding-ada-002-subs02",
+        "text-embedding-ada-002-subs03",
+        "text-embedding-ada-002-subs04",
+        "text-embedding-ada-002-subs05",
+        "text-embedding-bge-m3",
+        "text-embedding-bge-m3-tdu",
+        "tsi-embedding-colqwen2-2b-v1",
+        "whisper-large-v3",
+        "whisper-large-v3-swiss",
+        "whisper-large-v3-turbo"
+    ]
+
+    const iframeSrc1 = `https://llm-grafana-public.llmhub.t-systems.net/d-solo/ec8d0e17-58fa-4ded-aa91-7fd83e9fcf4d/public-tpm-and-latency?orgId=1&var-model=${encodeURIComponent(selectedModel)}&from=1747204640055&to=1747226240055&panelId=2`;
+
+    const iframeSrc2 = `https://llm-grafana-public.llmhub.t-systems.net/d-solo/ec8d0e17-58fa-4ded-aa91-7fd83e9fcf4d/public-tpm-and-latency?orgId=1&var-model=${encodeURIComponent(selectedModel)}&from=1747204999405&to=1747226599405&panelId=1`;
+
+    return (
+        <>
+            <label htmlFor="model-select">Select Model: </label>
+            <select
+                id="model-select"
+                value={selectedModel}
+                onChange={(e) => setSelectedModel(e.target.value)}
+                style={{ marginBottom: '1rem' }}
+            >
+                {models.map((model) => (
+                    <option key={model} value={model}>
+                        {model}
+                    </option>
+                ))}
+            </select>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div>
+                    <h3>Token per second</h3>
+                    <iframe
+                        src={iframeSrc1}
+                        width="900"
+                        height="300"
+                        frameBorder="0"
+                    ></iframe>
+                </div>
+                <div>
+                    <h3>Time-to-First-Token Latency</h3>
+                    <iframe
+                        src={iframeSrc2}
+                        width="900"
+                        height="300"
+                        frameBorder="0"
+                    ></iframe>
+                </div>
+            </div>
+        </>
+    );
+}
+
+<GrafanaDashboard />
