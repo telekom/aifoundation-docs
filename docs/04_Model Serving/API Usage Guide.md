@@ -531,3 +531,39 @@ ChatCompletionMessage(content=None, role='assistant', function_call=None, tool_c
 Currently, we only support function calling to the proprietary models like gpt-4 series.
 For open-source models like Llama-3.3 support is planned in the future. Stay tuned!
 :::
+
+### Image generation
+
+<Tabs>
+  <TabItem value="py" label="Python" default>
+    ```py showLineNumbers
+    import os
+    import openai
+    from openai import OpenAI, AzureOpenAI
+    import base64
+    
+    # print("OpenAI version: ",openai.__version__)
+    client = OpenAI(
+        # defaults to os.environ.get("OPENAI_API_KEY")
+        api_key=os.getenv('API_KEY'),
+        base_url=os.getenv('API_BASE'),
+    )
+    
+    prompt = """
+    A background with server racks and cables, with a futuristic city skyline visible through a large window, outside is sunrise time. 
+    The room is modern light, with blue and green LED lights illuminating the equipment. 
+    """
+    result = client.images.generate(
+        model="gpt-image-1",
+        prompt=prompt
+    )
+    
+    image_base64 = result.data[0].b64_json
+    image_bytes = base64.b64decode(image_base64)
+    
+    # Save the image to a file
+    with open("background5.png", "wb") as f:
+        f.write(image_bytes)
+    ```
+  </TabItem>
+</Tabs>
