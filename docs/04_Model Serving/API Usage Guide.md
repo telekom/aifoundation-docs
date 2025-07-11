@@ -350,7 +350,7 @@ Translation: {'text': "A little lady took her pants off. The lady laughed, took 
 3. **Efficient Processing**: Low latency for both transcription and translation tasks.  
 
 
-## Multimodal Models
+### Multimodal Models
 Currently, beside text generation LLM, we also provide vision models and speech-to-text models.
 Here is an example of how to use OpenAI Vision API for Qwen2.5-VL-72B-Instruct.
 
