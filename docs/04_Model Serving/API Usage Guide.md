@@ -567,3 +567,76 @@ For open-source models like Llama-3.3 support is planned in the future. Stay tun
     ```
   </TabItem>
 </Tabs>
+
+### Reasoning control
+
+:::info
+For supported models (o1, o1-mini, o3, o3-mini, o4-mini, Gemini 2.5, Claude 3.7, Claude 4) reasoning can be controlled via the reasoning_effort parameter. The parameter can be changed to the values "low", "medium" and "high".
+:::
+
+<Tabs>
+  <TabItem value="py" label="Python" default>
+    ```py showLineNumbers
+    model = "claude-sonnet-4"
+    stream = True
+    system_prompt = """You are an AI assistant named {model}. You are truthful, concise, and helpful. Always respond in a friendly and professional manner."""
+    user_prompt = "What is your name?"
+    
+    start=time.time()
+    chat_response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        stream=stream,
+        reasoning_effort="low" # you can set either "low","medium","high"
+    )
+    
+    count = 0
+    if not stream:
+        print("Answer: ",chat_response.choices[0].message.content)
+    else:
+        for chunk in chat_response:
+            if chunk.choices:
+                if chunk.choices[0].delta.content is not None:
+                    print(chunk.choices[0].delta.content, end="", flush=True)
+                    count+=1
+    ```
+  </TabItem>
+</Tabs>
+
+:::info
+For Qwen3, reasoning can be disabled with the addition of the keyword "/no_think" to the prompt.
+:::
+
+<Tabs>
+  <TabItem value="py" label="Python" default>
+    ```py showLineNumbers
+    model = "Qwen3-30B-A3B-FP8"
+    stream = True
+    system_prompt = """You are an AI assistant named {model}. You are truthful, concise, and helpful. Always respond in a friendly and professional manner."""
+    user_prompt = "What is your name?"
+    
+    start=time.time()
+    chat_response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": "/no_think " + user_prompt},
+        ],
+        stream=stream
+    )
+    
+    count = 0
+    if not stream:
+        print("Answer: ",chat_response.choices[0].message.content)
+    else:
+        for chunk in chat_response:
+            if chunk.choices:
+                if chunk.choices[0].delta.content is not None:
+                    print(chunk.choices[0].delta.content, end="", flush=True)
+                    count+=1
+    ```
+  </TabItem>
+</Tabs>
