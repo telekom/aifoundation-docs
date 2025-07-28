@@ -64,33 +64,29 @@ Example output:
 
 ```
 ==========Available models==========
-DeepSeek-Coder-V2-Lite-Instruct
 DeepSeek-R1-Distill-Llama-70B
-Llama-3.1-405B-Instruct-US
 Llama-3.3-70B-Instruct
-Mistral-Large-2407
-Mistral-Nemo-Instruct-2407
-Mistral-Small-24B-Instruct-2501
-QWEN-VL2-7B
-Qwen2.5-Coder-32B-Instruct-FP8
+Llama-BildungsLLM-0.9
+Qwen2.5-Coder-7B-Base
 Qwen2.5-VL-72B-Instruct
+Qwen3-32B-FP8
 Teuken-7B-Instruct-v04
 claude-3-5-sonnet
-claude-3-5-sonnet-v2
 claude-3-7-sonnet
-gemini-1.5-flash
-gemini-1.5-pro
+claude-sonnet-4
 gemini-2.0-flash
-gpt-35-turbo
-gpt-4-32k-1
-gpt-4-turbo-128k-france
-gpt-4o
+gemini-2.5-flash
+gemini-2.5-pro
+gpt-4.1
+gpt-4.1-mini
+gpt-4.1-nano
+gpt-image-1
 jina-embeddings-v2-base-code
-jina-embeddings-v2-base-de
-text-embedding-ada-002
-text-embedding-bge-m3
-tsi-embedding-colqwen2-2b-v1
-whisper-large-v3-turbo
+o1-mini
+o3
+o3-mini
+o4-mini
+whisper-large-v3
 ```
 
 **You can get the specific meta data of each model:**
@@ -100,7 +96,20 @@ models.data[0].meta_data
 ```
 That will output:
 ```
-{'max_sequence_length': 8192, 'hidden_size': 0, 'max_output_length': 0}
+{'model_type': 'LLM',
+ 'source_type': 'OPEN SOURCE',
+ 'max_sequence_length': 0,
+ 'hidden_size': 0,
+ 'max_output_length': 0,
+ 'deployment_region': 'otc-germany',
+ 'location': 'otc-germany',
+ 'license': 'https://choosealicense.com/licenses/apache-2.0/',
+ 'display_name': 'DeepSeek-R1-Distill-Llama-70B',
+ 'deployment_country': '',
+ 'input_modalities': [],
+ 'output_modalities': [],
+ 'is_externally_hosted': False,
+ 'end_of_life_date': None}
 ```
 :::info
 - **max_sequence_length**: maximum length of input + output sentence, measured in tokens that can be processed by the LLM
@@ -221,16 +230,25 @@ Usage(prompt_tokens=31, total_tokens=31)
   <TabItem value="py" label="Python" default>
     ```python showLineNumbers
     import os
-    from openai import OpenAI
+    import openai
+    from openai import OpenAI, AzureOpenAI
+    import httpx
+    import time
 
+    # print("OpenAI version: ",openai.__version__)
     client = OpenAI(
+        # defaults to os.environ.get("OPENAI_API_KEY")
         api_key=os.getenv('API_KEY'),
-        base_url=os.getenv('API_BASE') + '/audio'  # /audio endpoint for transcription and translation
+        base_url=os.getenv('API_BASE'),
     )
 
+    print("==========Available models==========")
     models = client.models.list()
     for model in models.data:
-        print(model.id)
+        model_type = model.meta_data.get('model_type')
+        #print(model_type)
+        if model.meta_data.get('model_type') == 'NLP':
+            print(model.id)
     ```
   </TabItem>
   <TabItem value="curl" label="cURL">
@@ -244,9 +262,13 @@ Usage(prompt_tokens=31, total_tokens=31)
 :::info  
 Example output:  
 ```
-whisper-1
+==========Available models==========
+whisper-large-v3
+whisper-large-v3-swiss
+whisper-large-v3-turbo
+whisper-large-v3-turbo-swiss
+whisperX-large-v3-swiss
 ```  
-`whisper-1` is the current supported model for audio processing.
 :::
 
 #### Audio Transcription  
@@ -256,22 +278,20 @@ The transcription API converts audio into text in the same language as the audio
 <Tabs>
   <TabItem value="py" label="Python" default>
     ```python showLineNumbers
-    import time
+    stt_model = 'whisper-large-v3'
+    audio_file_path = '/home/pv_rwm_models/workspace/trong/unified-cce-proxy/notebooks/harvard.wav'
 
-    audio_file_path = "/path/to/audio_file.mp3"  # Path to your audio file
+    audio_file = open(audio_file_path, "rb")
 
-    start = time.time()
-    with open(audio_file_path, "rb") as audio_file:
-        transcription = client.audio.transcriptions.create(
-            model="whisper-1",
-            file=audio_file,
-            language="de",  # Optional: specify input language (e.g., German)
-            temperature=0.0
-        )
-    stop = time.time()
+    transcription = client.audio.transcriptions.create(
+                model=stt_model, 
+                file=audio_file, 
+                #response_format="text",
+                #language="en"
+            )
 
-    print("\nTime taken: ", stop - start)
-    print("Transcription:", transcription)
+    print(f"Transcription: {transcription.text}")
+    print(f"Usage: {transcription.usage}")
     ```
   </TabItem>
   <TabItem value="curl" label="cURL">
@@ -288,8 +308,8 @@ The transcription API converts audio into text in the same language as the audio
 
 **Example Output:**  
 ```
-Time taken: 9.11 seconds  
-Transcription: {'text': 'Eine kleine Dickmadam zog sich eine Hose an. Die Hose krachte, Dickmadam lachte, zog sie wieder aus und du bist raus.', 'task': 'transcribe', 'duration': 10.58}
+Transcription: The stale smell of old beer lingers. It takes heat to bring out the odor. A cold dip restores health and zest. A salt pickle tastes fine with ham. Tacos al pastor are my favorite. A zestful food is the hot cross bun.
+Usage: UsageTokens(input_tokens=None, output_tokens=None, total_tokens=52, type=None, input_token_details=None, prompt_tokens=0, completion_tokens=52)
 ```
 
 :::info  
@@ -359,22 +379,18 @@ Here is an example of how to use OpenAI Vision API for Qwen2.5-VL-72B-Instruct.
 <Tabs>
   <TabItem value="py" label="Python" default>
     ```py showLineNumbers
-    model = 'Qwen2.5-VL-72B-Instruct'
-    stream=True
-
-    chat_response = client.chat.completions.create(
-      model=model,
-      messages=[
+    vlm_model = 'gemini-2.5-flash'
+    messages=[
         {
           "role": "system",
           "content": [
-            {"type": "text", "text": "You are an helpful AI assistant named Qwen and help people to answer their question based on the image and text provided."}
+            {"type": "text", "text": "You are an helpful AI assistant named LLava help people answer their question base on the image and text provided."}
           ],
         },
         {
           "role": "user",
           "content": [
-            {"type": "text", "text": "What is depicted in this image?"},
+            {"type": "text", "text": "What’s in this image?"},
             {
               "type": "image_url",
               "image_url": {
@@ -383,19 +399,45 @@ Here is an example of how to use OpenAI Vision API for Qwen2.5-VL-72B-Instruct.
             },
           ],
         },
-      ],
-      max_tokens=300,
-      stream=stream,
-      temperature=0.01
+    ]
+
+    start=time.time()
+    chat_response = client.chat.completions.create(
+        model=vlm_model,
+        messages=messages,
+        #temperature=0.1,
+        max_tokens=1024,
+        stream=stream,
+        max_completion_tokens=1024,
+        extra_body={}
     )
 
-    if stream:
+    count = 0
+    reasoning = ""
+    if not stream:
+        #print(chat_response)
+        print(chat_response.choices[0].message.content.strip())
+    else:
         for chunk in chat_response:
+            #print(chunk)
             if chunk.choices:
                 if chunk.choices[0].delta.content is not None:
-                    print(chunk.choices[0].delta.content, end="")
-    else:
-        print(chat_response.choices[0].message.content)
+                    print(chunk.choices[0].delta.content, end="", flush=True)
+                    count+=1
+                try:
+                    if chunk.choices[0].delta.reasoning_content is not None:
+                        reasoning += chunk.choices[0].delta.reasoning_content
+                        print(chunk.choices[0].delta.reasoning_content, end="", flush=True)
+                        count+=1
+                except:
+                    continue
+                
+    #print("\n\nReasoning: ", reasoning)
+    stop=time.time()
+    time_taken = stop-start
+    print('\nTime taken: ', time_taken)
+    speed = count / time_taken
+    print("Token per second: ",speed)
     ```
   </TabItem>
 </Tabs>
@@ -403,11 +445,16 @@ Here is an example of how to use OpenAI Vision API for Qwen2.5-VL-72B-Instruct.
 **Example output:**
 
 ```
-The image shows a serene landscape with a wooden boardwalk or pathway leading through a field of tall grass. 
-The pathway appears to be well-maintained and is surrounded by lush greenery. 
-The sky is partly cloudy, suggesting it might be a pleasant day. 
-In the distance, there are trees and what looks like a line of bushes or shrubs, which could be part of a hedge or a natural boundary. 
-The overall scene is peaceful and invites one to imagine a walk through the field.
+This image captures a beautiful, serene natural landscape. Here's what's in it:
+
+*   **A wooden boardwalk:** A long, light-colored wooden boardwalk stretches from the foreground directly into the distance, leading the eye towards the horizon.
+*   **Vast green grass/vegetation:** On both sides of the boardwalk, there's an abundance of lush, vibrant green grass and other tall, leafy vegetation, giving the impression of a large meadow or wetland. The grass appears well-lit, especially towards the foreground, possibly by the setting or rising sun.
+*   **Trees and bushes in the background:** Further in the distance, a line of trees and bushes forms a natural border, separating the open field from what might be beyond. Some of these bushes show hints of reddish or brownish foliage, especially on the right side.
+*   **A bright blue sky with clouds:** The upper half of the image is dominated by a clear, bright blue sky. Scattered white and light grey clouds are present, some appearing wispy and spread out, while others are more distinct and puffy.
+
+Overall, the image portrays a peaceful outdoor scene, likely a nature trail or a park, designed for exploring a grassy natural area.
+Time taken:  7.3864312171936035
+Token per second:  0.6769168835365799
 ```
 
 Alternatively to the online image url, you can pass the local path of the image to a base64 image encoder as shown below:
