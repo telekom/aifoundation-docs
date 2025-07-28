@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DE, EU } from 'country-flag-icons/react/3x2'; 
+import { CH, DE, EU } from 'country-flag-icons/react/3x2'; 
 
 function AvailableModels() {
   const [showAll, setShowAll] = useState(false);
@@ -18,16 +18,8 @@ function AvailableModels() {
       flag: DE
     },
     {
-      id: "DeepSeek-Coder-V2-Lite-Instruct",
-      name: "DeepSeek Coder V2 Lite",
-      provider: "DeepSeek",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
       id: "Llama-3.3-70B-Instruct",
-      name: "Llama 3.3 70B",
+      name: "Llama 3.3 70B Instruct",
       provider: "Meta",
       hosted: "OTC",
       availability: "Available",
@@ -42,25 +34,25 @@ function AvailableModels() {
       flag: EU
     },
     {
-      id: "Mistral-Large-2407",
-      name: "Mistral Large 2407",
-      provider: "Mistral AI",
-      hosted: "GCP",
+      id: "Llama-BildungsLLM-0.9",
+      name: "Llama Bildungs LLM 0.9",
+      provider: "Google",
+      hosted: "OTC",
       availability: "Available",
-      flag: EU
+      flag: DE
     },
     {
-      id: "Mistral-Nemo-Instruct-2407",
-      name: "Mistral Nemo 2407",
+      id: "Mistral-Small-3.1-24B-Instruct-2503",
+      name: "Mistral-Small-3.1-24B-Instruct-2503",
       provider: "Mistral AI",
       hosted: "OTC",
       availability: "Available",
       flag: DE
     },
     {
-      id: "Mistral-Small-24B-Instruct-2501",
-      name: "Mistral Small 24B 2501",
-      provider: "Mistral AI",
+      id: "Qwen3-30B-A3B",
+      name: "Qwen3 30B A3B",
+      provider: "Alibaba",
       hosted: "OTC",
       availability: "Available",
       flag: DE
@@ -82,20 +74,20 @@ function AvailableModels() {
       flag: DE
     },
     {
-      id: "QWEN-VL2-7B",
-      name: "Qwen VL2 7B",
-      provider: "Alibaba",
+      id: "Teuken-7B-Instruct",
+      name: "Teuken 7B Instruct",
+      provider: "OpenGPT-X",
       hosted: "OTC",
       availability: "Available",
       flag: DE
     },
     {
-      id: "Teuken-7B-Instruct-v04",
-      name: "Teuken 7B v0.4",
-      provider: "OpenGPT-X",
-      hosted: "OTC",
+      id: "claude-sonnet-4",
+      name: "Claude Sonnet 4",
+      provider: "Anthropic",
+      hosted: "GCP",
       availability: "Available",
-      flag: DE
+      flag: EU
     },
     {
       id: "claude-3-7-sonnet",
@@ -122,6 +114,22 @@ function AvailableModels() {
       flag: EU
     },
     {
+      id: "gemini-2.5-pro",
+      name: "Gemini 2.5 Pro",
+      provider: "Google",
+      hosted: "GCP",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gemini-2.5-flash",
+      name: "Gemini 2.5 Flash",
+      provider: "Google",
+      hosted: "GCP",
+      availability: "Available",
+      flag: EU
+    },
+    {
       id: "gemini-2.0-flash",
       name: "Gemini 2.0 Flash",
       provider: "Google",
@@ -142,6 +150,62 @@ function AvailableModels() {
       name: "Gemini 1.5 Pro",
       provider: "Google",
       hosted: "GCP",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gpt-o4-mini",
+      name: "GPT-o4 Mini",
+      provider: "OpenAI",
+      hosted: "Azure",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gpt-o3",
+      name: "GPT-o3",
+      provider: "OpenAI",
+      hosted: "Azure",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gpt-o3-mini",
+      name: "GPT-o3 Mini",
+      provider: "OpenAI",
+      hosted: "Azure",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gpt-41",
+      name: "GPT-4.1",
+      provider: "OpenAI",
+      hosted: "Azure",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gpt-41-mini",
+      name: "GPT-4.1 Mini",
+      provider: "OpenAI",
+      hosted: "Azure",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gpt-41-nano",
+      name: "GPT-4.1 Nano",
+      provider: "OpenAI",
+      hosted: "Azure",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gpt-4o",
+      name: "GPT-4o",
+      provider: "OpenAI",
+      hosted: "Azure",
       availability: "Available",
       flag: EU
     },
@@ -224,10 +288,42 @@ function AvailableModels() {
       hosted: "OTC",
       availability: "Available",
       flag: EU
-    }
+    },
+    {
+      id: "DeepSeek-R1-Distill-Qwen-32B-Swiss",
+      name: "DeepSeek R1 Distill Qwen 32B Swiss",
+      provider: "Community+TSI",
+      hosted: "OTC",
+      availability: "Available",
+      flag: CH
+    },
+     {
+      id: "Qwen2.5-Coder-7B-Instruct-Swiss",
+      name: "Qwen2.5 Coder 7B Instruct Swiss",
+      provider: "Community+TSI",
+      hosted: "OTC",
+      availability: "Available",
+      flag: CH
+    },
+    {
+      id: "Mistral-Nemo-Instruct-2407-Swiss",
+      name: "Mistral Nemo Instruct 2407 Swiss",
+      provider: "Community+TSI",
+      hosted: "OTC",
+      availability: "Available",
+      flag: CH 
+    },
+    {
+      id: "Qwen2-VL-7B-Instruct-Swiss",
+      name: "Qwen2 VL 7B Instruct Swiss",
+      provider: "Community+TSI",
+      hosted: "OTC",
+      availability: "Available",
+      flag: CH
+    },
   ];
 
-  const top_models = models.filter(model => model.name === "Llama 3.3 70B" || model.name === "DeepSeek R1 Distill Llama 70B" || model.name === "Teuken 7B v0.4");
+  const top_models = models.filter(model => model.name === "Llama 3.3 70B Instruct" || model.name === "DeepSeek R1 Distill Llama 70B" || model.name === "Teuken 7B Instruct");
 
 
   return (
