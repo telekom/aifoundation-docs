@@ -33,7 +33,6 @@ If you want to look up the raw POST/GET API endpoints instead, because you would
 ```
 pip install openai
 ```
-
 **Step 1: Provide Base URL and API key.**
 
 <Tabs>
