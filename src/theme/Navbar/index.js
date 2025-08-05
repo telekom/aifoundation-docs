@@ -16,9 +16,6 @@ export default function Navbar() {
           <scale-telekom-nav-item>
             <a href="/Introduction">Introduction</a>
           </scale-telekom-nav-item>
-          <scale-telekom-nav-item>
-            <a href="/category/guides">Examples</a>
-          </scale-telekom-nav-item>
         </scale-telekom-nav-list>
         
         <scale-telekom-nav-list variant="functions" slot="functions" alignment="right">
