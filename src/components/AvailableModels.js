@@ -36,7 +36,7 @@ function AvailableModels() {
     {
       id: "Llama-BildungsLLM-0.9",
       name: "Llama Bildungs LLM 0.9",
-      provider: "Google",
+      provider: "DeutschlandGPT",
       hosted: "OTC",
       availability: "Available",
       flag: DE
