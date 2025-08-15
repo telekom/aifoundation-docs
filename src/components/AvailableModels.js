@@ -74,6 +74,14 @@ function AvailableModels() {
       flag: DE
     },
     {
+      id: "Alibaba Qwen3-235B-A22B-Instruct-2507-FP8 ",
+      name: "Qwen 3 235B A22B",
+      provider: "Alibaba",
+      hosted: "OTC",
+      availability: "Available",
+      flag: DE
+    },    
+    {
       id: "Teuken-7B-Instruct",
       name: "Teuken 7B Instruct",
       provider: "OpenGPT-X",
