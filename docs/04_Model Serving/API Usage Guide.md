@@ -574,8 +574,10 @@ ChatCompletionMessage(content=None, role='assistant', function_call=None, tool_c
 ```
 
 :::info
-Currently, we only support function calling to the proprietary models like gpt-4 series.
-For open-source models like Llama-3.3 support is planned in the future. Stay tuned!
+Function calling is currently supported by OpenAI, Google and Anthropic models, but not yet available across all offered OTC-hosted models.
+For the best experience on OTC, we recommend using the gpt-oss-120b or qwen-next-80b models, which offer full function-calling compatibility and reliable performance.
+
+Please note that the Responses API is currently fully supported only for OpenAI models. Currently, only the gpt-oss-120b model on OTC partially supports the Responses API, such as the POST /v1/responses endpoint.
 :::
 
 ### Image generation
