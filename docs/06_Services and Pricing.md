@@ -5,7 +5,7 @@ sidebar_position: 6
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# AI Foundation Services: Overview
+# Service Description & FAQ
 
 Welcome to the information page for the AI Foundation Services by T-Systems. Here you will find both the official service description as a PDF and the most important questions and answers (FAQ) about the offering.
 
