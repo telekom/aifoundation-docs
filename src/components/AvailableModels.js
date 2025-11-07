@@ -50,6 +50,22 @@ function AvailableModels() {
       flag: DE
     },
     {
+      id: "Mistral-Large-2411",
+      name: "Mistral-Large-2411",
+      provider: "Mistral AI",
+      hosted: "OTC",
+      availability: "Available",
+      flag: DE
+    },
+    {
+      id: "Mistral-Small-24B-Instruct-2501",
+      name: "Mistral-Small-24B-Instruct-2501",
+      provider: "Mistral AI",
+      hosted: "OTC",
+      availability: "Available",
+      flag: DE
+    },
+    {
       id: "Qwen3-30B-A3B",
       name: "Qwen3 30B A3B",
       provider: "Alibaba",
@@ -68,6 +84,14 @@ function AvailableModels() {
     {
       id: "Qwen2.5-Coder-32B-Instruct-FP8",
       name: "Qwen 2.5 Coder 32B",
+      provider: "Alibaba",
+      hosted: "OTC",
+      availability: "Available",
+      flag: DE
+    },
+    {
+      id: "Qwen3-235B-A22B-Instruct-2507-FP8",
+      name: "Qwen3-235B-A22B-Instruct-2507-FP8",
       provider: "Alibaba",
       hosted: "OTC",
       availability: "Available",
@@ -236,6 +260,22 @@ function AvailableModels() {
     {
       id: "gpt-35-turbo",
       name: "GPT-3.5 Turbo",
+      provider: "OpenAI",
+      hosted: "Azure",
+      availability: "Available",
+      flag: EU
+    },
+     {
+      id: "gpt-o1",
+      name: "GPT-o1",
+      provider: "OpenAI",
+      hosted: "Azure",
+      availability: "Available",
+      flag: EU
+    },
+    {
+      id: "gpt-o1-mini",
+      name: "GPT-o1 Mini",
       provider: "OpenAI",
       hosted: "Azure",
       availability: "Available",
