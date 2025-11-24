@@ -30,8 +30,11 @@ const config = {
     // Other configurations...
   
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+      defaultLocale: 'en',
+      locales: ['en'],
+      localeConfigs: {
+          en: { label: 'English' },
+      },
   },
 
   scripts: [
