@@ -95,8 +95,12 @@ export default function PlansRates() {
                                             {t('PLANS.OTC')}
                                         </scale-tag>
                                     </scale-tooltip>
-                                    <scale-tag>{t('PLANS.AZURE')}</scale-tag>
-                                    <scale-tag>{t('PLANS.GCP')}</scale-tag>
+                                    <scale-tooltip content={t('PLANS.TOOLTIP_AZURE')}>
+                                        <scale-tag style={{ position: 'relative', top: '-3px' }}> {t('PLANS.AZURE')}</scale-tag>
+                                    </scale-tooltip>
+                                    <scale-tooltip content={t('PLANS.TOOLTIP_GCP')}>
+                                        <scale-tag style={{ position: 'relative', top: '-3px' }}> {t('PLANS.GCP')}</scale-tag>
+                                    </scale-tooltip>
                                 </div>
                             </td>
                         </tr>
@@ -117,8 +121,12 @@ export default function PlansRates() {
                                             {t('PLANS.OTC')}
                                         </scale-tag>
                                     </scale-tooltip>
-                                    <scale-tag>{t('PLANS.AZURE')}</scale-tag>
-                                    <scale-tag>{t('PLANS.GCP')}</scale-tag>
+                                    <scale-tooltip content={t('PLANS.TOOLTIP_AZURE')}>
+                                        <scale-tag style={{ position: 'relative', top: '-3px' }}> {t('PLANS.AZURE')}</scale-tag>
+                                    </scale-tooltip>
+                                    <scale-tooltip content={t('PLANS.TOOLTIP_GCP')}>
+                                        <scale-tag style={{ position: 'relative', top: '-3px' }}> {t('PLANS.GCP')}</scale-tag>
+                                    </scale-tooltip>
                                 </div>
                             </td>
                         </tr>
@@ -139,8 +147,12 @@ export default function PlansRates() {
                                             {t('PLANS.OTC')}
                                         </scale-tag>
                                     </scale-tooltip>
-                                    <scale-tag>{t('PLANS.AZURE')}</scale-tag>
-                                    <scale-tag>{t('PLANS.GCP')}</scale-tag>
+                                    <scale-tooltip content={t('PLANS.TOOLTIP_AZURE')}>
+                                        <scale-tag style={{ position: 'relative', top: '-3px' }}> {t('PLANS.AZURE')}</scale-tag>
+                                    </scale-tooltip>
+                                    <scale-tooltip content={t('PLANS.TOOLTIP_GCP')}>
+                                        <scale-tag style={{ position: 'relative', top: '-3px' }}> {t('PLANS.GCP')}</scale-tag>
+                                    </scale-tooltip>
                                 </div>
                             </td>
                         </tr>
@@ -161,8 +173,12 @@ export default function PlansRates() {
                                             {t('PLANS.OTC')}
                                         </scale-tag>
                                     </scale-tooltip>
-                                    <scale-tag>{t('PLANS.AZURE')}</scale-tag>
-                                    <scale-tag>{t('PLANS.GCP')}</scale-tag>
+                                    <scale-tooltip content={t('PLANS.TOOLTIP_AZURE')}>
+                                        <scale-tag style={{ position: 'relative', top: '-3px' }}> {t('PLANS.AZURE')}</scale-tag>
+                                    </scale-tooltip>
+                                    <scale-tooltip content={t('PLANS.TOOLTIP_GCP')}>
+                                        <scale-tag style={{ position: 'relative', top: '-3px' }}> {t('PLANS.GCP')}</scale-tag>
+                                    </scale-tooltip>
                                 </div>
                             </td>
                         </tr>

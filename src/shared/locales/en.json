@@ -24,8 +24,8 @@
     "INPUT_TOKEN_PRICE": "Input Token Price",
     "MODELS": {
       "ALL_CLOUD": "All cloud",
-      "ALL_DATA_SOVEREIGNTY": "All Data Sovereignty",
-      "DATA_SOVEREIGNTY_SUFFIX": "(Data Sovereignty)",
+      "ALL_SERVER_LOCATION": "All Server Location",
+      "SERVER_LOCATION_SUFFIX": "(Server Location)",
       "LOADING": "Loading ...",
       "SELECTED_RATE_PLAN": "Selected Rate Plan",
       "SUBTITLE": "Choose the right model for your use case - from fast responses to deep analysis",
@@ -69,6 +69,8 @@
     "TOKEN_PRICE_3000": " 2.23 ",
     "TOKEN_PRICE_4000": " 1.75 ",
     "TOKEN_PRICE_BASIC": " 3.53 ",
-    "TOOLTIP_OTC": "Open Telekom Cloud"
+    "TOOLTIP_OTC": "Open Telekom Cloud",
+    "TOOLTIP_GCP": "Google Cloud Platform",
+    "TOOLTIP_AZURE": "Microsoft Azure"
   }
 }

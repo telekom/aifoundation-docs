@@ -205,11 +205,11 @@ function ModelPlans(props) {
                         filterSelected={
                             <>
                                 {(!filters?.dataSovereigntyFilter || filters?.dataSovereigntyFilter.length === 0) ? (
-                                    <scale-tag>{t('PLANS.MODELS.ALL_DATA_SOVEREIGNTY')}</scale-tag>
+                                    <scale-tag>{t('PLANS.MODELS.ALL_SERVER_LOCATION')}</scale-tag>
                                 ) : (
                                     filters.dataSovereigntyFilter.map((item, idx) => (
                                         <scale-tag key={idx}>
-                                            {(item?.name || '') + ' ' + t('PLANS.MODELS.DATA_SOVEREIGNTY_SUFFIX')}
+                                            {(item?.name || '') + ' ' + t('PLANS.MODELS.SERVER_LOCATION_SUFFIX')}
                                         </scale-tag>
                                     ))
                                 )}

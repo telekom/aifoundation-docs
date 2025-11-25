@@ -179,13 +179,13 @@ export default function ModelPlanFilter(props) {
                 <div className="my-flex">
                         <scale-dropdown-select
                             ref={dsRef}
-                            label={t('PLANS.DATA_SOVEREIGNTY')}
+                            label={t('PLANS.SERVER_LOCATION')}
                             value={selectedDataSovereigntyOptions?.[0]?.name || ''}
                             // optional: allow clearing (depends on scale component API)
                             // clearable
                         >
                             <scale-dropdown-select-item value="">
-                                {t('PLANS.MODELS.ALL_DATA_SOVEREIGNTY') /* optional: placeholder empty */}
+                                {t('PLANS.MODELS.ALL_SERVER_LOCATION') /* optional: placeholder empty */}
                             </scale-dropdown-select-item>
 
                             {dataSovereigntyOptions.map((opt) => (

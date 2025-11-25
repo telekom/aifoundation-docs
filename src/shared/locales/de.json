@@ -28,8 +28,8 @@
     "LOWER_TOKEN_RATES": "Günstigere Token-Preise",
     "MODELS": {
       "ALL_CLOUD": "All cloud",
-      "ALL_DATA_SOVEREIGNTY": "All Data Sovereignty",
-      "DATA_SOVEREIGNTY_SUFFIX": "(Data Sovereignty)",
+      "ALL_SERVER_LOCATION": "All Server Location",
+      "SERVER_LOCATION_SUFFIX": "(Server Location)",
       "LOADING": "Loading ...",
       "SELECTED_RATE_PLAN": "Gewählter Tarif",
       "SUBTITLE": "Wählen Sie das richtige Modell für Ihren Anwendungsfall – von schnellen Antworten bis hin zu tiefgreifenden Analysen.",
@@ -75,6 +75,8 @@
     "TOKEN_PRICE_3000": "2,23",
     "TOKEN_PRICE_4000": "1,75",
     "TOKEN_PRICE_BASIC": "3,53",
-    "TOOLTIP_OTC": "Open Telekom Cloud"
+    "TOOLTIP_OTC": "Open Telekom Cloud",
+    "TOOLTIP_GCP": "Google Cloud Platform",
+    "TOOLTIP_AZURE": "Microsoft Azure"
   }
 }
