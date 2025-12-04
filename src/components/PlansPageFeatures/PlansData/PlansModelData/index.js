@@ -1,6 +1,6 @@
-import {AllPlansV1} from "./v1.13";
+import {AllPlansV1_19_0} from "./v1.19.0";
 
-export const PlansHistory = AllPlansV1
+export const PlansHistory = AllPlansV1_19_0
 
 
 /**
