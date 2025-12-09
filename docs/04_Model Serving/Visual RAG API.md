@@ -14,13 +14,13 @@ import TabItem from '@theme/TabItem';
 
 **Visual RAG is a beta feature. If you are interested in being an early bird and trying it out, you are most welcomed to contact: AlFoundation@t-systems.com**
 
-This document introduce our Visual RAG API and outlines how to upload and operate files, as well as to ingest to the VisualRAG system and perform searching. The API is compatible with the OpenAI API standard.
+This document introduces our Visual RAG API and outlines how to upload, operate and ingest files to the VisualRAG system and perform searches. The API is compatible with the OpenAI API standard.
 
-Our Visual RAG index your file in **both text and image**. By combining the two indexing methods, it is able to take the best of both worlds: The stability of text indexing as well as the flexibility and informativity of visual indexing. In comparison to conventional text-based RAG systems, Visual RAG can retrieve the information that only exists in graphs, charts etc. while text-based RAG cannot. Moreover, Visual RAG can typically overcome various file parsing issues that currently text-RAGs struggle with. For example, parsing tables in PDF files, or parsing paragraphs under free format such as PPTX.
+Our Visual RAG indexes your file in **both text and image**. By combining the two indexing methods, it is able to take the best of both worlds: The stability of text indexing as well as the flexibility and informativeness of visual indexing. Compared to conventional text-based RAG systems, Visual RAG can retrieve information that only exists in graphs or charts — something text-based approaches often miss. Moreover, Visual RAG can typically overcome various file parsing issues that currently text-RAGs struggle with. For example, parsing tables in PDF files, or parsing paragraphs under free format such as PPTX.
 
 ## Visual RAG API workflow
 
-Visual RAG supports the following formats: PDF, PPTX, DOCX, HTML and PNG.
+Visual RAG supports the following formats: PDF, PPTX, DOCX, HTML, and PNG.
 
 
 <div style={{ width: '100%', margin: '0 auto' }}>
@@ -30,7 +30,7 @@ Visual RAG supports the following formats: PDF, PPTX, DOCX, HTML and PNG.
 ## Set-ups
 To have access to this feature, you need to firstly contact: AlFoundation@t-systems.com. We will deploy a safe and isolated storage instance just for your project.
 
-Once you get a "ready" signal from us, you can prepare your environment by doing the followings:
+Once you get a "ready" signal from us, you can prepare your environment by doing the following:
 
 ### Dependencies requirements
 
@@ -178,8 +178,8 @@ After you sorted out the file-upload, it is time to ingest the files into your v
 client.vector_stores.create(
     name="my_vs",
     chunking_strategy={
-        "text_embedding_model": "text-embedding-bge-m3", # any text embedding model of your choice
-        "vision_embedding_model": "tsi-embedding-colqwen2-2b-v1" # any vision embedding model of your choice
+        "text_embedding_model": "text-embedding-bge-m3", # replace with the embedding models of your choice
+        "vision_embedding_model": "tsi-embedding-colqwen2-2b-v1" # replace with the embedding models of your choice
     }
 )
 ```
@@ -203,8 +203,8 @@ Contains the models for indexing in both ways: the value for ```text_embedding_m
 ### List All Vector Stores
 
 ```py
-vectorstores_list = client.vector_stores.list()
-for vector_store in vectorstores_list:
+vector_stores_list = client.vector_stores.list()
+for vector_store in vector_stores_list:
     print(vector_store.name)
     print(vector_store.id)
     print(vector_store.file_counts)
@@ -404,7 +404,7 @@ The query that you use to search through the vector store.
 - **top_k_image** integer: Return the top k search results from image searching.
 
 
-### Check out the Text Search Resaults:
+### Check out the Text Search Results:
 
 ```py
 for result in results:
