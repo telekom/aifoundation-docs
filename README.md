@@ -1,56 +1,47 @@
-# Access the Docs: 
+# Access the Docs
 
 [https://docs.llmhub.t-systems.net/](https://docs.llmhub.t-systems.net/)
 
-
-# Website
+## Website
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
-### Installation
+## Installation
 
-#### Requirements
-Node.js version 18.0 or above (which can be checked by running node -v). You can use nvm for managing multiple Node versions on a single machine installed.
+### Requirements
 
-Run the following code to install docusaurus
+- **Node.js** version 18.0 or above (which can be checked by running `node -v`). You can use nvm for managing multiple Node versions on a single machine installed.
+- **Bun** (optional but recommended) - A fast JavaScript runtime and package manager. Install from [bun.sh](https://bun.sh) for significantly faster package installation and script execution.
 
-```
-$ npm init docusaurus
+⚠️ **Package Manager Note**: Choose either npm or bun and stick with it throughout your development session. Do not mix usage to avoid undesired behavior.
 
-```
-#### Installing Telekom Design Dependencies
-
-From  [Telekom Guidelines](https://telekom.github.io/scale/?path=/docs/setup-info-getting-started-for-developers--page), run these commands to install dependencies.
-
-```
-$ npm install @telekom/scale-components@next
+```text
+$ npm install  # or: bun install (recommended)
 ```
 
-```
-$ npm install @telekom/scale-components-react@next
-```
+This will install all dependencies including the Telekom Scale Design System components. The Telekom Scale components are configured according to the [Telekom Guidelines](https://telekom.github.io/scale/?path=/docs/setup-info-getting-started-for-developers--page).
 
 ### Local Development
 
-```
-$ npm run start
+```text
+$ npm run start  # or: bun run start
 ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
 ### Build
 
-```
-$ npm build
+```text
+$ npm run build  # or: bun run build
 ```
 
 This command generates static content into the `build` directory and can be served using any static contents hosting service.
 
-```
-$ npm run serve
+```text
+$ npm run serve  # or: bun run serve
 ```
 
-This command is used to test the build locally.
+This command is used to test the final production build locally.
 
 ### Deployment
 
