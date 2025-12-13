@@ -53,7 +53,7 @@ To securely connect to our API, you’ll need to generate an API key from the da
 
 ---
 :::tip
-You can see the list of our available models by using the command from [<span style={{ color: 'red', fontWeight: 'bold' }}>API Reference</span>](./04_Model%20Serving/API%20Reference.md#list-of-available-models) or view the [<span style={{ color: 'red', fontWeight: 'bold' }}>list of available models</span>](./01_Overview.md#available-llm-apis-on-ai-foundation-services).
+You can see the list of our available models by using the command from [<span style={{ color: 'red', fontWeight: 'bold' }}>API Reference</span>](./04_Model%20Serving/API%20Usage%20Guide.md#list-of-available-models) or view the [<span style={{ color: 'red', fontWeight: 'bold' }}>list of available models</span>](./01_Overview.md#available-llm-apis-on-ai-foundation-services).
 :::
 
 ---
@@ -160,4 +160,4 @@ You can see the list of our available models by using the command from [<span st
 
 You’re all set up! Now, explore different models and tune parameters like `temperature` and `max_tokens` to refine responses. For specialized use cases like RAG, see our **[LangChain](./04_Model%20Serving/Langchain%20Migration.md)** and **[Llama-Index Integration](./04_Model%20Serving/Llama-Index%20Intergration.md)** sections in the documentation.
 
-**Note**: For any model-specific requirements or best practices, consult the [API Reference](./04_Model%20Serving/API%20Reference.md) section of this documentation.
+**Note**: For any model-specific requirements or best practices, consult the [API Reference](./04_Model%20Serving/API%20Usage%20Guide.md) section of this documentation.
