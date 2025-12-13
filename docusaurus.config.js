@@ -25,9 +25,13 @@ const config = {
   projectName: 'aifoundation-docs', // Usually your repo name.
 
   onBrokenLinks: 'ignore',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
   
-    // Other configurations...
+  // Other configurations...
   
   i18n: {
       defaultLocale: 'en',
