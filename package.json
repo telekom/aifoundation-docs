@@ -14,29 +14,29 @@
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.7.0",
-    "@docusaurus/preset-classic": "^3.7.0",
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
     "@easyops-cn/docusaurus-search-local": "^0.40.1",
-    "@mdx-js/react": "^3.0.0",
-    "@telekom/scale-components": "^3.0.0-beta.156",
-    "@telekom/scale-components-react": "^3.0.0-beta.156",
-    "clsx": "^2.0.0",
-    "country-flag-icons": "^1.5.13",
+    "@mdx-js/react": "^3.1.1",
+    "@telekom/scale-components": "^3.0.0-beta.158",
+    "@telekom/scale-components-react": "^3.0.0-beta.158",
+    "clsx": "^2.1.1",
+    "country-flag-icons": "^1.6.4",
     "docusaurus": "^1.14.7",
-    "docusaurus-plugin-search-local": "^2.0.1",
-    "i18next": "^25.6.3",
+    "docusaurus-plugin-search-local": "^2.1.2",
+    "i18next": "^25.7.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
-    "prism-react-renderer": "^2.3.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-i18next": "^16.3.5",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^16.5.0",
     "util": "^0.12.5"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.7.0",
+    "@docusaurus/module-type-aliases": "^3.9.2",
     "@docusaurus/types": "3.2.1",
-    "postcss-preset-env": "^9.5.11"
+    "postcss-preset-env": "^9.6.0"
   },
   "browserslist": {
     "production": [
