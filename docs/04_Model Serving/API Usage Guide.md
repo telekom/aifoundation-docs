@@ -580,6 +580,153 @@ For the best experience on OTC, we recommend using the gpt-oss-120b or qwen-next
 Please note that the Responses API is currently fully supported only for OpenAI models. Currently, only the gpt-oss-120b model on OTC partially supports the Responses API, such as the POST /v1/responses endpoint.
 :::
 
+### Response API
+
+Using the GPT-OSS-120b model and having a up-to-date version of the openai python package, the responses API can be used the following way,
+
+<Tabs>
+  <TabItem value="py" label="Python" default>
+    ```py showLineNumbers
+    response = client.responses.create(
+        model=model,
+        input="Write a one-sentence bedtime story about a unicorn.",
+        stream=stream,
+    )
+    if not stream:
+        print(response.output_text)
+    else:
+        for chunk in response:
+            print(chunk)
+    ```
+  </TabItem>
+</Tabs>
+
+You can also use both, the input and instructions field,
+
+<Tabs>
+  <TabItem value="py" label="Python" default>
+    ```py showLineNumbers
+    def generate_product_description(product_name, features, target_audience):
+      response = client.responses.create(
+          model=model,
+          instructions="You are a professional copywriter specialized in creating concise, compelling product descriptions. Focus on benefits rather than just features.",
+          input=f"""
+          Create a product description for {product_name}.
+          Key features:
+          - {features[0]}
+          - {features[1]}
+          - {features[2]}
+          Target audience: {target_audience}
+          Keep it under 200 words.
+          """,
+          temperature=0.7,
+          max_output_tokens=200
+      )
+      # logger.info(f"response: {response}")
+      return response.output[0].content[0].text
+
+    # Example usage
+    headphones_desc = generate_product_description(
+      "NoiseGuard Pro Headphones",
+      ["Active noise cancellation", "40-hour battery life", "Memory foam ear cushions"],
+      "Business travelers and remote workers"
+    )
+
+    print(headphones_desc)
+    ```
+  </TabItem>
+</Tabs>
+
+Function calling is working similarly to the chat completion manner,
+
+<Tabs>
+  <TabItem value="py" label="Python" default>
+    ```py showLineNumbers
+    tools = [{
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current temperature for a given location.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "City and country e.g. Bogotá, Colombia"
+                }
+            },
+            "required": [
+                "location"
+            ],
+            "additionalProperties": False
+        }
+    }]
+
+    response = client.responses.create(
+        model=model,
+        input=[{"role": "user", "content": "What is the weather like in Paris today?"}],
+        tools=tools
+    )
+
+    print(response.output)
+    ```
+  </TabItem>
+</Tabs>
+
+Lastly, parsing of text into a structured schema can be implemented the following way,
+
+<Tabs>
+  <TabItem value="py" label="Python" default>
+    ```py showLineNumbers
+    import json
+
+    product_description = """
+    Our Premium Laptop Backpack is perfect for professionals and students alike.
+    Made with water-resistant material, it features padded compartments that fit
+    laptops up to 15.6 inches. The backpack includes 3 main storage areas,
+    5 smaller pockets, and has an integrated USB charging port. Available in
+    navy blue, black, and gray. Current retail price: $79.99, though it's
+    currently on sale for $64.99 until the end of the month.
+    """
+
+    response = client.responses.create(
+      model=model,
+      input=f"Extract structured product information from this description: {product_description}",
+      text={
+          "format": {
+              "type": "json_schema",
+              "name": "product_details",
+              "schema": {
+                  "type": "object",
+                  "properties": {
+                      "product_name": {"type": "string"},
+                      "category": {"type": "string"},
+                      "features": {"type": "array", "items": {"type": "string"}},
+                      "colors": {"type": "array", "items": {"type": "string"}},
+                      "pricing": {
+                          "type": "object",
+                          "properties": {
+                              "regular_price": {"type": "number"},
+                              "sale_price": {"type": "number"},
+                              "currency": {"type": "string"},
+                          },
+                          "additionalProperties": False,
+                          "required": ["regular_price", "sale_price", "currency"],
+                      },
+                  },
+                  "required": ["product_name", "features", "colors", "pricing","category"],
+                  "additionalProperties": False,
+              },
+              "strict": True,
+          }
+      },
+    )
+
+    product_data = json.loads(response.output[0].content[0].text)
+    print(json.dumps(product_data, indent=2))
+    ```
+  </TabItem>
+</Tabs>
+
 ### Image generation
 
 <Tabs>
