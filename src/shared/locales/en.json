@@ -55,7 +55,7 @@
     "SUBTITLE": "AI Foundation Services offers pay-as-you-go pricing. Prices vary by model, agreement, and rate plan.",
     "SUBTITLE_2": "Please contact us for more information on the dedicated and on-premises hosting options.",
     "TABLE_HEADERS": {
-      "BASE_PRICE": "Base Price",
+      "MINIMUM_CONSUMPTION": "Minimum Consumption",
       "CLOUD_PROVIDER": "Cloud Provider",
       "PER_MIL_TOKEN": "€ / Mil. Tokens",
       "PER_REQUEST": "Request/Minute",

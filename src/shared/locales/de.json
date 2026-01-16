@@ -61,7 +61,7 @@
     "SUBTITLE": "Die AI Foundation Services Plattform bietet eine nutzungsabhängige Preisgestaltung. Die Preise variieren je nach Modell, Vereinbarung und Tarif.",
     "SUBTITLE_2": "Bitte kontaktieren Sie uns für weitere Informationen zu den dedizierten und on-premises Hosting-Optionen.",
     "TABLE_HEADERS": {
-      "BASE_PRICE": "Grundpreis",
+      "MINIMUM_CONSUMPTION": "Mindestverbrauch",
       "CLOUD_PROVIDER": "Cloud Anbieter",
       "PER_MIL_TOKEN": "€ / Mil. Tokens",
       "PER_REQUEST": "Anfragen/Minute",
