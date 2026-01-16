@@ -27,7 +27,7 @@ function AvailableModels() {
 
   let models = useModels(PlansHistory[PlansHistory.length - 2]?.modelQuotaConfigs || [])
 
-  const top_models = models.filter(model => model.name === "Claude 4 Sonnet" || model.name === "GPT-4.1" || model.name === "Gemini 2.5 Pro");
+  const top_models = models.filter(model => model.name === "Teuken 7B Instruct" || model.name === "GPT-4.1" || model.name === "Llama 3.3 70B Instruct");
 
 
   return (
