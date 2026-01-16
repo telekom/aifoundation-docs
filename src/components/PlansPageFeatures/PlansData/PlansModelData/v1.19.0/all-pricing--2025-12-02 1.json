@@ -257,88 +257,6 @@
     "parentPackageName": null,
     "parentPackageId": null,
     "inheritUpdates": false,
-    "childrenPackages": [
-      {
-        "packageName": "testforfun",
-        "isActive": true,
-        "packageId": 125,
-        "inheritUpdates": false,
-        "modelCount": 28,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Tarif_1000_TDU",
-        "isActive": true,
-        "packageId": 126,
-        "inheritUpdates": false,
-        "modelCount": 30,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Tarif-Standard-1000-Limited-New",
-        "isActive": true,
-        "packageId": 127,
-        "inheritUpdates": true,
-        "modelCount": 33,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Standard_1000_with_GPT-OSS",
-        "isActive": true,
-        "packageId": 129,
-        "inheritUpdates": true,
-        "modelCount": 35,
-        "packageType": "system"
-      },
-      {
-        "packageName": "AnaTestPackage",
-        "isActive": true,
-        "packageId": 132,
-        "inheritUpdates": true,
-        "modelCount": 35,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Standard 1000 - IAIS",
-        "isActive": false,
-        "packageId": 136,
-        "inheritUpdates": false,
-        "modelCount": 6,
-        "packageType": "system_otc"
-      },
-      {
-        "packageName": "Standard 1000 - Fraunhofer IAIS",
-        "isActive": false,
-        "packageId": 137,
-        "inheritUpdates": false,
-        "modelCount": 6,
-        "packageType": "system_otc"
-      },
-      {
-        "packageName": "Standard 1000 (OTC) + Whisper  – Fraunhofer IAIS",
-        "isActive": false,
-        "packageId": 138,
-        "inheritUpdates": false,
-        "modelCount": 6,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Standard 1000 GovIT NEW",
-        "isActive": true,
-        "packageId": 146,
-        "inheritUpdates": true,
-        "modelCount": 32,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Tarif Standard 1000 DTService",
-        "isActive": true,
-        "packageId": 147,
-        "inheritUpdates": true,
-        "modelCount": 33,
-        "packageType": "system"
-      }
-    ],
     "modelQuotaConfigs": [
       {
         "exactModelName": "Claude 3.7 Sonnet",
@@ -930,40 +848,6 @@
     "parentPackageName": null,
     "parentPackageId": null,
     "inheritUpdates": false,
-    "childrenPackages": [
-      {
-        "packageName": "smartchat-dev-package",
-        "isActive": true,
-        "packageId": 119,
-        "inheritUpdates": true,
-        "modelCount": 36,
-        "packageType": "system"
-      },
-      {
-        "packageName": "smartchat-staging-package",
-        "isActive": true,
-        "packageId": 120,
-        "inheritUpdates": false,
-        "modelCount": 28,
-        "packageType": "system"
-      },
-      {
-        "packageName": "smartchat-prod-package",
-        "isActive": true,
-        "packageId": 121,
-        "inheritUpdates": false,
-        "modelCount": 33,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Standard2000_OTC_ONLY_limited",
-        "isActive": true,
-        "packageId": 133,
-        "inheritUpdates": false,
-        "modelCount": 14,
-        "packageType": "system"
-      }
-    ],
     "modelQuotaConfigs": [
       {
         "exactModelName": "Claude 3.7 Sonnet",
@@ -1555,7 +1439,6 @@
     "parentPackageName": null,
     "parentPackageId": null,
     "inheritUpdates": false,
-    "childrenPackages": [],
     "modelQuotaConfigs": [
       {
         "exactModelName": "Claude 3.7 Sonnet",
@@ -2147,72 +2030,6 @@
     "parentPackageName": null,
     "parentPackageId": null,
     "inheritUpdates": false,
-    "childrenPackages": [
-      {
-        "packageName": "Tarif Standard4000 Template Test",
-        "isActive": false,
-        "packageId": 122,
-        "inheritUpdates": true,
-        "modelCount": 38,
-        "packageType": "system"
-      },
-      {
-        "packageName": " Tarif Standard4000 Amber",
-        "isActive": true,
-        "packageId": 123,
-        "inheritUpdates": true,
-        "modelCount": 49,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Tarif-Standard-4000-Limited-New",
-        "isActive": true,
-        "packageId": 128,
-        "inheritUpdates": true,
-        "modelCount": 29,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Tarif-Standard4000-ITSCare-2",
-        "isActive": true,
-        "packageId": 131,
-        "inheritUpdates": false,
-        "modelCount": 16,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Standard 4000 (OTC) + Whisper – Fraunhofer IAIS\t",
-        "isActive": true,
-        "packageId": 139,
-        "inheritUpdates": false,
-        "modelCount": 6,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Fraunhofer IAIS (4000er OTC + Whisper)",
-        "isActive": true,
-        "packageId": 140,
-        "inheritUpdates": false,
-        "modelCount": 6,
-        "packageType": "system"
-      },
-      {
-        "packageName": "Tarif-4000er Limits - Tarif basic price - OTC only",
-        "isActive": true,
-        "packageId": 141,
-        "inheritUpdates": false,
-        "modelCount": 11,
-        "packageType": "system"
-      },
-      {
-        "packageName": "smartchat-benchmarks-package",
-        "isActive": true,
-        "packageId": 145,
-        "inheritUpdates": false,
-        "modelCount": 30,
-        "packageType": "system"
-      }
-    ],
     "modelQuotaConfigs": [
       {
         "exactModelName": "Claude 3.7 Sonnet",
