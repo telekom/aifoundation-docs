@@ -43,7 +43,7 @@ function PricingListTooltip(props) {
         setModelList((prev) => prev.map((m) => ({ ...m, price: '' })));
 
         (allStandardPackages || []).forEach((plan) => {
-            const matchingModel = plan.modelQuotaConfigs?.find((model) => model.exactModelName === exactModelName);
+            const matchingModel = plan.modelQuotaConfigs?.find((model) => model.displayModelName === exactModelName);
             if (matchingModel && plan.packageName) {
                 setModelList((prev) =>
                     prev.map((item) => {
