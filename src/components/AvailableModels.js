@@ -17,7 +17,7 @@ function AvailableModels() {
   function useModels(apiModels) {
       return apiModels.map((m) => ({
         id: normalizeId(m.exactModelName),
-        name: m.exactModelName,
+        name: m.displayModelName,
         provider: m.deploymentRegion.split('-')[0].toUpperCase() || '-',   // "Claude" (or set explicitly)
         hosted: useCapitalizeFirstLetter(m.deploymentRegion.split('-')[1] || '-'),
         availability: "Available",
@@ -27,7 +27,7 @@ function AvailableModels() {
 
   let models = useModels(PlansHistory[PlansHistory.length - 2]?.modelQuotaConfigs || [])
 
-  const top_models = models.filter(model => model.name === "gpt-oss-120b" || model.name === "gemini-2.5-pro" || model.name === "Qwen2.5-Coder-32B-Instruct-FP8");
+  const top_models = models.filter(model => model.name === "Meta LLama 3.3 70B" || model.name === "Claude 4 Sonnet" || model.name === "GPT 4.1");
 
 
   return (
