@@ -32,9 +32,10 @@ Welcome to AI Foundation Services - your gateway to private, secure, and scalabl
 
 ## Available LLM-APIs on AI Foundation Services
 
-NOTE: The model list underneath is being currently redesigned, for an updated model list please refer to [the Serving Plans page](https://marketplace.otc.t-systems.com/](https://docs.llmhub.t-systems.net/Model%20Serving/Plans).
+Discover our latest AI model offerings below—carefully curated to power your applications with state-of-the-art performance and reliability.
+For a complete and up-to-date overview of all supported models and rate plans, please visit the [Plans page](Model%20Serving/Plans) or [LLM Serving Application](https://apikey.llmhub.t-systems.net).
 
-<AvailableModels />
+<AvailableModels/>
 
 ---
 

@@ -46,7 +46,7 @@ export default function PlansRates() {
                         <thead>
                         <tr>
                             <th>{t('PLANS.TABLE_HEADERS.RATE_PLAN')}</th>
-                            <th>{t('PLANS.TABLE_HEADERS.BASE_PRICE')}</th>
+                            <th>{t('PLANS.TABLE_HEADERS.MINIMUM_CONSUMPTION')}</th>
                             <th style={{ lineHeight: '18px', padding: '8px' }}>
                                 {t('PLANS.TABLE_HEADERS.TOKEN_PRICING')}
                                 <br />

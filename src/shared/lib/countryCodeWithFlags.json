@@ -414,6 +414,12 @@
     "dial_code": "+251"
   },
   {
+    "name": "European Union",
+    "flag": "🇪🇺",
+    "code": "EU",
+    "dial_code": "+"
+  },
+  {
     "name": "Falkland Islands (Malvinas)",
     "flag": "🇫🇰",
     "code": "FK",
