@@ -28,7 +28,7 @@ To securely connect to our API, you’ll need to generate an API key from the da
 1. **Store it safely** in a location like a `.zshrc` file (macOS/Linux) or another text file on your computer.
 2. **Export it as an environment variable** in your terminal for easy access in your scripts.
 
-**Create an API key** in the dashboard [here](#) and follow the steps below for your operating system.
+**Create an API key** in the dashboard [here](https://apikey.llmhub.t-systems.net/) and follow the steps below for your operating system.
 
 <Tabs>
   <TabItem value="mac" label="macOS / Linux" default>

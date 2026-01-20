@@ -1,337 +1,33 @@
-import React, { useState } from 'react';
-import { CH, DE, EU } from 'country-flag-icons/react/3x2'; 
+import React, {useMemo, useState} from 'react';
+import {useCapitalizeFirstLetter, useCountryHelper} from "../shared/lib";
+import {PlansHistory} from "./PlansPageFeatures/PlansData/PlansModelData";
 
 function AvailableModels() {
   const [showAll, setShowAll] = useState(false);
+  const useCountry = useCountryHelper();
 
   const handleShowMore = () => {
     setShowAll(!showAll);
   };
 
-  let models = [
-    {
-      id: "DeepSeek-R1-Distill-Llama-70B",
-      name: "DeepSeek R1 Distill Llama 70B",
-      provider: "DeepSeek",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "Llama-3.3-70B-Instruct",
-      name: "Llama 3.3 70B Instruct",
-      provider: "Meta",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "Llama-3.1-405B-Instruct-US",
-      name: "Llama 3.1 405B",
-      provider: "Google",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "Llama-BildungsLLM-0.9",
-      name: "Llama Bildungs LLM 0.9",
-      provider: "DeutschlandGPT",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "Mistral-Small-3.1-24B-Instruct-2503",
-      name: "Mistral-Small-3.1-24B-Instruct-2503",
-      provider: "Mistral AI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "Qwen3-30B-A3B",
-      name: "Qwen3 30B A3B",
-      provider: "Alibaba",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "Qwen2.5-VL-72B-Instruct",
-      name: "Qwen 2.5 VL 72B",
-      provider: "Alibaba",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "Qwen2.5-Coder-32B-Instruct-FP8",
-      name: "Qwen 2.5 Coder 32B",
-      provider: "Alibaba",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "Alibaba Qwen3-235B-A22B-Instruct-2507-FP8 ",
-      name: "Qwen 3 235B A22B",
-      provider: "Alibaba",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },    
-    {
-      id: "Teuken-7B-Instruct",
-      name: "Teuken 7B Instruct",
-      provider: "OpenGPT-X",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "claude-sonnet-4",
-      name: "Claude Sonnet 4",
-      provider: "Anthropic",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "claude-3-7-sonnet",
-      name: "Claude 3.7 Sonnet",
-      provider: "Anthropic",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "claude-3-5-sonnet-v2",
-      name: "Claude 3.5 Sonnet v2",
-      provider: "Anthropic",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "claude-3-5-sonnet",
-      name: "Claude 3.5 Sonnet",
-      provider: "Anthropic",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gemini-2.5-pro",
-      name: "Gemini 2.5 Pro",
-      provider: "Google",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gemini-2.5-flash",
-      name: "Gemini 2.5 Flash",
-      provider: "Google",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gemini-2.0-flash",
-      name: "Gemini 2.0 Flash",
-      provider: "Google",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gemini-1.5-flash",
-      name: "Gemini 1.5 Flash",
-      provider: "Google",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gemini-1.5-pro",
-      name: "Gemini 1.5 Pro",
-      provider: "Google",
-      hosted: "GCP",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-o4-mini",
-      name: "GPT-o4 Mini",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-o3",
-      name: "GPT-o3",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-o3-mini",
-      name: "GPT-o3 Mini",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-41",
-      name: "GPT-4.1",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-41-mini",
-      name: "GPT-4.1 Mini",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-41-nano",
-      name: "GPT-4.1 Nano",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-4o",
-      name: "GPT-4o",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-4o",
-      name: "GPT-4o",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-4-turbo-128k-france",
-      name: "GPT-4 Turbo 128k France",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "gpt-35-turbo",
-      name: "GPT-3.5 Turbo",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "text-embedding-ada-002",
-      name: "Text Embedding Ada 002",
-      provider: "OpenAI",
-      hosted: "Azure",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "text-embedding-bge-m3",
-      name: "Text Embedding BGE M3",
-      provider: "BAAI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "jina-embeddings-v2-base-code",
-      name: "Jina Embeddings v2 Base Code",
-      provider: "JinaAI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "jina-embeddings-v2-base-de",
-      name: "Jina Embeddings v2 Base DE",
-      provider: "JinaAI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "Bce-Reranker",
-      name: "BCE Reranker",
-      provider: "BAAI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "tsi-embedding-colqwen2-2b-v1",
-      name: "TSI ColQwen2 2B v1",
-      provider: "Community+TSI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: DE
-    },
-    {
-      id: "whisper-large-v3-turbo",
-      name: "Whisper Large v3 Turbo",
-      provider: "OpenAI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: EU
-    },
-    {
-      id: "DeepSeek-R1-Distill-Qwen-32B-Swiss",
-      name: "DeepSeek R1 Distill Qwen 32B Swiss",
-      provider: "Community+TSI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: CH
-    },
-     {
-      id: "Qwen2.5-Coder-7B-Instruct-Swiss",
-      name: "Qwen2.5 Coder 7B Instruct Swiss",
-      provider: "Community+TSI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: CH
-    },
-    {
-      id: "Mistral-Nemo-Instruct-2407-Swiss",
-      name: "Mistral Nemo Instruct 2407 Swiss",
-      provider: "Community+TSI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: CH 
-    },
-    {
-      id: "Qwen2-VL-7B-Instruct-Swiss",
-      name: "Qwen2 VL 7B Instruct Swiss",
-      provider: "Community+TSI",
-      hosted: "OTC",
-      availability: "Available",
-      flag: CH
-    },
-  ];
+  function normalizeId(name) {
+      return name.replace(/\s+/g, "-");
+  }
 
-  const top_models = models.filter(model => model.name === "Llama 3.3 70B Instruct" || model.name === "DeepSeek R1 Distill Llama 70B" || model.name === "Teuken 7B Instruct");
+  function useModels(apiModels) {
+      return apiModels.map((m) => ({
+        id: normalizeId(m.exactModelName),
+        name: m.displayModelName,
+        provider: m.deploymentRegion.split('-')[0].toUpperCase() || '-',   // "Claude" (or set explicitly)
+        hosted: useCapitalizeFirstLetter(m.deploymentRegion.split('-')[1] || '-'),
+        availability: "Available",
+          flag: useCountry.searchCountries('name', useCapitalizeFirstLetter(m.deploymentRegion.split('-')[1]))[0].flag,
+      }));
+    }
+
+  let models = useModels(PlansHistory[PlansHistory.length - 2]?.modelQuotaConfigs || [])
+
+  const top_models = models.filter(model => model.name === "Meta LLama 3.3 70B" || model.name === "Claude 4 Sonnet" || model.name === "GPT 4.1");
 
 
   return (
@@ -380,11 +76,11 @@ function AvailableModels() {
             <scale-icon-action-copy-paste accessibility-title="copy-paste" />
           </button>
           <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)',marginBottom: '2px'  }}>
-            Provider: <strong>{model.provider}</strong>
+            Cloud: <strong>{model.provider}</strong>
           </p>
           <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', alignItems: 'center', marginBottom: '14px'}}>
-            Hosted on: <strong style={{ marginLeft: '4px' }}>{model.hosted}</strong>
-            <model.flag style={{ marginLeft: '8px', width: '30px', height: '18px', position: 'relative', top: '4px' }} />
+            Server Location: <strong style={{ marginLeft: '4px' }}>{model.hosted}</strong>
+              <span style={{ display: 'inline-flex', marginLeft: '4px', fontSize: '18px' }} >{model.flag}</span>
           </p>
           <span
             style={{

@@ -70,7 +70,7 @@ function ModelPlans(props) {
                 cloud: (item?.deploymentRegion || '-').split('-')[0]?.toUpperCase() || '-',
                 creator: '-',
                 name: {
-                    heading: item?.exactModelName,
+                    heading: item?.displayModelName,
                     subHeading: item?.modelLabel,
                     license: item?.license,
                 },
@@ -92,7 +92,7 @@ function ModelPlans(props) {
                         cloud: (item?.deploymentRegion || '-').split('-')[0]?.toUpperCase() || '-',
                         creator: '-',
                         name: {
-                            heading: item?.exactModelName,
+                            heading: item?.displayModelName,
                             subHeading: customItem?.modelLabel,
                             license: item?.license,
                         },
