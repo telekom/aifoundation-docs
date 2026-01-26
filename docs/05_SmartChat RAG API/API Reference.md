@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 2
 id: eRAG API Reference
 title: API Reference
 tags:
@@ -83,3 +83,12 @@ To authenticate you need to obtain a **Bearer Token** from the [authentication e
 | **Ingest Master** | **ingest-master** | [link](https://api-gateway.ai.t-systems.net/ingest-master/redoc)  | Orchestration of file ingestion tasks, based on the selected ingestion pipeline via the Config Manager. |
 | **Chat Session Manager** | **chat-session-manager** | [link](https://api-gateway.ai.t-systems.net/chat-session-manager/redoc)  | Management of chat sessions, session configurations, session history, and messages feedback. |
 | **Query Pipeline** | **query-pipeline** | [link](https://api-gateway.ai.t-systems.net/query-pipeline/redoc)  | Generation of chat responses based on the selected query pipeline via the Config Manager. |
+
+---
+
+## See Also
+
+- [SmartChat RAG Overview](./smartchat-overview) - Overview and comparison with Model Serving API
+- [Global KB Chat Guide](./global_chat_guide) - How to chat using the global knowledge base
+- [Local KB Chat Guide](./local_chat_guide) - How to upload files and chat with local context
+- [Model Serving API](../Model%20Serving/model-serving-overview) - Direct LLM API access with OpenAI compatibility

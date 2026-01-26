@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 2
 id: openai
 title: API Usage Guide
 tags:
@@ -44,7 +44,7 @@ pip install openai
 
     client = OpenAI(
         api_key=os.getenv('API_KEY'),
-        base_url="https://llm-server.llmhub.t-systems.net/v2",
+        base_url=os.getenv('API_BASE'),  # https://llm-server.llmhub.t-systems.net/v2
     )
 
     print("==========Available models==========")
@@ -278,7 +278,7 @@ The transcription API converts audio into text in the same language as the audio
   <TabItem value="py" label="Python" default>
     ```python showLineNumbers
     stt_model = 'whisper-large-v3'
-    audio_file_path = '/home/pv_rwm_models/workspace/trong/unified-cce-proxy/notebooks/harvard.wav'
+    audio_file_path = '/path/to/your/audio_file.wav'
 
     audio_file = open(audio_file_path, "rb")
 
@@ -812,7 +812,7 @@ For Qwen3, reasoning can be disabled with the addition of the keyword "/no_think
     stream = True
     system_prompt = """You are an AI assistant named {model}. You are truthful, concise, and helpful. Always respond in a friendly and professional manner."""
     user_prompt = "What is your name?"
-    
+
     start=time.time()
     chat_response = client.chat.completions.create(
         model=model,
@@ -822,7 +822,7 @@ For Qwen3, reasoning can be disabled with the addition of the keyword "/no_think
         ],
         stream=stream
     )
-    
+
     count = 0
     if not stream:
         print("Answer: ",chat_response.choices[0].message.content)
@@ -835,3 +835,14 @@ For Qwen3, reasoning can be disabled with the addition of the keyword "/no_think
     ```
   </TabItem>
 </Tabs>
+
+---
+
+## See Also
+
+- [Model Serving Overview](./model-serving-overview) - Overview of all capabilities and model comparison
+- [Fine-Tuning API](./finetune) - Customize models with your own data
+- [LangChain Integration](./langchain) - Build RAG applications with LangChain
+- [Llama-Index Integration](./llama-index) - Build RAG applications with Llama-Index
+- [Visual RAG](./visualrag) - RAG with text and image indexing
+- [Plans & Pricing](./Plans) - View available rate plans and pricing

@@ -35,8 +35,8 @@ To securely connect to our API, you’ll need to generate an API key from the da
 
    <strong>Export environment variables on *nix systems*:</strong>
    ```bash
-   export OPENAI_API_KEY="your_api_key_here"
-   export BASE_URL="https://llm-server.llmhub.t-systems.net/v2"
+   export API_KEY="your_api_key_here"
+   export API_BASE="https://llm-server.llmhub.t-systems.net/v2"
    ```
 
   </TabItem>
@@ -44,8 +44,8 @@ To securely connect to our API, you’ll need to generate an API key from the da
 
    <strong>Set environment variables on Windows:</strong>
    ```bash
-   setx OPENAI_API_KEY "your_api_key_here"
-   setx BASE_URL "https://llm-server.llmhub.t-systems.net/v2"
+   setx API_KEY "your_api_key_here"
+   setx API_BASE "https://llm-server.llmhub.t-systems.net/v2"
    ```
 
   </TabItem>
@@ -53,7 +53,7 @@ To securely connect to our API, you’ll need to generate an API key from the da
 
 ---
 :::tip
-You can see the list of our available models by using the command from [<span style={{ color: 'red', fontWeight: 'bold' }}>API Reference</span>](./04_Model%20Serving/API%20Usage%20Guide.md#list-of-available-models) or view the [<span style={{ color: 'red', fontWeight: 'bold' }}>list of available models</span>](./01_Overview.md#available-llm-apis-on-ai-foundation-services).
+You can see the list of our available models by using the command from [<span style={{ color: 'red', fontWeight: 'bold' }}>API Reference</span>](./Model%20Serving/openai#list-of-available-models) or view the [<span style={{ color: 'red', fontWeight: 'bold' }}>list of available models</span>](./#available-llm-apis-on-ai-foundation-services).
 :::
 
 ---
@@ -70,8 +70,8 @@ You can see the list of our available models by using the command from [<span st
 
     # Set up the client with your API key and base URL
     client = openai.OpenAI(
-        api_key=os.getenv("OPENAI_API_KEY"),
-        base_url=os.getenv("BASE_URL")
+        api_key=os.getenv("API_KEY"),
+        base_url=os.getenv("API_BASE")
     )
 
     chat_response = client.chat.completions.create(
@@ -102,8 +102,8 @@ You can see the list of our available models by using the command from [<span st
 
     # Set up the client with your API key and base URL
     client = openai.OpenAI(
-        api_key=os.getenv("OPENAI_API_KEY"),
-        base_url=os.getenv("BASE_URL")
+        api_key=os.getenv("API_KEY"),
+        base_url=os.getenv("API_BASE")
     )
 
     texts = ["The quick brown fox jumps over the lazy dog", "Data science is fun!"]
@@ -131,8 +131,8 @@ You can see the list of our available models by using the command from [<span st
 
     # Set up the client with your API key and base URL
     client = openai.OpenAI(
-        api_key=os.getenv("OPENAI_API_KEY"),
-        base_url=os.getenv("BASE_URL")
+        api_key=os.getenv("API_KEY"),
+        base_url=os.getenv("API_BASE")
     )
 
     chat_response = client.chat.completions.create(
@@ -158,6 +158,6 @@ You can see the list of our available models by using the command from [<span st
 
 ### Next Steps
 
-You’re all set up! Now, explore different models and tune parameters like `temperature` and `max_tokens` to refine responses. For specialized use cases like RAG, see our **[LangChain](./04_Model%20Serving/Langchain%20Migration.md)** and **[Llama-Index Integration](./04_Model%20Serving/Llama-Index%20Intergration.md)** sections in the documentation.
+You're all set up! Now, explore different models and tune parameters like `temperature` and `max_tokens` to refine responses. For specialized use cases like RAG, see our **[LangChain](./Model%20Serving/langchain)** and **[Llama-Index Integration](./Model%20Serving/llama-index)** sections in the documentation.
 
-**Note**: For any model-specific requirements or best practices, consult the [API Reference](./04_Model%20Serving/API%20Usage%20Guide.md) section of this documentation.
+**Note**: For any model-specific requirements or best practices, consult the [API Reference](./Model%20Serving/openai) section of this documentation.
