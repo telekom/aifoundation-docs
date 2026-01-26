@@ -83,7 +83,7 @@ claude-3-5-sonnet-v2-US
 
     llm = AzureOpenAI(
         deployment_name="gpt-4o",
-        api_key=api_key=os.getenv('API_KEY'),
+        api_key=os.getenv('API_KEY'),
         azure_endpoint=os.getenv('API_BASE'),
         api_version="2023-07-01-preview",
     )
@@ -212,3 +212,12 @@ Example output:
 ```
 According to the context, Alphabet generated $69,787 million in revenue in the quarter ended March 31, 2023.
 ```
+
+---
+
+## See Also
+
+- [Model Serving Overview](./model-serving-overview) - Overview of all capabilities and model comparison
+- [API Usage Guide](./openai) - Complete API reference for chat, embeddings, audio, and more
+- [LangChain Integration](./langchain) - Alternative RAG framework integration
+- [SmartChat RAG API](../SmartChat%20RAG%20API/smartchat-overview) - Managed RAG solution

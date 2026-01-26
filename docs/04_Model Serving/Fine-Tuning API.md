@@ -1,7 +1,7 @@
 ---
-sidebar_position: 5
+sidebar_position: 3
 id: finetune
-title: Fine-tuning API
+title: Fine-Tuning API
 tags:
   - OpenAI API
   - Fine Tuning LLM
@@ -500,4 +500,13 @@ For each fine-tuning job, there are two main runs for monitoring:
 In Mlflow artifacts, you will find the LM Evaluation Harness Benchmark scores and RAG Needle in a Haystack Benchmark scores for your Fine-Tuned Model.
 
 ![image](https://github.com/user-attachments/assets/d788f790-62f9-4556-a701-69ae27e903bf)
+
+---
+
+## See Also
+
+- [Model Serving Overview](./model-serving-overview) - Overview of all capabilities and model comparison
+- [API Usage Guide](./openai) - Complete API reference for chat, embeddings, audio, and more
+- [LangChain Integration](./langchain) - Build RAG applications with LangChain
+- [Llama-Index Integration](./llama-index) - Build RAG applications with Llama-Index
 

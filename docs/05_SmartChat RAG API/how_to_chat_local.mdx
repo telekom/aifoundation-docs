@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 4
 id: local_chat_guide
 title: How to chat using the local KB?
 tags:
@@ -128,7 +128,7 @@ body = {
   "config": {
     "localConfigId": default_local_config_id,
     "globalContext": False,
-    "activeFiles": [ingested_files["fileId"] for uploaded_file in uploaded_files]  # you can also leave empty. In that case, all files in the local context will be used for retrieval.
+    "activeFiles": [uploaded_file["fileId"] for uploaded_file in uploaded_files],  # you can also leave empty. In that case, all files in the local context will be used for retrieval.
     "chatModel": allowed_llms[0]["name"]
   }
 }
@@ -146,3 +146,11 @@ response = requests.post(f"{base_url}/query-pipelines/api/v1/chat", headers=head
 
 print(response.json())
 ```
+
+---
+
+## See Also
+
+- [SmartChat RAG Overview](./smartchat-overview) - Overview of SmartChat RAG API
+- [Global KB Chat Guide](./global_chat_guide) - Chat using global knowledge base
+- [API Reference](./eRAG%20API%20Reference) - Complete API documentation

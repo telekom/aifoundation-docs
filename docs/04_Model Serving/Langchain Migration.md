@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 id: langchain
 title: LangChain Integration
 tags:
@@ -165,10 +165,10 @@ I want something crisp, something clean, something that sparkles and shines,
 
 
     # Test run
-    embed_model = OTC_Embeddings(openai_api_key=os.getenv('API_KEY'), 
+    embed_model = OTC_Embeddings(openai_api_key=os.getenv('API_KEY'),
                                 openai_api_base=os.getenv('API_BASE'),
                                 model="text-embedding-bge-m3")
-    embeddings = embeddings_model.embed_documents(
+    embeddings = embed_model.embed_documents(
         [
           "Hi there!",
           "Oh, hello!",
@@ -188,4 +188,11 @@ Example output:
 (5, 1024)
 ```
 
+---
 
+## See Also
+
+- [Model Serving Overview](./model-serving-overview) - Overview of all capabilities and model comparison
+- [API Usage Guide](./openai) - Complete API reference for chat, embeddings, audio, and more
+- [Llama-Index Integration](./llama-index) - Alternative RAG framework integration
+- [SmartChat RAG API](../SmartChat%20RAG%20API/smartchat-overview) - Managed RAG solution
