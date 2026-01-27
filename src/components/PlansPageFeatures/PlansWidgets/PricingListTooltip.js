@@ -223,8 +223,6 @@ function PricingListTooltip(props) {
                     border-bottom: 1px solid var(--telekom-color-ui-faint);
                 }
                 .table tbody td {
-                    border-bottom: none;
-                    width: 50%;
                     padding-left: var(--telekom-spacing-unit-x5);
                 }
                 scale-tooltip::part(trigger) {
