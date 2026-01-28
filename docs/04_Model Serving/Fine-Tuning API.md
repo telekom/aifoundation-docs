@@ -13,6 +13,10 @@ import TabItem from '@theme/TabItem';
 
 This document introduce our Fine-Tuning API and outlines how to use the Upload API for tasks like uploading, listing, and deleting files, as well as the Fine-Tuning Server for fine-tune purpose. It also details how to validate dataset formats, ensuring they are ready for use. Both APIs integrate with the OpenAI package in Python for easier streamlining data management.
 
+Currently, our Fine-Tuning API is compatible with Mistral-Nemo-Instruct-2407 and Llama-3.1-70B-Instruct. 
+
+If you want to use our Fine-Tuning API, please contact our support AlFoundation@t-systems.com, we will enable this feature for your API key.
+
 ## Fine-Tuning API workflow
 The Fine-Tuning API includes 2 main components: 
 - **Upload API**  
@@ -238,7 +242,7 @@ client = OpenAI(
 
 ### Create fine-tuning job
 
-Creates a fine-tuning job which begins the process of creating a new model from a given dataset.
+Creates a fine-tuning job which begins the process of creating a new model from a given dataset. Fine-tuning jobs are visible and can be used across the project.
 
 **Endpoint**: `POST /fine_tuning/jobs`
 
