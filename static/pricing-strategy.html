@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIFS Model Catalog & Pricing Strategy 2026</title>
+  <style>
+    :root {
+      --magenta: #e20074;
+      --magenta-dark: #b8005c;
+      --magenta-light: #ff4da6;
+      --dark: #1a1a2e;
+      --dark-card: #16213e;
+      --dark-surface: #0f3460;
+      --dark-border: #1a3a6a;
+      --text: #e8e8e8;
+      --text-muted: #a0aec0;
+      --text-bright: #ffffff;
+      --green: #38b000;
+      --green-bg: rgba(56, 176, 0, 0.12);
+      --red: #ff4d4d;
+      --red-bg: rgba(255, 77, 77, 0.12);
+      --blue: #4da6ff;
+      --blue-bg: rgba(77, 166, 255, 0.12);
+      --orange: #ff9f1c;
+      --orange-bg: rgba(255, 159, 28, 0.12);
+      --purple: #a855f7;
+      --gold: #fbbf24;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark-surface) 100%);
+      border-bottom: 3px solid var(--magenta);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 2.4rem;
+      color: var(--text-bright);
+      margin-bottom: 0.5rem;
+    }
+    .header .subtitle {
+      color: var(--magenta-light);
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+    .header .meta {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+
+    .section { margin-bottom: 3rem; }
+    .section-title {
+      font-size: 1.6rem;
+      color: var(--text-bright);
+      margin-bottom: 0.3rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--magenta);
+      display: inline-block;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      margin-top: 0.4rem;
+    }
+
+    /* Summary Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .summary-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 10px;
+      padding: 1.3rem;
+      text-align: center;
+    }
+    .summary-card .number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--magenta);
+    }
+    .summary-card .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--dark-card);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      font-size: 0.88rem;
+    }
+    thead { background: var(--dark-surface); }
+    th {
+      padding: 0.8rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-bright);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.65rem 1rem;
+      border-top: 1px solid var(--dark-border);
+      vertical-align: middle;
+    }
+    tr:hover td { background: rgba(255, 255, 255, 0.03); }
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-new { background: var(--green-bg); color: var(--green); border: 1px solid rgba(56,176,0,0.3); }
+    .badge-flagship { background: rgba(232,0,116,0.15); color: var(--magenta-light); border: 1px solid rgba(232,0,116,0.3); }
+    .badge-unique { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(77,166,255,0.3); }
+    .badge-best { background: var(--orange-bg); color: var(--orange); border: 1px solid rgba(255,159,28,0.3); }
+    .badge-free { background: var(--green-bg); color: var(--green); border: 1px solid rgba(56,176,0,0.3); }
+    .badge-retire { background: var(--red-bg); color: var(--red); border: 1px solid rgba(255,77,77,0.3); }
+
+    .price { font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace; font-weight: 600; }
+    .price-good { color: var(--green); }
+    .price-neutral { color: var(--text); }
+    .price-bad { color: var(--red); }
+
+    .saving { color: var(--green); font-weight: 600; font-size: 0.8rem; }
+    .overprice { color: var(--red); font-weight: 600; font-size: 0.8rem; }
+
+    .model-name { font-weight: 600; color: var(--text-bright); }
+    .provider { color: var(--text-muted); font-size: 0.8rem; }
+
+    /* Tier cards */
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .tier-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .tier-card:hover { border-color: var(--magenta); }
+    .tier-card.recommended {
+      border-color: var(--magenta);
+      box-shadow: 0 0 20px rgba(226, 0, 116, 0.15);
+    }
+    .tier-card.recommended::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      background: var(--magenta);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+    .tier-name { font-size: 1.2rem; font-weight: 700; color: var(--text-bright); }
+    .tier-price { font-size: 1.8rem; font-weight: 800; color: var(--magenta); margin: 0.5rem 0; }
+    .tier-price span { font-size: 0.85rem; font-weight: 400; color: var(--text-muted); }
+    .tier-features { list-style: none; margin-top: 1rem; }
+    .tier-features li {
+      padding: 0.35rem 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .tier-features li::before {
+      content: '>';
+      color: var(--magenta);
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+    .tier-discount {
+      margin-top: 1rem;
+      padding: 0.5rem 0.8rem;
+      background: var(--green-bg);
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    /* Tabs */
+    .tab-container { margin-bottom: 2rem; }
+    .tab-buttons {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--dark-border);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.7rem 1.3rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { color: var(--text-bright); }
+    .tab-btn.active {
+      color: var(--magenta);
+      border-bottom-color: var(--magenta);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Comparison bar */
+    .compare-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.3rem 0;
+    }
+    .compare-bar .bar {
+      height: 8px;
+      border-radius: 4px;
+      min-width: 4px;
+    }
+    .compare-bar .bar-aifs { background: var(--magenta); }
+    .compare-bar .bar-ionos { background: var(--blue); }
+    .compare-bar .bar-stackit { background: var(--orange); }
+    .compare-bar .bar-azure { background: #0078d4; }
+    .compare-bar-label { font-size: 0.75rem; color: var(--text-muted); min-width: 55px; }
+
+    /* Positioning chart */
+    .position-chart {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+    .position-row {
+      display: flex;
+      align-items: center;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .position-price { width: 80px; font-family: monospace; font-size: 0.8rem; color: var(--text-muted); text-align: right; padding-right: 1rem; }
+    .position-bar-container { flex: 1; position: relative; height: 26px; }
+    .position-bar {
+      height: 100%;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding-left: 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: white;
+      white-space: nowrap;
+    }
+
+    /* Comparison section */
+    .vs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .vs-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .vs-header {
+      padding: 1rem;
+      background: var(--dark-surface);
+      font-weight: 600;
+      color: var(--text-bright);
+      font-size: 0.95rem;
+    }
+    .vs-body { padding: 1rem; }
+    .vs-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.85rem;
+    }
+    .vs-row:last-child { border: none; }
+
+    .footnote {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .footnote a { color: var(--magenta-light); text-decoration: none; }
+    .footnote a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .container { padding: 1rem; }
+      .header h1 { font-size: 1.6rem; }
+      table { font-size: 0.78rem; }
+      th, td { padding: 0.5rem 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>AI Foundation Services</h1>
+  <div class="subtitle">Model Catalog & Competitive Pricing Strategy 2026</div>
+  <div class="meta">T-Systems International | EU-Sovereign AI | GDPR-Compliant | Updated January 2026</div>
+</div>
+
+<div class="container">
+
+  <!-- Summary Cards -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="number">40</div>
+      <div class="label">Models in Catalog</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">7</div>
+      <div class="label">AI Providers</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">6</div>
+      <div class="label">Rate Plan Tiers</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">100%</div>
+      <div class="label">EU Data Sovereignty</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">0%</div>
+      <div class="label">Markup vs Hyperscalers</div>
+    </div>
+  </div>
+
+  <!-- Competitive Landscape -->
+  <div class="section">
+    <h2 class="section-title">EU-Sovereign AI Provider Landscape</h2>
+    <p class="section-desc">How AIFS compares to competitors in the EU-sovereign AI market</p>
+    <div class="vs-grid">
+      <div class="vs-card">
+        <div class="vs-header">T-Systems AIFS <span class="badge badge-flagship">Full Spectrum</span></div>
+        <div class="vs-body">
+          <div class="vs-row"><span>Region</span><span>Germany (OTC, Azure, GCP, AWS)</span></div>
+          <div class="vs-row"><span>Commercial Models</span><span style="color:var(--green)">GPT-5.2, Claude, Gemini, Mistral</span></div>
+          <div class="vs-row"><span>Open-Source Models</span><span style="color:var(--green)">Llama, Qwen, GLM, Devstral, GPT-OSS</span></div>
+          <div class="vs-row"><span>Sovereign Coding</span><span style="color:var(--green)">Yes (unique)</span></div>
+          <div class="vs-row"><span>Single API</span><span style="color:var(--green)">Yes (OpenAI-compatible)</span></div>
+        </div>
+      </div>
+      <div class="vs-card">
+        <div class="vs-header">IONOS AI Model Hub</div>
+        <div class="vs-body">
+          <div class="vs-row"><span>Region</span><span>Germany</span></div>
+          <div class="vs-row"><span>Commercial Models</span><span style="color:var(--red)">None</span></div>
+          <div class="vs-row"><span>Open-Source Models</span><span>~5 models</span></div>
+          <div class="vs-row"><span>Sovereign Coding</span><span style="color:var(--red)">No</span></div>
+          <div class="vs-row"><span>Single API</span><span style="color:var(--green)">Yes</span></div>
+        </div>
+      </div>
+      <div class="vs-card">
+        <div class="vs-header">STACKIT (Schwarz Group)</div>
+        <div class="vs-body">
+          <div class="vs-row"><span>Region</span><span>Germany / Austria</span></div>
+          <div class="vs-row"><span>Commercial Models</span><span style="color:var(--red)">None</span></div>
+          <div class="vs-row"><span>Open-Source Models</span><span>~8 models</span></div>
+          <div class="vs-row"><span>Sovereign Coding</span><span style="color:var(--red)">No</span></div>
+          <div class="vs-row"><span>Single API</span><span style="color:var(--green)">Yes</span></div>
+        </div>
+      </div>
+      <div class="vs-card">
+        <div class="vs-header">Azure OpenAI (EU Region)</div>
+        <div class="vs-body">
+          <div class="vs-row"><span>Region</span><span>Sweden, France</span></div>
+          <div class="vs-row"><span>Commercial Models</span><span>OpenAI only</span></div>
+          <div class="vs-row"><span>Open-Source Models</span><span style="color:var(--red)">None</span></div>
+          <div class="vs-row"><span>Sovereign Coding</span><span style="color:var(--red)">No</span></div>
+          <div class="vs-row"><span>Single API</span><span>OpenAI only</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Catalog with Tabs -->
+  <div class="section">
+    <h2 class="section-title">Proposed Model Catalog</h2>
+    <p class="section-desc">40 models across 7 tiers, matching or beating every competitor on price</p>
+
+    <div class="tab-container">
+      <div class="tab-buttons">
+        <button class="tab-btn active" onclick="showTab('flagship')">Flagship</button>
+        <button class="tab-btn" onclick="showTab('performance')">High Performance</button>
+        <button class="tab-btn" onclick="showTab('costeff')">Cost-Effective</button>
+        <button class="tab-btn" onclick="showTab('budget')">Budget</button>
+        <button class="tab-btn" onclick="showTab('opensource')">Open-Source (OTC)</button>
+        <button class="tab-btn" onclick="showTab('coding')">Sovereign Code</button>
+        <button class="tab-btn" onclick="showTab('embed')">Embeddings</button>
+        <button class="tab-btn" onclick="showTab('special')">Specialized</button>
+      </div>
+
+      <!-- Flagship -->
+      <div id="flagship" class="tab-content active">
+        <p class="section-desc">Strategy: Match hyperscaler pricing 1:1. Value = EU sovereignty + single API.</p>
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Provider</th><th>Region</th><th class="text-right">Input / 1M</th><th class="text-right">Output / 1M</th><th>Context</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="model-name">GPT-5.2</span></td>
+              <td><span class="provider">OpenAI (Azure)</span></td>
+              <td>Azure-Sweden</td>
+              <td class="text-right"><span class="price">$1.75</span></td>
+              <td class="text-right"><span class="price">$14.00</span></td>
+              <td>400K</td>
+              <td><span class="badge badge-new">New</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Claude Opus 4.5</span></td>
+              <td><span class="provider">Anthropic (AWS)</span></td>
+              <td>AWS-EU</td>
+              <td class="text-right"><span class="price">$5.00</span></td>
+              <td class="text-right"><span class="price">$25.00</span></td>
+              <td>200K</td>
+              <td><span class="badge badge-new">New</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Gemini 3 Pro</span></td>
+              <td><span class="provider">Google (GCP)</span></td>
+              <td>GCP-EU</td>
+              <td class="text-right"><span class="price">$2.00</span></td>
+              <td class="text-right"><span class="price">$12.00</span></td>
+              <td>1M</td>
+              <td><span class="badge badge-flagship">Flagship</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">o3</span></td>
+              <td><span class="provider">OpenAI (Azure)</span></td>
+              <td>Azure-Sweden</td>
+              <td class="text-right"><span class="price">$2.00</span></td>
+              <td class="text-right"><span class="price">$8.00</span></td>
+              <td>200K</td>
+              <td><span class="badge badge-flagship">Reasoning</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- High Performance -->
+      <div id="performance" class="tab-content">
+        <p class="section-desc">Strategy: Match hyperscaler pricing. GLM-4.7 at near-direct pricing as sovereign alternative.</p>
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Provider</th><th>Region</th><th class="text-right">Input / 1M</th><th class="text-right">Output / 1M</th><th>Context</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="model-name">GPT-5</span></td><td><span class="provider">OpenAI (Azure)</span></td><td>Azure-Sweden</td><td class="text-right"><span class="price">$1.25</span></td><td class="text-right"><span class="price">$10.00</span></td><td>128K</td><td></td></tr>
+            <tr><td><span class="model-name">Claude Sonnet 4.5</span></td><td><span class="provider">Anthropic (AWS)</span></td><td>AWS-EU</td><td class="text-right"><span class="price">$3.00</span></td><td class="text-right"><span class="price">$15.00</span></td><td>200K</td><td><span class="badge badge-new">New</span></td></tr>
+            <tr><td><span class="model-name">Claude Sonnet 4</span></td><td><span class="provider">Anthropic (AWS)</span></td><td>AWS-EU</td><td class="text-right"><span class="price">$3.00</span></td><td class="text-right"><span class="price">$15.00</span></td><td>200K</td><td></td></tr>
+            <tr><td><span class="model-name">GPT-4.1</span></td><td><span class="provider">OpenAI (Azure)</span></td><td>Azure-France</td><td class="text-right"><span class="price">$2.00</span></td><td class="text-right"><span class="price">$8.00</span></td><td>128K</td><td></td></tr>
+            <tr><td><span class="model-name">Gemini 2.5 Pro</span></td><td><span class="provider">Google (GCP)</span></td><td>GCP-EU</td><td class="text-right"><span class="price">$1.25</span></td><td class="text-right"><span class="price">$10.00</span></td><td>1M</td><td></td></tr>
+            <tr><td><span class="model-name">o4-mini</span></td><td><span class="provider">OpenAI (Azure)</span></td><td>Azure-Sweden</td><td class="text-right"><span class="price">$1.10</span></td><td class="text-right"><span class="price">$4.40</span></td><td>200K</td><td></td></tr>
+            <tr><td><span class="model-name">GLM-4.7</span></td><td><span class="provider">Zhipu AI (OTC)</span></td><td>OTC-Germany</td><td class="text-right"><span class="price">$0.60</span></td><td class="text-right"><span class="price">$2.20</span></td><td>200K</td><td><span class="badge badge-new">New</span> <span class="badge badge-unique">Sovereign</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Cost-Effective -->
+      <div id="costeff" class="tab-content">
+        <p class="section-desc">Strategy: Match direct API pricing. Mistral at direct Mistral rates.</p>
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Provider</th><th>Region</th><th class="text-right">Input / 1M</th><th class="text-right">Output / 1M</th><th>Context</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="model-name">GPT-5 Mini</span></td><td><span class="provider">OpenAI (Azure)</span></td><td>Azure-Sweden</td><td class="text-right"><span class="price">$0.25</span></td><td class="text-right"><span class="price">$2.00</span></td><td>128K</td><td></td></tr>
+            <tr><td><span class="model-name">GPT-5 Codex</span></td><td><span class="provider">OpenAI (Azure)</span></td><td>Azure-Sweden</td><td class="text-right"><span class="price">$1.35</span></td><td class="text-right"><span class="price">$10.70</span></td><td>128K</td><td></td></tr>
+            <tr><td><span class="model-name">Claude Haiku 4.5</span></td><td><span class="provider">Anthropic (AWS)</span></td><td>AWS-EU</td><td class="text-right"><span class="price">$1.00</span></td><td class="text-right"><span class="price">$5.00</span></td><td>200K</td><td><span class="badge badge-new">New</span></td></tr>
+            <tr><td><span class="model-name">Gemini 2.5 Flash</span></td><td><span class="provider">Google (GCP)</span></td><td>GCP-EU</td><td class="text-right"><span class="price">$0.30</span></td><td class="text-right"><span class="price">$2.50</span></td><td>1M</td><td></td></tr>
+            <tr><td><span class="model-name">Mistral Large 3</span></td><td><span class="provider">Mistral (GCP)</span></td><td>GCP-EU</td><td class="text-right"><span class="price price-good">$0.50</span></td><td class="text-right"><span class="price price-good">$1.50</span></td><td>128K</td><td><span class="badge badge-best">Best Price</span></td></tr>
+            <tr><td><span class="model-name">Mistral Medium 3</span></td><td><span class="provider">Mistral (GCP)</span></td><td>GCP-EU</td><td class="text-right"><span class="price price-good">$0.40</span></td><td class="text-right"><span class="price price-good">$2.00</span></td><td>128K</td><td><span class="badge badge-best">Best Price</span></td></tr>
+            <tr><td><span class="model-name">GPT-4.1 Mini</span></td><td><span class="provider">OpenAI (Azure)</span></td><td>Azure-France</td><td class="text-right"><span class="price">$0.40</span></td><td class="text-right"><span class="price">$1.60</span></td><td>128K</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Budget -->
+      <div id="budget" class="tab-content">
+        <p class="section-desc">Strategy: Match or beat direct pricing. GLM-4.7 Flash as cheapest sovereign LLM in EU.</p>
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Provider</th><th>Region</th><th class="text-right">Input / 1M</th><th class="text-right">Output / 1M</th><th>Context</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="model-name">GPT-5 Nano</span></td><td><span class="provider">OpenAI (Azure)</span></td><td>Azure-Sweden</td><td class="text-right"><span class="price price-good">$0.05</span></td><td class="text-right"><span class="price price-good">$0.40</span></td><td>128K</td><td></td></tr>
+            <tr><td><span class="model-name">GPT-4.1 Nano</span></td><td><span class="provider">OpenAI (Azure)</span></td><td>Azure-France</td><td class="text-right"><span class="price price-good">$0.10</span></td><td class="text-right"><span class="price price-good">$0.40</span></td><td>128K</td><td></td></tr>
+            <tr><td><span class="model-name">Mistral Small 3.2</span></td><td><span class="provider">Mistral (GCP)</span></td><td>GCP-EU</td><td class="text-right"><span class="price price-good">$0.20</span></td><td class="text-right"><span class="price price-good">$0.60</span></td><td>128K</td><td><span class="badge badge-best">Best Price</span></td></tr>
+            <tr><td><span class="model-name">GLM-4.7 Flash</span></td><td><span class="provider">Zhipu AI (OTC)</span></td><td>OTC-Germany</td><td class="text-right"><span class="price price-good">$0.07</span></td><td class="text-right"><span class="price price-good">$0.38</span></td><td>200K</td><td><span class="badge badge-new">New</span> <span class="badge badge-unique">Sovereign</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Open-Source -->
+      <div id="opensource" class="tab-content">
+        <p class="section-desc">Strategy: Size-based pricing. Beat IONOS on every comparable model. Unique models no competitor has.</p>
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Size</th><th class="text-right">AIFS (EUR)</th><th class="text-right">IONOS (EUR)</th><th class="text-right">STACKIT (EUR)</th><th>Advantage</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="model-name">GPT-OSS 120B</span></td><td>120B MoE</td>
+              <td class="text-right"><span class="price price-good">€0.13 / €0.60</span></td>
+              <td class="text-right"><span class="price">€0.15 / €0.65</span></td>
+              <td class="text-right"><span class="price">€0.49 / €0.71</span></td>
+              <td><span class="saving">13% cheaper than IONOS</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Llama 3.3 70B</span></td><td>70B</td>
+              <td class="text-right"><span class="price price-good">€0.55 / €0.55</span></td>
+              <td class="text-right"><span class="price">€0.65 / €0.65</span></td>
+              <td class="text-right"><span class="price">€0.49 / €0.71</span></td>
+              <td><span class="saving">15% cheaper than IONOS</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Qwen 3 Next 80B</span></td><td>80B</td>
+              <td class="text-right"><span class="price price-good">€0.65 / €0.65</span></td>
+              <td class="text-right"><span class="price" style="color:var(--text-muted)">N/A</span></td>
+              <td class="text-right"><span class="price" style="color:var(--text-muted)">N/A</span></td>
+              <td><span class="badge badge-unique">Unique</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Qwen 3 30B</span></td><td>30B</td>
+              <td class="text-right"><span class="price price-good">€0.35 / €0.35</span></td>
+              <td class="text-right"><span class="price" style="color:var(--text-muted)">N/A</span></td>
+              <td class="text-right"><span class="price">€0.49 / €0.71</span></td>
+              <td><span class="saving">46% cheaper than STACKIT</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Qwen 3 VL 30B</span></td><td>30B</td>
+              <td class="text-right"><span class="price price-good">€0.40 / €0.40</span></td>
+              <td class="text-right"><span class="price" style="color:var(--text-muted)">N/A</span></td>
+              <td class="text-right"><span class="price" style="color:var(--text-muted)">N/A</span></td>
+              <td><span class="badge badge-unique">Unique Vision</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Teuken 7B</span></td><td>7B</td>
+              <td class="text-right"><span class="price price-good">€0.10 / €0.10</span></td>
+              <td class="text-right"><span class="price">€0.15 / €0.65</span></td>
+              <td class="text-right"><span class="price" style="color:var(--text-muted)">N/A</span></td>
+              <td><span class="saving">33% cheaper than IONOS</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sovereign Coding -->
+      <div id="coding" class="tab-content">
+        <p class="section-desc">AIFS Sovereign Code: 100% EU-hosted, open-weight, GDPR-compliant. No competitor offers this package.</p>
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Size</th><th class="text-right">AIFS (EUR)</th><th>SWE-bench</th><th>Strength</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="model-name">Devstral 2</span></td><td>123B</td>
+              <td class="text-right"><span class="price price-good">€0.35 / €1.80</span></td>
+              <td>72.2%</td>
+              <td>SOTA open-source code agent</td>
+              <td><span class="badge badge-new">New</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Devstral Small 2</span></td><td>24B</td>
+              <td class="text-right"><span class="price price-good">€0.09 / €0.27</span></td>
+              <td>68.0%</td>
+              <td>Single-GPU deployment</td>
+              <td><span class="badge badge-new">New</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">Qwen 2.5 Coder 32B</span></td><td>32B</td>
+              <td class="text-right"><span class="price price-good">€0.35 / €0.35</span></td>
+              <td>-</td>
+              <td>Code completion</td>
+              <td><span class="badge badge-unique">Unique</span></td>
+            </tr>
+            <tr>
+              <td><span class="model-name">GLM-4.7 Flash</span></td><td>30B MoE</td>
+              <td class="text-right"><span class="price price-good">€0.07 / €0.38</span></td>
+              <td>73.8%</td>
+              <td>Best MoE coding model</td>
+              <td><span class="badge badge-new">New</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Embeddings -->
+      <div id="embed" class="tab-content">
+        <p class="section-desc">Strategy: Match IONOS at EUR 0.02. Promote free TSI embedding as differentiator.</p>
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Region</th><th class="text-right">Price / 1M</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="model-name">Embedding Ada 002</span></td><td>Azure-France</td><td class="text-right"><span class="price">$0.10</span></td><td>OpenAI standard</td></tr>
+            <tr><td><span class="model-name">Jina Embeddings v2 Code</span></td><td>OTC-Germany</td><td class="text-right"><span class="price price-good">€0.02</span></td><td>Matches IONOS BGE-M3</td></tr>
+            <tr><td><span class="model-name">Jina Embeddings v2 De</span></td><td>OTC-Germany</td><td class="text-right"><span class="price price-good">€0.02</span></td><td>German-optimized</td></tr>
+            <tr><td><span class="model-name">Embedding BGE-M3</span></td><td>OTC-Germany</td><td class="text-right"><span class="price price-good">€0.02</span></td><td>Matches IONOS</td></tr>
+            <tr><td><span class="model-name">TSI Col Qwen 2 2b</span></td><td>OTC-Germany</td><td class="text-right"><span class="price price-good" style="font-size:1.1em">FREE</span></td><td><span class="badge badge-free">Free</span> <span class="badge badge-unique">Unique</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Specialized -->
+      <div id="special" class="tab-content">
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Type</th><th class="text-right">Input / 1M</th><th class="text-right">Output / 1M</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="model-name">GPT Image 1</span></td><td>Image Generation</td><td class="text-right"><span class="price">$12.72</span></td><td class="text-right"><span class="price">$50.85</span></td></tr>
+            <tr><td><span class="model-name">Whisper Large v3</span></td><td>Speech-to-Text</td><td class="text-right"><span class="price">$36.00</span></td><td class="text-right"><span class="price">$36.00</span></td></tr>
+            <tr><td><span class="model-name">Whisper Large v3 Turbo</span></td><td>Speech-to-Text (Fast)</td><td class="text-right"><span class="price">$23.00</span></td><td class="text-right"><span class="price">$23.00</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- GPT-OSS 120B Head-to-Head -->
+  <div class="section">
+    <h2 class="section-title">GPT-OSS 120B: Head-to-Head Comparison</h2>
+    <p class="section-desc">Beating IONOS on the most popular open-source model</p>
+    <table>
+      <thead>
+        <tr><th>Metric</th><th class="text-center">AIFS (Proposed)</th><th class="text-center">IONOS</th><th class="text-center">STACKIT</th><th class="text-center">Winner</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Input / 1M tokens</td><td class="text-center"><span class="price price-good">€0.13</span></td><td class="text-center"><span class="price">€0.15</span></td><td class="text-center"><span class="price">€0.49</span></td><td class="text-center" style="color:var(--magenta); font-weight:700">AIFS</td></tr>
+        <tr><td>Output / 1M tokens</td><td class="text-center"><span class="price price-good">€0.60</span></td><td class="text-center"><span class="price">€0.65</span></td><td class="text-center"><span class="price">€0.71</span></td><td class="text-center" style="color:var(--magenta); font-weight:700">AIFS</td></tr>
+        <tr><td>Volume discount</td><td class="text-center" style="color:var(--green)">Up to 50% (Sovereign tier)</td><td class="text-center" style="color:var(--text-muted)">None</td><td class="text-center" style="color:var(--text-muted)">None</td><td class="text-center" style="color:var(--magenta); font-weight:700">AIFS</td></tr>
+        <tr><td>Commercial models</td><td class="text-center" style="color:var(--green)">GPT-5.2, Claude, Gemini</td><td class="text-center" style="color:var(--red)">None</td><td class="text-center" style="color:var(--red)">None</td><td class="text-center" style="color:var(--magenta); font-weight:700">AIFS</td></tr>
+        <tr><td>Coding package</td><td class="text-center" style="color:var(--green)">Devstral 2 + GLM-4.7</td><td class="text-center" style="color:var(--red)">None</td><td class="text-center" style="color:var(--red)">None</td><td class="text-center" style="color:var(--magenta); font-weight:700">AIFS</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Rate Plans -->
+  <div class="section">
+    <h2 class="section-title">Rate Plan Tiers</h2>
+    <p class="section-desc">Designed to drive minimum commitments and finance GPU fleet operations</p>
+
+    <div class="tier-grid">
+      <div class="tier-card">
+        <div class="tier-name">Explorer</div>
+        <div class="tier-price">€0 <span>/ month</span></div>
+        <ul class="tier-features">
+          <li>Pay-as-you-go, no commitment</li>
+          <li>All models available</li>
+          <li>100K TPM / 60 RPM</li>
+          <li>5 concurrent requests</li>
+          <li>List price (no discount)</li>
+        </ul>
+      </div>
+      <div class="tier-card">
+        <div class="tier-name">Starter</div>
+        <div class="tier-price">€250 <span>/ month</span></div>
+        <ul class="tier-features">
+          <li>500K TPM / 300 RPM</li>
+          <li>20 concurrent requests</li>
+        </ul>
+        <div class="tier-discount">10% off OTC models</div>
+      </div>
+      <div class="tier-card recommended">
+        <div class="tier-name">Professional</div>
+        <div class="tier-price">€1,000 <span>/ month</span></div>
+        <ul class="tier-features">
+          <li>2M TPM / 1,000 RPM</li>
+          <li>50 concurrent requests</li>
+          <li>GPT-OSS at €0.10/€0.48</li>
+        </ul>
+        <div class="tier-discount">20% off OTC + 5% off commercial</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-name">Business</div>
+        <div class="tier-price">€3,000 <span>/ month</span></div>
+        <ul class="tier-features">
+          <li>5M TPM / 3,000 RPM</li>
+          <li>100 concurrent requests</li>
+          <li>GPT-OSS at €0.09/€0.42</li>
+        </ul>
+        <div class="tier-discount">30% off OTC + 10% off commercial</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-price">€10,000 <span>/ month</span></div>
+        <ul class="tier-features">
+          <li>20M TPM / 10,000 RPM</li>
+          <li>300 concurrent requests</li>
+          <li>Dedicated support</li>
+        </ul>
+        <div class="tier-discount">40% off OTC + 15% off commercial</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-name">Sovereign</div>
+        <div class="tier-price">€25,000 <span>/ month</span></div>
+        <ul class="tier-features">
+          <li>50M TPM / 30,000 RPM</li>
+          <li>500 concurrent requests</li>
+          <li>SLA guarantees</li>
+          <li>Public sector / regulated</li>
+        </ul>
+        <div class="tier-discount">50% off OTC + 15% off commercial</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue Model -->
+  <div class="section">
+    <h2 class="section-title">GPU Fleet Financing Model</h2>
+    <p class="section-desc">Revenue projection based on target customer mix</p>
+    <table>
+      <thead>
+        <tr><th>Plan</th><th class="text-right">Target Customers</th><th class="text-right">Avg. Monthly</th><th class="text-right">Guaranteed Min.</th><th class="text-right">Total Revenue</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Explorer</td><td class="text-right">500</td><td class="text-right">€50</td><td class="text-right">€0</td><td class="text-right">€25,000</td></tr>
+        <tr><td>Starter</td><td class="text-right">200</td><td class="text-right">€400</td><td class="text-right">€50,000</td><td class="text-right">€80,000</td></tr>
+        <tr><td>Professional</td><td class="text-right">100</td><td class="text-right">€1,800</td><td class="text-right">€100,000</td><td class="text-right">€180,000</td></tr>
+        <tr><td>Business</td><td class="text-right">30</td><td class="text-right">€5,000</td><td class="text-right">€90,000</td><td class="text-right">€150,000</td></tr>
+        <tr><td>Enterprise</td><td class="text-right">8</td><td class="text-right">€18,000</td><td class="text-right">€80,000</td><td class="text-right">€144,000</td></tr>
+        <tr><td>Sovereign</td><td class="text-right">3</td><td class="text-right">€35,000</td><td class="text-right">€75,000</td><td class="text-right">€105,000</td></tr>
+        <tr style="background:rgba(226,0,116,0.1); font-weight:700">
+          <td>Total</td><td class="text-right">841</td><td class="text-right"></td><td class="text-right" style="color:var(--green)">€395,000</td><td class="text-right" style="color:var(--magenta)">€684,000</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="display:flex; gap:2rem; margin-top:1rem; flex-wrap:wrap">
+      <div class="summary-card" style="flex:1; min-width:200px">
+        <div class="number" style="color:var(--green)">€395K</div>
+        <div class="label">Guaranteed Minimum / Month</div>
+      </div>
+      <div class="summary-card" style="flex:1; min-width:200px">
+        <div class="number">€684K</div>
+        <div class="label">Projected Revenue / Month</div>
+      </div>
+      <div class="summary-card" style="flex:1; min-width:200px">
+        <div class="number" style="color:var(--green)">92%</div>
+        <div class="label">GPU Fleet Cost Coverage (Guaranteed)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Models to Retire -->
+  <div class="section">
+    <h2 class="section-title">Models to Retire</h2>
+    <p class="section-desc">Superseded by newer, better-priced alternatives</p>
+    <table>
+      <thead><tr><th>Model</th><th>Reason</th><th>Replacement</th></tr></thead>
+      <tbody>
+        <tr><td><span class="model-name">GPT-4o / GPT-4o Mini</span></td><td>Superseded</td><td>GPT-5 / GPT-5 Mini</td></tr>
+        <tr><td><span class="model-name">o1 / o1 Mini</span></td><td>Superseded, overpriced ($19.48/$77.92)</td><td>o3 / o4-mini</td></tr>
+        <tr><td><span class="model-name">o3 Mini</span></td><td>Overlaps with o4-mini</td><td>o4-mini</td></tr>
+        <tr><td><span class="model-name">Claude 3.7 Sonnet</span></td><td>Superseded</td><td>Claude Sonnet 4</td></tr>
+        <tr><td><span class="model-name">Mistral Large 2411</span></td><td>Superseded</td><td>Mistral Large 3</td></tr>
+        <tr><td><span class="model-name">Mistral Small 24B 2501</span></td><td>Superseded</td><td>Mistral Small 3.2</td></tr>
+        <tr><td><span class="model-name">Llama Bildungs LLM 0.9</span></td><td>Niche, low demand</td><td>Remove</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footnote">
+    <strong>Sources:</strong>
+    <a href="https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/">Azure OpenAI</a> |
+    <a href="https://platform.openai.com/docs/pricing">OpenAI API</a> |
+    <a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic Claude</a> |
+    <a href="https://ai.google.dev/gemini-api/docs/pricing">Google Gemini</a> |
+    <a href="https://mistral.ai/pricing">Mistral AI</a> |
+    <a href="https://cloud.ionos.com/managed/ai-model-hub">IONOS AI Hub</a> |
+    <a href="https://www.stackit.de/en/pricing/cloud-services/paas/prices-stackit-ai-model-serving/">STACKIT</a> |
+    <a href="https://llm-stats.com/models/glm-4.7">GLM-4.7</a> |
+    <a href="https://mistral.ai/news/devstral-2-vibe-cli">Devstral 2</a>
+    <br><br>
+    <em>All prices in USD unless marked EUR. Prices reflect publicly available API rates as of January 2026. Actual AIFS pricing subject to final commercial approval. Deutsche Telekom / T-Systems International GmbH.</em>
+  </div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
