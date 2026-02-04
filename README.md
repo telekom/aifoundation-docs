@@ -10,13 +10,15 @@ This website is built using [Docusaurus](https://docusaurus.io/), a modern stati
 
 ### Requirements
 
+Choose either
+
+- **Bun** (recommended) - A fast JavaScript runtime and package manager. Install from [bun.sh](https://bun.sh) for significantly faster package installation and script execution.
 - **Node.js** version 18.0 or above (which can be checked by running `node -v`). You can use nvm for managing multiple Node versions on a single machine installed.
-- **Bun** (optional but recommended) - A fast JavaScript runtime and package manager. Install from [bun.sh](https://bun.sh) for significantly faster package installation and script execution.
 
 ⚠️ **Package Manager Note**: Choose either npm or bun and stick with it throughout your development session. Do not mix usage to avoid undesired behavior. So even if the command outputs recommend to run `npm something` just run `bun something` instead if you have chosen to use `bun`.
 
 ```text
-npm install  # or: bun install (recommended)
+bun install  # or: npm install
 ```
 
 This will install all dependencies including the Telekom Scale Design System components. The Telekom Scale components are configured according to the [Telekom Guidelines](https://telekom.github.io/scale/?path=/docs/setup-info-getting-started-for-developers--page).
@@ -24,7 +26,7 @@ This will install all dependencies including the Telekom Scale Design System com
 ### Local Development
 
 ```text
-npm run start  # or: bun run start
+bun run start  # or: npm run start
 ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
@@ -32,13 +34,13 @@ This command starts a local development server and opens up a browser window. Mo
 ### Build
 
 ```text
-npm run build  # or: bun run build
+bun run build  # or: np run build
 ```
 
 This command generates static content into the `build` directory and can be served using any static contents hosting service.
 
 ```text
-npm run serve  # or: bun run serve
+bun run serve  # or: npm run serve
 ```
 
 This command is used to test the final production build locally.
