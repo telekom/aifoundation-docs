@@ -12,7 +12,7 @@ import Link from '@docusaurus/Link';
 
 # Overview
 
-Welcome to AI Foundation Services - your gateway to private, secure, and scalable model inference. Our platform integrates cloud services, tools, and APIs to support your AI implementation. With the T-Systems LLM API Key, you can access a variety of open-source and proprietary LLMs. Hosted in Germany and the EU, our platform ensures GDPR-compliant data security. Get started and integrate existing or build new AI applications.
+Welcome to the AI Foundation Services - your gateway to private, secure, and scalable model inference. Our platform integrates cloud services, tools, and APIs to support your AI implementation. With the T-Systems LLM API Key, you can access a variety of open-source and proprietary LLMs. Hosted in Germany and the EU, our platform ensures GDPR-compliant data security. Get started and integrate existing or build new AI applications.
  
 **Request a Free Trial API key:** [Create a new account at our API Key page!](https://apikey.llmhub.t-systems.net/)
 
