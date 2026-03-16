@@ -44,7 +44,7 @@ Drop in your API key and start building — the API is identical to OpenAI's:
       -H "Content-Type: application/json" \
       -d '{
         "model": "Llama-3.3-70B-Instruct",
-        "messages": [{"role": "user", "content": "Hello from AIFS!"}]
+        "messages": [{"role": "user", "content": "Hello from AIFS"}]
       }'
     ```
   </TabItem>
@@ -56,7 +56,7 @@ Drop in your API key and start building — the API is identical to OpenAI's:
 
     response = client.chat.completions.create(
         model="Llama-3.3-70B-Instruct",
-        messages=[{"role": "user", "content": "Hello from AIFS!"}],
+        messages=[{"role": "user", "content": "Hello from AIFS"}],
     )
     print(response.choices[0].message.content)
     ```
@@ -71,7 +71,7 @@ Drop in your API key and start building — the API is identical to OpenAI's:
 
     const response = await client.chat.completions.create({
       model: "Llama-3.3-70B-Instruct",
-      messages: [{ role: "user", content: "Hello from AIFS!" }],
+      messages: [{ role: "user", content: "Hello from AIFS" }],
     });
     console.log(response.choices[0].message.content);
     ```

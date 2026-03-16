@@ -4,6 +4,9 @@ title: Rate Limits
 sidebar_position: 3
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Rate Limits
 
 Rate limits protect the service and ensure fair usage. Limits are defined per plan tier and vary by model.
@@ -32,7 +35,11 @@ Exact limits vary by model. See the [Plans & Pricing](/plans-page) page for per-
 
 ## Rate Limit Response Headers
 
-Every API response includes headers that help you track your current usage against the limits:
+Responses from Azure-hosted models (GPT, o-series) include headers that help you track usage against limits:
+
+:::note
+Rate limit headers are currently returned by Azure-hosted models (e.g., `gpt-4.1`, `o3-mini`). Open-source models hosted on T-Cloud (e.g., `Llama-3.3-70B-Instruct`) do not return these headers.
+:::
 
 | Header | Description |
 |---|---|
@@ -45,22 +52,19 @@ Every API response includes headers that help you track your current usage again
 
 ### Reading Headers
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 <Tabs>
   <TabItem value="python" label="Python" default>
 
 ```python
-from openai import OpenAI
+import os
 import httpx
 
 # Use httpx directly to inspect response headers
 response = httpx.post(
     "https://llm-server.llmhub.t-systems.net/v2/chat/completions",
-    headers={"Authorization": f"Bearer {OPENAI_API_KEY}"},
+    headers={"Authorization": f"Bearer {os.getenv('OPENAI_API_KEY')}"},
     json={
-        "model": "Llama-3.3-70B-Instruct",
+        "model": "gpt-4.1",
         "messages": [{"role": "user", "content": "Hello"}],
         "max_tokens": 10,
     },
@@ -79,7 +83,7 @@ curl -i -X POST "$OPENAI_BASE_URL/chat/completions" \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Llama-3.3-70B-Instruct",
+    "model": "gpt-4.1",
     "messages": [{"role": "user", "content": "Hello"}],
     "max_tokens": 10
   }'

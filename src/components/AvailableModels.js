@@ -17,17 +17,78 @@ function AvailableModels() {
   function useModels(apiModels) {
       return apiModels.map((m) => ({
         id: normalizeId(m.exactModelName),
+        modelId: m.exactModelName,
         name: m.displayModelName,
-        provider: m.deploymentRegion.split('-')[0].toUpperCase() || '-',   // "Claude" (or set explicitly)
+        provider: ((region) => { const prefix = (region || '-').split('-')[0].toUpperCase(); return prefix === 'OTC' ? 'T-Cloud' : prefix; })(m.deploymentRegion),
         hosted: useCapitalizeFirstLetter(m.deploymentRegion.split('-')[1] || '-'),
         availability: "Available",
           flag: useCountry.searchCountries('name', useCapitalizeFirstLetter(m.deploymentRegion.split('-')[1]))[0].flag,
       }));
     }
 
-  let models = useModels(PlansHistory[PlansHistory.length - 2]?.modelQuotaConfigs || [])
+  // Models confirmed offline / not in the API — filter them out
+  const offlineModels = new Set([
+    'gpt-4.1-nano', 'gpt-4o-mini', 'GPT-5-Codex', 'gpt-5-nano',
+    'Mistral-Large-2411', 'Mistral-Medium-3', 'o1', 'text-embedding-ada-002',
+  ]);
 
-  const top_models = models.filter(model => model.name === "Meta LLama 3.3 70B" || model.name === "Claude 4 Sonnet" || model.name === "GPT 4.1");
+  // Priority order: T-Cloud flagship first, then newest hyperscaler, then rest
+  const sortOrder = [
+    'GPT OSS 120B',           // T-Cloud flagship
+    'Qwen 3 Next 80B Instruct',
+    'Qwen 3 VL 30B Instruct',
+    'Qwen 3 30B',
+    'Meta LLama 3.3 70B',
+    'Mistral Small 24B Instruct 2501',
+    'Qwen 3 Coder 30B',
+    'Qwen2.5 Coder 32B Instruct',
+    // Newest hyperscaler models
+    'GPT 5.2',
+    'GPT 5',
+    'GPT 5 Mini',
+    'o4 Mini',
+    'o3',
+    'Claude 4.5 Sonnet',
+    'Claude 4 Sonnet',
+    'Gemini 3 Pro',
+    'Gemini 2.5 Pro',
+    'Gemini 2.5 Flash',
+    'GPT 4.1',
+    'GPT 4.1 Mini',
+    'GPT 4o',
+    'GPT Image 1',
+    'o3 Mini',
+    'o1 Mini',
+    'Claude 3.7 Sonnet',
+    // Embeddings, audio, specialized
+    'Embedding BGE M3',
+    'Jina Embeddings v2 Base De',
+    'Jina Embeddings v2 Base Code',
+    'TSI Col Qwen 2 2b v1.0',
+    'Whisper Large v3',
+    'Whisper Large v3 Turbo',
+    'Teuken 7B Instruct',
+  ];
+
+  const allConfigs = PlansHistory[PlansHistory.length - 2]?.modelQuotaConfigs || [];
+  const filteredConfigs = allConfigs.filter(m => !offlineModels.has(m.exactModelName));
+  let models = useModels(filteredConfigs);
+
+  // Models live in the API but missing from pricing data — add manually
+  const extraModels = [
+    { modelId: 'gpt-5.2', name: 'GPT 5.2', provider: 'AZURE', hosted: 'Sweden', flag: '🇸🇪' },
+    { modelId: 'Qwen3-Coder-30B-A3B-Instruct-FP8', name: 'Qwen 3 Coder 30B', provider: 'T-Cloud', hosted: 'Germany', flag: '🇩🇪' },
+  ].map(m => ({ ...m, id: normalizeId(m.modelId), availability: 'Available' }));
+  models = models.concat(extraModels);
+
+  // Sort by priority order
+  models.sort((a, b) => {
+    const ai = sortOrder.indexOf(a.name);
+    const bi = sortOrder.indexOf(b.name);
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
+
+  const top_models = models.slice(0, 3);
 
 
   return (
@@ -60,7 +121,7 @@ function AvailableModels() {
             {model.name}
           </h4>
           <button
-            onClick={() => navigator.clipboard.writeText(model.name)}
+            onClick={() => navigator.clipboard.writeText(model.modelId)}
             title="Copy model ID"
             style={{
               position: 'absolute',

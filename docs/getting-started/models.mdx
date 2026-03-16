@@ -71,20 +71,23 @@ print(models.data[0].meta_data)
 {
   "model_type": "LLM",
   "source_type": "OPEN SOURCE",
-  "max_sequence_length": 0,
+  "max_sequence_length": 128000,
   "hidden_size": 0,
   "max_output_length": 0,
   "deployment_region": "otc-germany",
   "location": "otc-germany",
-  "license": "https://choosealicense.com/licenses/apache-2.0/",
-  "display_name": "DeepSeek-R1-Distill-Llama-70B",
-  "deployment_country": "",
+  "license": "https://www.llama.com/llama3_3/license/",
+  "display_name": "Meta LLama 3.3 70B",
+  "deployment_country": "Germany, EU",
+  "input_modalities": ["text"],
+  "output_modalities": ["text"],
+  "model_lifecycle_stage": "Stable",
   "is_externally_hosted": false
 }
 ```
 
 **Key fields:**
-- **model_type** — `LLM`, `Embedding`, `NLP` (audio), or `Vision`
+- **model_type** — `LLM`, `EMBEDDING`, `STT` (audio)
 - **max_sequence_length** — Maximum input + output tokens
 - **hidden_size** — Embedding vector dimensions (embedding models only)
 - **max_output_length** — Maximum output tokens the model can generate
@@ -98,8 +101,8 @@ print(models.data[0].meta_data)
 |---|---|---|
 | **LLM** | Llama 3.3 70B, GPT 4.1, Claude Sonnet 4, Qwen 3 | Text generation, chat, reasoning |
 | **Embedding** | jina-embeddings-v2-base-de, text-embedding-bge-m3 | Semantic search, RAG |
-| **Vision** | Qwen2.5-VL-72B-Instruct, Gemini 2.5 Flash | Image analysis, multimodal chat |
-| **Audio/NLP** | whisper-large-v3 | Speech-to-text, translation |
+| **Vision** | Qwen3-VL-30B-A3B-Instruct-FP8, Gemini 2.5 Flash | Image analysis, multimodal chat |
+| **Audio/STT** | whisper-large-v3, whisper-large-v3-turbo | Speech-to-text, translation |
 | **Image Generation** | gpt-image-1 | Image creation from text prompts |
 
 ---

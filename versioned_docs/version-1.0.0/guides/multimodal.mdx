@@ -42,7 +42,7 @@ AI Foundation Services provides vision models that can analyze images alongside 
             "role": "user",
             "content": [
               {"type": "text", "text": "What is in this image?"},
-              {"type": "image_url", "image_url": {"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"}}
+              {"type": "image_url", "image_url": {"url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400"}}
             ]
           }
         ],
@@ -66,7 +66,7 @@ AI Foundation Services provides vision models that can analyze images alongside 
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+                            "url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400"
                         },
                     },
                 ],
@@ -94,7 +94,7 @@ AI Foundation Services provides vision models that can analyze images alongside 
             {
               type: "image_url",
               image_url: {
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+                url: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400",
               },
             },
           ],
@@ -127,7 +127,7 @@ def encode_image(image_path):
 base64_image = encode_image("/path/to/your/image.jpg")
 
 response = client.chat.completions.create(
-    model="Qwen2.5-VL-72B-Instruct",
+    model="Qwen3-VL-30B-A3B-Instruct-FP8",
     messages=[
         {
             "role": "user",
@@ -152,7 +152,7 @@ print(response.choices[0].message.content)
 
 | Model | Provider | Capabilities |
 |---|---|---|
-| `Qwen2.5-VL-72B-Instruct` | T-Cloud (Germany) | Image understanding, OCR |
+| `Qwen3-VL-30B-A3B-Instruct-FP8` | T-Cloud (Germany) | Image understanding, OCR |
 | `gemini-2.5-flash` | Google Cloud | Image + video understanding |
 | `gpt-4.1` | Azure | Image understanding |
 

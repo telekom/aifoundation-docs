@@ -2,7 +2,6 @@ import React from 'react';
 import '@telekom/scale-components/dist/scale-components/scale-components.css';
 import '@telekom/scale-components-react';
 import {useVersions, useActiveVersion} from '@docusaurus/plugin-content-docs/client';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 
 export default function Navbar() {
@@ -52,27 +51,18 @@ export default function Navbar() {
 
           {versions.length > 1 && (
             <scale-telekom-nav-item>
-              <scale-dropdown-select
-                label=""
+              <select
                 value={activeVersion?.name || versions[0]?.name}
-                onScaleChange={(e) => {
-                  const selected = versions.find(v => v.name === e.detail.value);
-                  if (selected) {
-                    window.location.href = selected.path || '/';
-                  }
-                }}
-                size="small"
-                style={{
-                  minWidth: '90px',
-                  '--spacing-x': '0',
-                }}
+                onChange={handleVersionChange}
+                className="version-select"
+                aria-label="Documentation version"
               >
                 {versions.map(v => (
-                  <scale-dropdown-select-item key={v.name} value={v.name}>
+                  <option key={v.name} value={v.name}>
                     {v.label}
-                  </scale-dropdown-select-item>
+                  </option>
                 ))}
-              </scale-dropdown-select>
+              </select>
             </scale-telekom-nav-item>
           )}
 

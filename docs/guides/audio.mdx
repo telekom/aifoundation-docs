@@ -31,7 +31,7 @@ AI Foundation Services provides Whisper-based audio models for transcription and
 
 ## List Audio Models
 
-Audio models have `model_type: "NLP"` in their metadata. Use the models endpoint and filter:
+Audio models have `model_type: "STT"` in their metadata. Use the models endpoint and filter:
 
 <Tabs>
   <TabItem value="python" label="Python" default>
@@ -42,7 +42,7 @@ Audio models have `model_type: "NLP"` in their metadata. Use the models endpoint
 
     models = client.models.list()
     for model in models.data:
-        if model.meta_data.get("model_type") == "NLP":
+        if model.meta_data.get("model_type") == "STT":
             print(model.id)
     ```
   </TabItem>
@@ -50,7 +50,7 @@ Audio models have `model_type: "NLP"` in their metadata. Use the models endpoint
     ```bash
     curl "$OPENAI_BASE_URL/models" \
       -H "Authorization: Bearer $OPENAI_API_KEY"
-    # Filter results for models with model_type "NLP"
+    # Filter results for models with model_type "STT"
     # Available audio models: whisper-large-v3, whisper-large-v3-turbo
     ```
   </TabItem>

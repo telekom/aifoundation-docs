@@ -28,6 +28,14 @@ When an API request fails, the response includes an HTTP status code and an erro
 
 ```json
 {
+  "detail": "Incorrect API key provided"
+}
+```
+
+:::info
+Some endpoints (e.g., Azure-proxied models like GPT-4.1) may return OpenAI-style error objects:
+```json
+{
   "error": {
     "message": "Invalid API key provided.",
     "type": "authentication_error",
@@ -35,6 +43,7 @@ When an API request fails, the response includes an HTTP status code and an erro
   }
 }
 ```
+:::
 
 ---
 

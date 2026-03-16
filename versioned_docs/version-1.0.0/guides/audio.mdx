@@ -46,7 +46,7 @@ AI Foundation Services provides Whisper-based audio models for transcription and
 
     models = client.models.list()
     for model in models.data:
-        if model.meta_data.get("model_type") == "NLP":
+        if model.meta_data.get("model_type") == "STT":
             print(model.id)
     ```
   </TabItem>

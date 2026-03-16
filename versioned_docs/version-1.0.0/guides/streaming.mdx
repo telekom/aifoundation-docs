@@ -142,6 +142,8 @@ stream = client.chat.completions.create(
 
 full_response = []
 for chunk in stream:
+    if not chunk.choices:
+        continue
     content = chunk.choices[0].delta.content
     if content:
         full_response.append(content)
@@ -219,6 +221,8 @@ stream = client.chat.completions.create(
 
 tool_calls = {}
 for chunk in stream:
+    if not chunk.choices:
+        continue
     delta = chunk.choices[0].delta
 
     if delta.tool_calls:
@@ -258,6 +262,8 @@ def stream_with_retry(messages, max_retries=3):
             )
             full_response = []
             for chunk in stream:
+                if not chunk.choices:
+                    continue
                 content = chunk.choices[0].delta.content
                 if content:
                     full_response.append(content)

@@ -131,7 +131,7 @@ with httpx.Client() as http_client:
 ```python
 job = client.fine_tuning.jobs.create(
     training_file="file-abc123",
-    model="Meta-Llama-3.1-8B-Instruct",
+    model="Llama-3.3-70B-Instruct",
     hyperparameters={"n_epochs": 2},
 )
 print(f"Job ID: {job.id}, Status: {job.status}")
