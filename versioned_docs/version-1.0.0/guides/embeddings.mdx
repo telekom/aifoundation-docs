@@ -1,0 +1,104 @@
+---
+id: embeddings
+title: Embeddings
+sidebar_position: 2
+tags:
+  - OpenAI API
+  - Embedding models
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Embeddings
+
+The Embedding API converts text into vector representations that capture semantic meaning. Use embeddings for semantic search, clustering, and RAG applications.
+
+:::info Prerequisites
+- An API key ([get one here](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK or HTTP client installed ([Quickstart](/getting-started/quickstart))
+:::
+
+**What you'll learn:**
+- How to generate embeddings from text
+- Available embedding models and their use cases
+- How to use embeddings for semantic search and RAG
+
+---
+
+## Basic Usage
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl -X POST "$OPENAI_BASE_URL/embeddings" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "jina-embeddings-v2-base-de",
+        "input": ["The quick brown fox jumps over the lazy dog", "Data science is fun!"]
+      }'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    texts = [
+        "I am Batman and I'm rich",
+        "I am Spiderman",
+        "I am Ironman and I'm a billionaire",
+        "I am Flash",
+        "I am the president of USA",
+    ]
+
+    embeddings = client.embeddings.create(input=texts, model="jina-embeddings-v2-base-de")
+
+    print("Embedding dimension:", len(embeddings.data[0].embedding))
+    print("Number of vectors:", len(embeddings.data))
+    print("Token usage:", embeddings.usage)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript showLineNumbers
+    import OpenAI from "openai";
+
+    const client = new OpenAI();
+
+    const result = await client.embeddings.create({
+      model: "jina-embeddings-v2-base-de",
+      input: ["The quick brown fox jumps over the lazy dog", "Data science is fun!"],
+    });
+
+    console.log("Embedding dimension:", result.data[0].embedding.length);
+    console.log("Token usage:", result.usage);
+    ```
+  </TabItem>
+</Tabs>
+
+**Example output:**
+```
+Embedding dimension: 1024
+Number of vectors: 5
+Token usage: Usage(prompt_tokens=31, total_tokens=31)
+```
+
+---
+
+## Available Embedding Models
+
+| Model | Dimensions | Languages | Use Case |
+|---|---|---|---|
+| `jina-embeddings-v2-base-de` | 1024 | German & English | German-language RAG |
+| `text-embedding-bge-m3` | 1024 | Multilingual | Cross-language search |
+
+Check [Available Models](/getting-started/models) for the latest list.
+
+---
+
+## Next Steps
+
+- **[LangChain Integration](/integrations/langchain)** — Use embeddings with LangChain for RAG
+- **[LlamaIndex Integration](/integrations/llama-index)** — Use embeddings with LlamaIndex for RAG

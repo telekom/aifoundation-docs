@@ -34,7 +34,7 @@
     "MODEL_NAME": "Model Name",
     "NO_PRICING_FOUND": "No pricing found for selected filter.",
     "ONLY_USAGE": "Only Usage",
-    "OTC": "OTC",
+    "OTC": "T-Cloud",
     "OUTPUT_TOKEN_LIMIT": "Output Token Limit",
     "OUTPUT_TOKEN_PRICE": "Output Token Price",
     "PLANS_BREADCRUMB": "Plans",
@@ -69,7 +69,7 @@
     "TOKEN_PRICE_3000": " 2.23 ",
     "TOKEN_PRICE_4000": " 1.75 ",
     "TOKEN_PRICE_BASIC": " 3.53 ",
-    "TOOLTIP_OTC": "Open Telekom Cloud",
+    "TOOLTIP_OTC": "T-Cloud",
     "TOOLTIP_GCP": "Google Cloud Platform",
     "TOOLTIP_AZURE": "Microsoft Azure"
   }

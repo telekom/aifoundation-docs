@@ -1,0 +1,125 @@
+---
+id: overview
+sidebar_position: 0
+slug: /
+title: Overview
+---
+
+import AvailableModels from '@site/src/components/AvailableModels';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<div className="hero-section">
+
+# AI Foundation Services
+
+**GDPR-compliant LLM APIs. OpenAI-compatible. Hosted in Germany.**
+
+Access 20+ open-source and proprietary LLMs through a single, OpenAI-compatible API. Switch from OpenAI with one line of code. Your data stays in the EU.
+
+<div className="hero-badges">
+  <span className="hero-badge">GDPR Compliant</span>
+  <span className="hero-badge">EU Hosted</span>
+  <span className="hero-badge">OpenAI Compatible</span>
+</div>
+
+<div className="hero-ctas">
+  <a className="button button--primary button--lg" href="https://apikey.llmhub.t-systems.net/">Get Free API Key</a>
+  <a className="button button--secondary button--lg" href="/getting-started/quickstart">Quickstart Guide</a>
+</div>
+
+</div>
+
+---
+
+## Try It Now
+
+Drop in your API key and start building — the API is identical to OpenAI's:
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl -X POST "https://llm-server.llmhub.t-systems.net/v2/chat/completions" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "Llama-3.3-70B-Instruct",
+        "messages": [{"role": "user", "content": "Hello from AIFS!"}]
+      }'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python
+    from openai import OpenAI
+
+    client = OpenAI(base_url="https://llm-server.llmhub.t-systems.net/v2")
+
+    response = client.chat.completions.create(
+        model="Llama-3.3-70B-Instruct",
+        messages=[{"role": "user", "content": "Hello from AIFS!"}],
+    )
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript
+    import OpenAI from "openai";
+
+    const client = new OpenAI({
+      baseURL: "https://llm-server.llmhub.t-systems.net/v2",
+    });
+
+    const response = await client.chat.completions.create({
+      model: "Llama-3.3-70B-Instruct",
+      messages: [{ role: "user", content: "Hello from AIFS!" }],
+    });
+    console.log(response.choices[0].message.content);
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+## Why AI Foundation Services?
+
+<div className="feature-grid">
+  <div className="feature-card">
+    <h3>Drop-in Replacement</h3>
+    <p>OpenAI-compatible API — switch from OpenAI or Azure by changing the base URL. Works with existing SDKs, LangChain, and LlamaIndex.</p>
+  </div>
+  <div className="feature-card">
+    <h3>Enterprise Security</h3>
+    <p>GDPR-compliant hosting in Germany and the EU. Open-source models run on T-Cloud. Your data never leaves the EU.</p>
+  </div>
+  <div className="feature-card">
+    <h3>Full Model Catalog</h3>
+    <p>20+ models from one API key — Llama, Mistral, GPT, Claude, Gemini, Qwen, and more. Text, vision, audio, and embeddings.</p>
+  </div>
+</div>
+
+---
+
+## Available Models
+
+<AvailableModels/>
+
+For the complete list with pricing, see the [Plans & Pricing](/plans-page) page.
+
+---
+
+## Get Started
+
+<div className="get-started-grid">
+  <a className="get-started-card" href="/getting-started/authentication">
+    <h3>Authentication</h3>
+    <p>Set up your API key and environment.</p>
+  </a>
+  <a className="get-started-card" href="/getting-started/quickstart">
+    <h3>Quickstart</h3>
+    <p>Make your first API call in 5 minutes.</p>
+  </a>
+  <a className="get-started-card" href="/reference/api-endpoints">
+    <h3>API Reference</h3>
+    <p>Explore all available endpoints.</p>
+  </a>
+</div>

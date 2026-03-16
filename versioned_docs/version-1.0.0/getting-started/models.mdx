@@ -1,0 +1,112 @@
+---
+id: models
+title: Available Models
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AvailableModels from '@site/src/components/AvailableModels';
+
+# Available Models
+
+AI Foundation Services provides access to a wide range of open-source and proprietary LLMs, embedding models, vision models, and audio models — all through a single OpenAI-compatible API.
+
+---
+
+## Featured Models
+
+<AvailableModels/>
+
+For a complete list with pricing, see the [Plans & Pricing](/plans-page) page.
+
+---
+
+## List Models via API
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl "$OPENAI_BASE_URL/models" \
+      -H "Authorization: Bearer $OPENAI_API_KEY"
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    models = client.models.list()
+    for model in models.data:
+        print(model.id)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript
+    import OpenAI from "openai";
+
+    const client = new OpenAI();
+
+    const models = await client.models.list();
+    for (const model of models.data) {
+      console.log(model.id);
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+## Model Metadata
+
+Each model includes metadata you can inspect:
+
+```python
+models = client.models.list()
+print(models.data[0].meta_data)
+```
+
+```json
+{
+  "model_type": "LLM",
+  "source_type": "OPEN SOURCE",
+  "max_sequence_length": 0,
+  "hidden_size": 0,
+  "max_output_length": 0,
+  "deployment_region": "otc-germany",
+  "location": "otc-germany",
+  "license": "https://choosealicense.com/licenses/apache-2.0/",
+  "display_name": "DeepSeek-R1-Distill-Llama-70B",
+  "deployment_country": "",
+  "is_externally_hosted": false
+}
+```
+
+**Key fields:**
+- **model_type** — `LLM`, `Embedding`, `NLP` (audio), or `Vision`
+- **max_sequence_length** — Maximum input + output tokens
+- **hidden_size** — Embedding vector dimensions (embedding models only)
+- **max_output_length** — Maximum output tokens the model can generate
+- **deployment_region** — Where the model is hosted (e.g., `otc-germany`)
+
+---
+
+## Model Categories
+
+| Category | Examples | Use Case |
+|---|---|---|
+| **LLM** | Llama 3.3 70B, GPT 4.1, Claude Sonnet 4, Qwen 3 | Text generation, chat, reasoning |
+| **Embedding** | jina-embeddings-v2-base-de, text-embedding-bge-m3 | Semantic search, RAG |
+| **Vision** | Qwen2.5-VL-72B-Instruct, Gemini 2.5 Flash | Image analysis, multimodal chat |
+| **Audio/NLP** | whisper-large-v3 | Speech-to-text, translation |
+| **Image Generation** | gpt-image-1 | Image creation from text prompts |
+
+---
+
+## Hosting & Compliance
+
+- **Open-source models** are hosted on the **T-Cloud** in Germany, fully GDPR-compliant.
+- **Proprietary models** (GPT, Claude, Gemini) are hosted via MS Azure, AWS, or GCP in GDPR-compliant configurations.
+
+All data processing stays within the EU.

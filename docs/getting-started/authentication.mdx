@@ -1,0 +1,114 @@
+---
+id: authentication
+title: Authentication
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Authentication
+
+AI Foundation Services uses API keys for authentication. All requests must include your API key in the `Authorization` header.
+
+---
+
+## Get an API Key
+
+### Free Trial Key
+
+Get started immediately with a free trial key:
+
+1. Visit the [API Key Portal](https://apikey.llmhub.t-systems.net/)
+2. Create an account and generate your API key
+3. Your trial key gives you access to all available models
+
+### Production Key
+
+For production workloads, purchase via the [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/).
+
+---
+
+## Set Up Environment Variables
+
+Store your API key as an environment variable — never hardcode it in your source code.
+
+<Tabs>
+  <TabItem value="mac" label="macOS / Linux" default>
+    ```bash
+    export OPENAI_API_KEY="your_api_key_here"
+    export OPENAI_BASE_URL="https://llm-server.llmhub.t-systems.net/v2"
+    ```
+
+    To persist across sessions, add these lines to your `~/.zshrc` or `~/.bashrc` file.
+  </TabItem>
+  <TabItem value="windows-ps" label="Windows (PowerShell)">
+    ```powershell
+    $env:OPENAI_API_KEY = "your_api_key_here"
+    $env:OPENAI_BASE_URL = "https://llm-server.llmhub.t-systems.net/v2"
+    ```
+  </TabItem>
+  <TabItem value="windows-cmd" label="Windows (CMD)">
+    ```bash
+    setx OPENAI_API_KEY "your_api_key_here"
+    setx OPENAI_BASE_URL "https://llm-server.llmhub.t-systems.net/v2"
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+## Using the API Key
+
+### With OpenAI SDKs
+
+When `OPENAI_API_KEY` and `OPENAI_BASE_URL` are set, the OpenAI SDKs pick them up automatically:
+
+```python
+from openai import OpenAI
+
+client = OpenAI()  # No need to pass api_key or base_url
+```
+
+You can also pass them explicitly:
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="your_api_key_here",
+    base_url="https://llm-server.llmhub.t-systems.net/v2",
+)
+```
+
+### With HTTP Requests
+
+Include the API key in the `Authorization` header:
+
+```bash
+curl -X POST "https://llm-server.llmhub.t-systems.net/v2/chat/completions" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "Llama-3.3-70B-Instruct", "messages": [{"role": "user", "content": "Hello"}]}'
+```
+
+---
+
+## Base URL
+
+All API requests go to:
+
+```
+https://llm-server.llmhub.t-systems.net/v2
+```
+
+This is the OpenAI-compatible endpoint. For the full API specification, see the [API Reference](https://llm-server.llmhub.t-systems.net/redoc).
+
+---
+
+## Best Practices
+
+- **Never commit API keys** to version control. Use `.env` files and add them to `.gitignore`.
+- **Use environment variables** in production rather than hardcoding keys.
+- **Rotate keys regularly** via the [API Key Portal](https://apikey.llmhub.t-systems.net/).
+- **Monitor usage** through the API Key Portal to track token consumption and costs.

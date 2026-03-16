@@ -9,7 +9,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'AI Foundation Services Documentation',
-  //tagline: 'create-tsi',
+  tagline: 'GDPR-compliant LLM APIs with OpenAI compatibility',
   favicon: 'img/favicon_180x180.png',
 
   // Set the production url of your site here
@@ -24,7 +24,7 @@ const config = {
   organizationName: 'telekom', // Usually your GitHub org/user name.
   projectName: 'aifoundation-docs', // Usually your repo name.
 
-  onBrokenLinks: 'ignore',
+  onBrokenLinks: 'warn',
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: 'warn',
@@ -56,6 +56,17 @@ const config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: './sidebars.js',
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: 'Latest',
+              path: '',
+            },
+            '1.0.0': {
+              label: '1.0.0',
+              path: '1.0.0',
+            },
+          },
         },
 
         theme: {
@@ -91,6 +102,7 @@ const config = {
       },
       prism: {
         darkTheme: prismThemes.dracula,
+        additionalLanguages: ['bash', 'json', 'javascript', 'typescript'],
       },
     }),
 

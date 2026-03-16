@@ -112,7 +112,7 @@ export default function ModelPlansTable(props) {
                                     {modelDetail.cloud !== '-' ? (
                                         <scale-tag
                                             style={
-                                                modelDetail.cloud && modelDetail.cloud.toLowerCase().includes('otc')
+                                                modelDetail.cloud && (modelDetail.cloud.toLowerCase().includes('t-cloud') || modelDetail.cloud.toLowerCase().includes('otc'))
                                                     ? {
                                                         '--background': 'var(--telekom-color-primary-standard)',
                                                         '--color': 'white',

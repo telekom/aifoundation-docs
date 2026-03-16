@@ -67,7 +67,7 @@ function ModelPlans(props) {
 
         mqcs.forEach((item) => {
             result.push({
-                cloud: (item?.deploymentRegion || '-').split('-')[0]?.toUpperCase() || '-',
+                cloud: ((region) => { const prefix = (region || '-').split('-')[0]?.toUpperCase() || '-'; return prefix === 'OTC' ? 'T-Cloud' : prefix; })(item?.deploymentRegion),
                 creator: '-',
                 name: {
                     heading: item?.displayModelName,
@@ -89,7 +89,7 @@ function ModelPlans(props) {
             if (item?.modelQuotaMetadata?.data) {
                 item.modelQuotaMetadata.data.forEach((customItem) => {
                     result.push({
-                        cloud: (item?.deploymentRegion || '-').split('-')[0]?.toUpperCase() || '-',
+                        cloud: ((region) => { const prefix = (region || '-').split('-')[0]?.toUpperCase() || '-'; return prefix === 'OTC' ? 'T-Cloud' : prefix; })(item?.deploymentRegion),
                         creator: '-',
                         name: {
                             heading: item?.displayModelName,
