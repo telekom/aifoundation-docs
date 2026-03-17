@@ -11,10 +11,11 @@ export default function ModelPlansTable(props) {
     const [sortConfig, setSortConfig] = useState(null); // { key, direction }
 
     const tableHeaders = [
-        { name: t('PLANS.CLOUD'), sortable: true, key: 'cloud' },
+        { name: t('PLANS.DATA_PROCESSING_LOCATION'), sortable: false, key: 'DATA_PROCESSING_LOCATION' },
         { name: t('PLANS.MODEL_NAME'), sortable: true, key: 'name' },
         { name: t('PLANS.INPUT_TOKEN_PRICE'), subLabel: t('PLANS.PRICE_UNIT_TOKENS'), sortable: true, key: 'inputPrice' },
         { name: t('PLANS.OUTPUT_TOKEN_PRICE'), subLabel: t('PLANS.PRICE_UNIT_TOKENS'), sortable: true, key: 'outputPrice' },
+        { name: t('PLANS.HOSTING_PLATFORM'), sortable: true, key: 'Hosting platform' },
         { name: t('PLANS.SERVER_LOCATION'), sortable: true, key: 'serverLocation' },
         { name: t('PLANS.INPUT_TOKEN_LIMIT'), sortable: true, key: 'inputToken' },
         { name: t('PLANS.OUTPUT_TOKEN_LIMIT'), sortable: true, key: 'outputToken' },
@@ -101,7 +102,7 @@ export default function ModelPlansTable(props) {
                     <tbody>
                     {(!sortedRows || sortedRows.length === 0) ? (
                         <tr>
-                            <td colSpan={9} className="my-text-align-center">
+                            <td colSpan={10} className="my-text-align-center">
                                 {t('PLANS.NO_PRICING_FOUND')}
                             </td>
                         </tr>
@@ -109,24 +110,14 @@ export default function ModelPlansTable(props) {
                         sortedRows.map((modelDetail, idx) => (
                             <tr key={idx}>
                                 <td>
-                                    {modelDetail.cloud !== '-' ? (
-                                        <scale-tag
-                                            style={
-                                                modelDetail.cloud && (modelDetail.cloud.toLowerCase().includes('t-cloud') || modelDetail.cloud.toLowerCase().includes('otc'))
-                                                    ? {
-                                                        '--background': 'var(--telekom-color-primary-standard)',
-                                                        '--color': 'white',
-                                                    }
-                                                    : undefined
-                                            }
-                                        >
-                                            <span>{modelDetail.cloud}</span>
-                                        </scale-tag>
-                                    ) : (
-                                        <span>-</span>
-                                    )}
+                                    {
+                                        modelDetail.cloud !== '-' ?
+                                            ( modelDetail.cloud && (modelDetail.cloud.toLowerCase().includes('t-cloud') || modelDetail.cloud.toLowerCase().includes('otc')) ?
+                                                (`${useCountry.getCountryByKey('name', 'European Union')?.flag} EU`) : (`${useCountry.getCountryByKey('name', 'World')?.flag} EU & Worldwide`) )
+                                            :
+                                            (<span>-</span>)
+                                    }
                                 </td>
-
                                 <td>
                                     <b>{modelDetail.name?.heading}</b>
                                     {modelDetail.name?.subHeading && <br />}
@@ -166,7 +157,24 @@ export default function ModelPlansTable(props) {
                                         )}
                                     </div>
                                 </td>
-
+                                <td>
+                                    {modelDetail.cloud !== '-' ? (
+                                        <scale-tag
+                                            style={
+                                                modelDetail.cloud && modelDetail.cloud.toLowerCase().includes('otc')
+                                                    ? {
+                                                        '--background': 'var(--telekom-color-primary-standard)',
+                                                        '--color': 'white',
+                                                    }
+                                                    : undefined
+                                            }
+                                        >
+                                            <span>{modelDetail.cloud}</span>
+                                        </scale-tag>
+                                    ) : (
+                                        <span>-</span>
+                                    )}
+                                </td>
                                 <td>
                     <span>
                       {modelDetail.serverLocation !== '-' ? useCountry.searchCountries('name', modelDetail.serverLocation || '')[0]?.flag : ''}

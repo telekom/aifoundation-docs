@@ -1,16 +1,22 @@
+
 import React, { useState } from 'react';
-import RatePlans  from './RatePlans';
+import RatePlans from './RatePlans';
 import ModelPlans from './ModelPlans';
 import '@telekom/scale-components/dist/scale-components/scale-components.css';
 import '@telekom/scale-components-react';
-function PlansPage() {
-    const [selectedPlanId, setSelectedPlanId] = useState('');
+
+function PlansPage({ selectedPlanId = '' }) {
+    const [internalSelectedPlanId, setInternalSelectedPlanId] = useState(selectedPlanId);
 
     return (
         <div className="my-column my-mx-2" id="plans-page">
-            <RatePlans />
+            {!selectedPlanId && <RatePlans selectedPlanId={selectedPlanId} />}
+
             <div className="my-mt-1">
-                <ModelPlans onSelectedPlanId={(id) => setSelectedPlanId(id)} />
+                <ModelPlans
+                    onSelectedPlanId={(id) => setInternalSelectedPlanId(id)}
+                    selectedPlanId={selectedPlanId}
+                />
             </div>
         </div>
     );
