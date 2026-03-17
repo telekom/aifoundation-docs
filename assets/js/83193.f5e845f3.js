@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkmy_website=globalThis.webpackChunkmy_website||[]).push([[5574,83193],{83193:(s,l,e)=>{e.r(l),e.d(l,{scale_ssr_slot_fix:()=>t});var r=e(24898);const t=class{constructor(s){(0,r.r)(this,s)}render(){return(0,r.h)(r.a,null,(0,r.h)("slot",null))}}}}]);
