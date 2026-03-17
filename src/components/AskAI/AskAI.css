@@ -1,0 +1,421 @@
+/* ── Floating trigger button ──────────────────────────────────────── */
+.ask-ai-trigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 24px;
+  background: var(--ifm-color-primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.ask-ai-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+.ask-ai-trigger--hidden {
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Chat panel ──────────────────────────────────────────────────── */
+.ask-ai-panel {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1001;
+  width: 400px;
+  max-width: calc(100vw - 48px);
+  height: 560px;
+  max-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  animation: askAiSlideUp 0.25s ease-out;
+}
+
+@keyframes askAiSlideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.ask-ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  background: var(--ifm-background-surface-color);
+  flex-shrink: 0;
+}
+.ask-ai-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ifm-font-color-base);
+}
+.ask-ai-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--ifm-color-primary);
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.ask-ai-header-actions {
+  display: flex;
+  gap: 4px;
+}
+.ask-ai-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ifm-font-color-secondary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ask-ai-icon-btn:hover {
+  background: var(--ifm-hover-overlay);
+}
+
+/* ── Messages area ───────────────────────────────────────────────── */
+.ask-ai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Welcome / empty state ───────────────────────────────────────── */
+.ask-ai-welcome,
+.ask-ai-key-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 8px;
+}
+.ask-ai-welcome-icon {
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+.ask-ai-welcome h3,
+.ask-ai-key-prompt h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--ifm-font-color-base);
+}
+.ask-ai-welcome p,
+.ask-ai-key-prompt p {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--ifm-font-color-secondary);
+  line-height: 1.5;
+}
+
+/* ── Suggested questions ─────────────────────────────────────────── */
+.ask-ai-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.ask-ai-suggestion {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 10px;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  line-height: 1.4;
+}
+.ask-ai-suggestion:hover {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary-lightest, rgba(226, 0, 116, 0.05));
+}
+
+/* ── API key input ───────────────────────────────────────────────── */
+.ask-ai-key-prompt form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ask-ai-key-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: monospace;
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+.ask-ai-key-input:focus {
+  border-color: var(--ifm-color-primary);
+}
+.ask-ai-key-submit {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--ifm-color-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  font-family: inherit;
+}
+.ask-ai-key-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ask-ai-key-note {
+  font-size: 11px !important;
+  color: var(--ifm-font-color-secondary) !important;
+  margin-top: 4px !important;
+}
+
+/* ── Message bubbles ─────────────────────────────────────────────── */
+.ask-ai-msg {
+  max-width: 92%;
+  animation: askAiFadeIn 0.15s ease-out;
+}
+@keyframes askAiFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ask-ai-msg--user {
+  align-self: flex-end;
+}
+.ask-ai-msg--user .ask-ai-msg-content {
+  background: var(--ifm-color-primary);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 14px 14px 4px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ask-ai-msg--assistant {
+  align-self: flex-start;
+}
+.ask-ai-msg--assistant .ask-ai-msg-content {
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  padding: 10px 14px;
+  border-radius: 14px 14px 14px 4px;
+  border: 1px solid var(--ifm-toc-border-color);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.ask-ai-msg--assistant .ask-ai-msg-content code {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.ask-ai-msg--assistant .ask-ai-msg-content pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 8px 0;
+  font-size: 12px;
+}
+.ask-ai-msg--assistant .ask-ai-msg-content pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* ── Sources ─────────────────────────────────────────────────────── */
+.ask-ai-sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ifm-toc-border-color);
+}
+.ask-ai-sources-label {
+  font-size: 11px;
+  color: var(--ifm-font-color-secondary);
+  font-weight: 600;
+}
+.ask-ai-source-link {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--ifm-color-primary-lightest, rgba(226, 0, 116, 0.08));
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.ask-ai-source-link:hover {
+  background: var(--ifm-color-primary-lighter, rgba(226, 0, 116, 0.15));
+  text-decoration: none;
+  color: var(--ifm-color-primary);
+}
+
+/* ── Error message ───────────────────────────────────────────────── */
+.ask-ai-error {
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 0, 0, 0.05);
+  border: 1px solid rgba(255, 0, 0, 0.15);
+  color: var(--ifm-font-color-base);
+  font-size: 12px;
+  text-align: center;
+}
+.ask-ai-error code {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* ── Input area ──────────────────────────────────────────────────── */
+.ask-ai-input-area {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--ifm-toc-border-color);
+  background: var(--ifm-background-surface-color);
+  flex-shrink: 0;
+}
+.ask-ai-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+  min-height: 20px;
+  max-height: 80px;
+  line-height: 1.4;
+}
+.ask-ai-input:focus {
+  border-color: var(--ifm-color-primary);
+}
+.ask-ai-send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  background: var(--ifm-color-primary);
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.ask-ai-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ask-ai-send:not(:disabled):hover {
+  opacity: 0.9;
+}
+
+/* ── Spinner ─────────────────────────────────────────────────────── */
+.ask-ai-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: askAiSpin 0.6s linear infinite;
+}
+@keyframes askAiSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+.ask-ai-footer {
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--ifm-font-color-secondary);
+  border-top: 1px solid var(--ifm-toc-border-color);
+  flex-shrink: 0;
+}
+
+/* ── Dark mode adjustments ───────────────────────────────────────── */
+[data-theme='dark'] .ask-ai-msg--assistant .ask-ai-msg-content code {
+  background: rgba(255, 255, 255, 0.1);
+}
+[data-theme='dark'] .ask-ai-trigger {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+[data-theme='dark'] .ask-ai-panel {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Mobile responsive ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .ask-ai-panel {
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  .ask-ai-trigger {
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 14px;
+  }
+  .ask-ai-trigger span {
+    display: none;
+  }
+}
