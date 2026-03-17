@@ -6,7 +6,7 @@ import useMyI18n from '../../shared/lib/useMyI18n';
 import { PlansHistory } from './PlansData/PlansModelData/';
 
 function ModelPlans(props) {
-    const { onSelectedPlanId } = props || {};
+    const { onSelectedPlanId, selectedPlanId } = props || {};
     const { t } = useMyI18n();
 
     const modelList = [
@@ -28,6 +28,20 @@ function ModelPlans(props) {
         priceRangeFilter: '',
     });
 
+
+    useEffect(() => {
+        if (!allStandardPackages.length) return;
+
+        // prefer parent's selection if provided; otherwise keep current internal
+        const target = selectedPlanId || selectedPlanName;
+
+        // apply without notifying parent (just a sync)
+        selectPackage(target, allStandardPackages, { notify: false });
+    }, [allStandardPackages]);
+
+
+
+
     useEffect(() => {
          function fetchAllStandardPackages() {
             try {
@@ -43,11 +57,24 @@ function ModelPlans(props) {
         fetchAllStandardPackages();
     }, []);
 
-    function selectPackage(packageName, packages = allStandardPackages) {
-        if (typeof onSelectedPlanId === 'function') onSelectedPlanId(packageName);
+
+    useEffect(() => {
+        if (dropdownRef.current && dropdownRef.current.value !== selectedPlanName) {
+            dropdownRef.current.value = selectedPlanName;
+        }
+    }, [selectedPlanName]);
+
+
+    function selectPackage(packageName, packages = allStandardPackages, options = { notify: true }) {
+        if (options.notify && typeof onSelectedPlanId === 'function') {
+            onSelectedPlanId(packageName);
+        }
+
         setSelectedPlanName(packageName);
+
         const found = (packages || []).find((p) => p?.packageName === packageName) || {};
         setSelectedPlanDetail(found);
+
         setFilters({
             searchFilter: '',
             cloudFilter: 'All',
@@ -55,6 +82,7 @@ function ModelPlans(props) {
             priceRangeFilter: '',
         });
     }
+
 
     const parseNumber = (value, defaultValue = 0) => {
         const parsed = Number(value);
@@ -177,16 +205,17 @@ function ModelPlans(props) {
             <span className="scl-font-variant-body">{t('PLANS.MODELS.SUBTITLE')}</span>
 
             <div className="my-row my-justify-space-between my-align-center">
-                <div className="my-input-width-0-5 my-mt-4">
-                    {/* use a ref and listen for 'scale-change' emitted by the web component */}
-                    <scale-dropdown-select ref={dropdownRef} value={selectedPlanName} label={t('PLANS.MODELS.SELECTED_RATE_PLAN')}>
-                        {modelList.map((model) => (
-                            <scale-dropdown-select-item key={model.packageName} value={model.packageName}>
-                                {model.label}
-                            </scale-dropdown-select-item>
-                        ))}
-                    </scale-dropdown-select>
-                </div>
+                {!selectedPlanId && <div className="my-input-width-0-5 my-mt-4">
+                {/* use a ref and listen for 'scale-change' emitted by the web component */}
+                <scale-dropdown-select ref={dropdownRef} value={selectedPlanName} label={t('PLANS.MODELS.SELECTED_RATE_PLAN')}>
+                    {modelList.map((model) => (
+                        <scale-dropdown-select-item key={model.packageName} value={model.packageName}>
+                            {model.label}
+                        </scale-dropdown-select-item>
+                    ))}
+                </scale-dropdown-select>
+            </div>
+                }
             </div>
 
             {isLoading ? (
