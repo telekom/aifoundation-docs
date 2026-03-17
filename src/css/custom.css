@@ -3,6 +3,10 @@
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
+head,
+body {
+    height: initial !important;
+}
 
  :root {
   --ifm-color-primary:  var(--telekom-color-primary-standard);
