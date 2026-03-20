@@ -3,6 +3,10 @@
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
+head,
+body {
+    height: initial !important;
+}
 
  :root {
   --ifm-color-primary:  var(--telekom-color-primary-standard);
@@ -1457,4 +1461,109 @@ table {
 .magenta-text-32 {
     font-size: var(--scl-spacing-32);
     color: var(--telekom-color-text-and-icon-primary-standard);
+}
+
+/* Version selector in navbar */
+.version-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: 1.5px solid var(--telekom-color-ui-border-standard);
+    border-radius: 4px;
+    color: var(--telekom-color-text-and-icon-standard);
+    font-family: inherit;
+    font-size: var(--telekom-typography-font-size-small);
+    font-weight: var(--telekom-typography-font-weight-bold);
+    padding: 4px 24px 4px 8px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    min-width: 80px;
+    line-height: 1.4;
+}
+
+.version-select:hover {
+    border-color: var(--telekom-color-text-and-icon-standard);
+}
+
+.version-select:focus {
+    outline: var(--telekom-line-weight-highlight) solid var(--telekom-color-functional-focus-standard);
+    outline-offset: 1px;
+}
+
+body[data-mode='dark'] .version-select {
+    border-color: var(--telekom-color-ui-border-standard);
+    color: var(--telekom-color-text-and-icon-white-standard);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Landing page styles */
+.hero-section {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background-color: var(--ifm-color-emphasis-100);
+    color: var(--ifm-font-color-base);
+    border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.hero-ctas {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.get-started-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 1.5rem 0;
+}
+
+.get-started-card {
+    display: block;
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    background-color: var(--ifm-card-background-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.get-started-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+    color: inherit;
+}
+
+.get-started-card h3 {
+    margin-top: 0;
+    color: var(--ifm-heading-color);
+}
+
+.get-started-card p {
+    margin-bottom: 0;
+    color: var(--ifm-font-color-secondary);
+    font-size: 0.9rem;
 }

@@ -1,0 +1,167 @@
+---
+id: multimodal
+title: Multimodal (Vision)
+sidebar_position: 3
+tags:
+  - OpenAI API
+  - Multimodal models
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Multimodal (Vision)
+
+AI Foundation Services provides vision models that can analyze images alongside text. Use the same Chat Completions API with image content.
+
+:::info Prerequisites
+- An API key ([get one here](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK or HTTP client installed ([Quickstart](/getting-started/quickstart))
+- A vision-capable model (see [Available Models](/getting-started/models))
+:::
+
+**What you'll learn:**
+- How to analyze images from URLs
+- How to send local images via base64 encoding
+- Which models support vision capabilities
+
+---
+
+## Analyze an Image from URL
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl -X POST "$OPENAI_BASE_URL/chat/completions" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "gemini-2.5-flash",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {"type": "text", "text": "What is in this image?"},
+              {"type": "image_url", "image_url": {"url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400"}}
+            ]
+          }
+        ],
+        "max_tokens": 1024
+      }'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    response = client.chat.completions.create(
+        model="gemini-2.5-flash",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "What's in this image?"},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400"
+                        },
+                    },
+                ],
+            }
+        ],
+        max_tokens=1024,
+    )
+
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript showLineNumbers
+    import OpenAI from "openai";
+
+    const client = new OpenAI();
+
+    const response = await client.chat.completions.create({
+      model: "gemini-2.5-flash",
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "What's in this image?" },
+            {
+              type: "image_url",
+              image_url: {
+                url: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400",
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 1024,
+    });
+
+    console.log(response.choices[0].message.content);
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+## Analyze a Local Image (Base64)
+
+You can also pass a local image as a base64-encoded string:
+
+```python showLineNumbers
+import base64
+from openai import OpenAI
+
+client = OpenAI()
+
+def encode_image(image_path):
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+base64_image = encode_image("/path/to/your/image.jpg")
+
+response = client.chat.completions.create(
+    model="Qwen3-VL-30B-A3B-Instruct-FP8",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What's in this image?"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+                },
+            ],
+        }
+    ],
+    max_tokens=1000,
+)
+
+print(response.choices[0].message.content)
+```
+
+---
+
+## Available Vision Models
+
+| Model | Provider | Capabilities |
+|---|---|---|
+| `Qwen3-VL-30B-A3B-Instruct-FP8` | T-Cloud (Germany) | Image understanding, OCR |
+| `gemini-2.5-flash` | Google Cloud | Image + video understanding |
+| `gpt-4.1` | Azure | Image understanding |
+
+Check [Available Models](/getting-started/models) for the latest list.
+
+---
+
+## Next Steps
+
+- [Visual RAG](/guides/visual-rag) — Index and retrieve from documents with text + image understanding
+- [Function Calling](/guides/function-calling) — Connect models to external tools
+- [Streaming](/guides/streaming) — Stream responses for better UX

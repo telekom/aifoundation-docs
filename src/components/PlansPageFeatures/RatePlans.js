@@ -308,10 +308,7 @@ export default function PlansRates(props) {
                         </tbody>
                     </table>
                 </scale-table>
-
-                <span className="scl-font-variant-caption my-pmy-4">
-          * OTC-Hosted Large Language Models
-        </span>
+                <span className="scl-font-variant-caption my-pmy-4">* T-Cloud-Hosted Large Language Models</span>
             </div>
         </div>
     );

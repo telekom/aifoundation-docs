@@ -112,7 +112,7 @@ export default function ModelPlansTable(props) {
                                 <td>
                                     {
                                         modelDetail.cloud !== '-' ?
-                                            ( modelDetail.cloud && modelDetail.cloud.toLowerCase().includes('otc') ?
+                                            ( modelDetail.cloud && (modelDetail.cloud.toLowerCase().includes('t-cloud') || modelDetail.cloud.toLowerCase().includes('otc')) ?
                                                 (`${useCountry.getCountryByKey('name', 'European Union')?.flag} EU`) : (`${useCountry.getCountryByKey('name', 'World')?.flag} EU & Worldwide`) )
                                             :
                                             (<span>-</span>)
