@@ -22,8 +22,6 @@
     "@telekom/scale-components-react": "^3.0.0-beta.158",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.6.4",
-    "docusaurus": "^1.14.7",
-    "docusaurus-plugin-search-local": "^2.1.2",
     "i18next": "^25.7.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
@@ -35,7 +33,7 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.9.2",
-    "@docusaurus/types": "3.2.1",
+    "@docusaurus/types": "^3.9.2",
     "postcss-preset-env": "^9.6.0"
   },
   "browserslist": {

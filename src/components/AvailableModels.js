@@ -15,15 +15,20 @@ function AvailableModels() {
   }
 
   function useModels(apiModels) {
-      return apiModels.map((m) => ({
-        id: normalizeId(m.exactModelName),
-        modelId: m.exactModelName,
-        name: m.displayModelName,
-        provider: ((region) => { const prefix = (region || '-').split('-')[0].toUpperCase(); return prefix === 'OTC' ? 'T-Cloud' : prefix; })(m.deploymentRegion),
-        hosted: useCapitalizeFirstLetter(m.deploymentRegion.split('-')[1] || '-'),
-        availability: "Available",
+      return apiModels.map((m) => {
+        const prefix = ((m.deploymentRegion || '-').split('-')[0]).toUpperCase();
+        const isTCloud = prefix === 'OTC';
+        return {
+          id: normalizeId(m.exactModelName),
+          modelId: m.exactModelName,
+          name: m.displayModelName,
+          provider: isTCloud ? 'T-Cloud' : prefix,
+          hosted: useCapitalizeFirstLetter(m.deploymentRegion.split('-')[1] || '-'),
           flag: useCountry.searchCountries('name', useCapitalizeFirstLetter(m.deploymentRegion.split('-')[1]))[0].flag,
-      }));
+          dataProcessing: isTCloud ? 'Germany' : 'EU',
+          availability: "Available",
+        };
+      });
     }
 
   // Models confirmed offline / not in the API — filter them out
@@ -76,8 +81,8 @@ function AvailableModels() {
 
   // Models live in the API but missing from pricing data — add manually
   const extraModels = [
-    { modelId: 'gpt-5.2', name: 'GPT 5.2', provider: 'AZURE', hosted: 'Sweden', flag: '🇸🇪' },
-    { modelId: 'Qwen3-Coder-30B-A3B-Instruct-FP8', name: 'Qwen 3 Coder 30B', provider: 'T-Cloud', hosted: 'Germany', flag: '🇩🇪' },
+    { modelId: 'gpt-5.2', name: 'GPT 5.2', provider: 'AZURE', hosted: 'Sweden', flag: '🇸🇪', dataProcessing: 'EU' },
+    { modelId: 'Qwen3-Coder-30B-A3B-Instruct-FP8', name: 'Qwen 3 Coder 30B', provider: 'T-Cloud', hosted: 'Germany', flag: '🇩🇪', dataProcessing: 'Germany' },
   ].map(m => ({ ...m, id: normalizeId(m.modelId), availability: 'Available' }));
   models = models.concat(extraModels);
 
@@ -139,9 +144,12 @@ function AvailableModels() {
           <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)',marginBottom: '2px'  }}>
             Cloud: <strong>{model.provider}</strong>
           </p>
-          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', alignItems: 'center', marginBottom: '14px'}}>
+          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', alignItems: 'center', marginBottom: '2px'}}>
             Server Location: <strong style={{ marginLeft: '4px' }}>{model.hosted}</strong>
               <span style={{ display: 'inline-flex', marginLeft: '4px', fontSize: '18px' }} >{model.flag}</span>
+          </p>
+          <p style={{ fontSize: '0.9em', color: 'var(--ifm-font-color-base)', alignItems: 'center', marginBottom: '14px'}}>
+            Data Processing: <strong style={{ marginLeft: '4px' }}>{model.dataProcessing}</strong>
           </p>
           <span
             style={{
