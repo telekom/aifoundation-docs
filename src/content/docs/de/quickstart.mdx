@@ -1,0 +1,151 @@
+---
+title: Schnellstart-Anleitung für Entwickler
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Diese Anleitung führt Sie durch die Einrichtung des OpenAI-Pakets zur Interaktion mit unseren LLM-Modellen und Embeddings. In nur wenigen Schritten sind Sie bereit, unsere Sprach-, Vision- und Embedding-Modelle über eine einfache und einheitliche API zu nutzen.
+
+---
+
+### Schritt 1: Das OpenAI-Paket installieren
+
+Um zu beginnen, installieren Sie das OpenAI-Paket mit `pip`. Dieses Paket ermöglicht Ihnen den Zugang zu all unseren Modellen, einschließlich Sprachgenerierung, Chat, Embeddings und Vision-Funktionen.
+
+```bash
+pip install openai
+```
+
+---
+
+### Schritt 2: API-Key erstellen und exportieren
+
+Um sich sicher mit unserer API zu verbinden, müssen Sie einen API-Key über das Dashboard generieren. Sobald Sie den Key haben:
+
+1. **Speichern Sie ihn sicher** an einem Ort wie einer `.zshrc`-Datei (macOS/Linux) oder einer anderen Textdatei auf Ihrem Computer.
+2. **Exportieren Sie ihn als Umgebungsvariable** in Ihrem Terminal für einfachen Zugriff in Ihren Skripten.
+
+**Erstellen Sie einen API-Key** im Dashboard [hier](https://apikey.llmhub.t-systems.net/) und folgen Sie den Schritten unten für Ihr Betriebssystem.
+
+<Tabs>
+  <TabItem label="macOS / Linux">
+
+   **Umgebungsvariablen auf *nix-Systemen exportieren:**
+   ```bash
+   export OPENAI_API_KEY="your_api_key_here"
+   export BASE_URL="https://llm-server.llmhub.t-systems.net/v2"
+   ```
+
+  </TabItem>
+  <TabItem label="Windows">
+
+   **Umgebungsvariablen unter Windows setzen:**
+   ```bash
+   setx OPENAI_API_KEY "your_api_key_here"
+   setx BASE_URL "https://llm-server.llmhub.t-systems.net/v2"
+   ```
+
+  </TabItem>
+</Tabs>
+
+---
+:::tip
+Sie können die Liste unserer verfügbaren Modelle mit dem Befehl aus der [API-Referenz](/de/model-serving/api-usage-guide#list-of-available-models) anzeigen oder die [Liste der verfügbaren Modelle](/de/#available-llm-apis-on-ai-foundation-services) einsehen.
+:::
+
+---
+
+### Text generieren
+
+Erstellen Sie eine menschenähnliche Antwort auf einen Prompt.
+
+```python
+import openai
+import os
+
+# Set up the client with your API key and base URL
+client = openai.OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("BASE_URL")
+)
+
+chat_response = client.chat.completions.create(
+    model="Llama-3.1-70B-Instruct",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Can you explain quantum computing in simple terms?"}
+    ],
+    temperature=0.5,
+    max_tokens=150
+)
+
+# Print the response
+print(chat_response.choices[0].message.content)
+```
+
+---
+
+### Embeddings generieren
+
+Generieren Sie Vektor-Embeddings für Textdaten.
+
+```python
+import openai
+import os
+
+# Set up the client with your API key and base URL
+client = openai.OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("BASE_URL")
+)
+
+texts = ["The quick brown fox jumps over the lazy dog", "Data science is fun!"]
+embeddings = client.embeddings.create(
+    input=texts,
+    model="jina-embeddings-v2-base-de"
+)
+
+# Print the embedding details
+print(f"Embedding dimension: {len(embeddings.data[0].embedding)}")
+print(f"Token usage: {embeddings.usage}")
+```
+
+---
+
+### Multimodale Modelle (Vision und Bildanalyse)
+
+Verwenden Sie ein Vision-Modell zur Bildanalyse.
+
+```python
+import openai
+import os
+
+# Set up the client with your API key and base URL
+client = openai.OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("BASE_URL")
+)
+
+chat_response = client.chat.completions.create(
+    model="llava-v1.6-34b",
+    messages=[
+        {"role": "user",
+        "content": [
+            {"type": "text", "text": "What's in this image?"},
+            {"type": "image_url", "image_url": {"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"}}
+        ],
+        }
+  ],
+    max_tokens=300,
+)
+
+# Print the image analysis
+print(chat_response.choices[0].message.content)
+```
+
+
+### Nächste Schritte
+
+Sie sind fertig eingerichtet! Erkunden Sie nun verschiedene Modelle und passen Sie Parameter wie `temperature` und `max_tokens` an, um Antworten zu verfeinern. Für spezialisierte Anwendungsfälle wie RAG, lesen Sie unsere Abschnitte zu **[LangChain](/de/model-serving/langchain-migration)** und **[Llama-Index-Integration](/de/model-serving/llama-index-integration)** in der Dokumentation.
+
+**Hinweis**: Für modellspezifische Anforderungen oder Best Practices konsultieren Sie den Abschnitt [API-Referenz](/de/model-serving/api-usage-guide) dieser Dokumentation.

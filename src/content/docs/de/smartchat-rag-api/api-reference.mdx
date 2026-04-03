@@ -1,0 +1,79 @@
+---
+title: API-Referenz
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Einleitung
+
+Sie koennen mit der API ueber HTTP-Anfragen aus jeder Programmiersprache ueber unser API Gateway interagieren. Hinter dem Gateway befindet sich eine Reihe von [Diensten](#dienste), mit denen Sie kommunizieren muessen, um eine bestimmte Aufgabe zu erledigen. Um mit einem Dienst zu kommunizieren, muessen Sie den **\<service_path\>** zwischen der **\<base_url\>** und dem Endpunkt **\<route\>** einfuegen, den Sie ansprechen moechten. Das bedeutet, Anfragen haben das Format **\<base_url/>/\<service_path\>/\<route\>**.
+
+Z.B. **https://api-gateway.ai.t-systems.net/config-manager/redoc**, wobei:
+* **\<base_url\>**: **https://api-gateway.ai.t-systems.net**
+* **\<service_path\>**: **config-manager**
+* **\<route\>**: **redoc**
+
+## Registrierung
+
+Fuer die Registrierung kontaktieren Sie bitte das AIFS-Team unter example@t-systems.com
+
+## Authentifizierung
+
+Zur Authentifizierung muessen Sie einen **Bearer Token** vom [Authentifizierungsendpunkt](https://api-gateway.ai.t-systems.net/redoc#tag/Auth/operation/get_user_token_api_v1_auth_user_post) erhalten und dann den **access_token** im Header aller nachfolgenden Anfragen setzen.
+
+### Beispiel-Authentifizierung
+<Tabs>
+  <TabItem label="cURL">
+    ```
+    # Authenticate via 
+    curl --location '<BASE_URL>/api/v1/auth/user' \
+    --header 'Content-Type: application/json' \
+    --data '{
+      "username": "<USERNAME>",
+      "password": "<PASSWORD>"
+    }'
+
+    # And then get chat sessions via
+    curl --location '<BASE_URL>/chat-session-manager/api/v1/sessions/' \
+    --header 'Authorization: Bearer <ACCESS_TOKEN>'
+    ```
+  </TabItem>
+  <TabItem label="Python">
+    ```py
+    import requests
+    import json
+
+    base_url = "<BASE_URL>"
+
+    payload = json.dumps({
+      "username": "<USERNAME>",
+      "password": "<PASSWORD>"
+    })
+    headers = {
+      'Content-Type': 'application/json'
+    }
+
+    response = requests.post(f"{base_url}/api/v1/auth/user", headers=headers, data=payload)
+
+    headers["Authorization"] = f"Bearer {response.json()['access_token']}"
+
+    response = requests.get(f"{base_url}/chat-session-manager/api/v1/sessions/", headers=headers)
+
+    print(response.json())
+
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Dienste
+
+| Name  | \<service_path\>  | Dokumentation  | Beschreibung |
+|:---:|:---:|:---:|:---:|
+| **API Gateway** | - | [Link](https://api-gateway.ai.t-systems.net/redoc)  | Einstiegspunkt fuer Authentifizierung und alle Backend-Dienste. |
+| **Config Manager** | **config-manager** | [Link](https://api-gateway.ai.t-systems.net/config-manager/redoc)  | Verwaltung von Mandanten- und RAG-Konfigurationen. |
+| **User Manager** | **user-manager** | [Link](https://api-gateway.ai.t-systems.net/user-manager/redoc)  | Verwaltung von Benutzern, Rollen und Benutzergruppen. |
+| **File Manager** | **file-manager** | [Link](https://api-gateway.ai.t-systems.net/file-manager/redoc)  | Verwaltung von Dateien, Dateigruppen, Wissensdatenbanken (KBs) und Dateizugriffsmanagement. |
+| **Ingest Master** | **ingest-master** | [Link](https://api-gateway.ai.t-systems.net/ingest-master/redoc)  | Orchestrierung von Dateieinlesungsaufgaben basierend auf der ausgewaehlten Einlesungspipeline ueber den Config Manager. |
+| **Chat Session Manager** | **chat-session-manager** | [Link](https://api-gateway.ai.t-systems.net/chat-session-manager/redoc)  | Verwaltung von Chat-Sitzungen, Sitzungskonfigurationen, Sitzungsverlauf und Nachrichten-Feedback. |
+| **Query Pipeline** | **query-pipeline** | [Link](https://api-gateway.ai.t-systems.net/query-pipeline/redoc)  | Generierung von Chat-Antworten basierend auf der ausgewaehlten Abfragepipeline ueber den Config Manager. |

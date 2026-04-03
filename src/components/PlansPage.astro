@@ -1,0 +1,361 @@
+---
+import PlansData from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
+import countries from '../shared/lib/countryCodeWithFlags.json';
+import enLocale from '../shared/locales/en.json';
+import deLocale from '../shared/locales/de.json';
+
+const locale = Astro.currentLocale || 'en';
+const translations: Record<string, any> = { en: enLocale, de: deLocale };
+const PLANS = translations[locale]?.PLANS || enLocale.PLANS;
+
+function capitalize(s: string) {
+  if (!s) return '-';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function getFlag(name: string) {
+  const search = (name || '').toLowerCase();
+  if (!search) return '';
+  const found = (countries as any[]).find((c: any) => String(c.name).toLowerCase().includes(search));
+  return found?.flag || '';
+}
+
+const plans = (PlansData as any[]).map((plan: any) => ({
+  packageName: plan.packageName,
+  rows: (plan.modelQuotaConfigs || []).map((m: any) => ({
+    cloud: (m.deploymentRegion || '-').split('-')[0].toUpperCase(),
+    name: m.displayModelName,
+    inputPrice: Number(m.inputPricePerMillionTokens) || 0,
+    outputPrice: Number(m.outputPricePerMillionTokens) || 0,
+    serverLocation: m.deploymentCountry || capitalize((m.deploymentRegion || '').split('-')[1] || '-'),
+    flag: getFlag((m.deploymentRegion || '').split('-')[1] || ''),
+    inputToken: Number(m.inputTokenPerMinuteLimit) || 0,
+    outputToken: Number(m.outputTokenPerMinuteLimit) || 0,
+    RPMLimit: Number(m.requestPerMinuteLimit) || 0,
+    license: m.license || '',
+  })),
+}));
+---
+
+<div id="plans-page">
+  <script id="plans-data" type="application/json" set:html={JSON.stringify(plans)} />
+
+  <!-- Rate Plans -->
+  <div class="plans-section">
+    <h2 class="plans-title">{PLANS.TITLE}</h2>
+
+    <table class="plans-table rate-plans-table">
+      <thead>
+        <tr>
+          <th>{PLANS.TABLE_HEADERS.RATE_PLAN}</th>
+          <th>{PLANS.TABLE_HEADERS.MINIMUM_CONSUMPTION}</th>
+          <th>{PLANS.TABLE_HEADERS.TOKEN_PRICING}<br/><small>{PLANS.TABLE_HEADERS.PER_MIL_TOKEN}</small></th>
+          <th>{PLANS.TABLE_HEADERS.RPM_EXAMPLE}<br/><small>{PLANS.TABLE_HEADERS.PER_REQUEST}</small></th>
+          <th>{PLANS.TABLE_HEADERS.CLOUD_PROVIDER}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="plans-tag" style="background-color: #4de0af; color: black;">{PLANS.BASIC}</span></td>
+          <td>-</td>
+          <td>{PLANS.TOKEN_PRICE_BASIC}</td>
+          <td>20</td>
+          <td><span class="plans-tag" style="background-color: #E20074; color: white;" title={PLANS.TOOLTIP_OTC}>{PLANS.OTC}</span></td>
+        </tr>
+        <tr>
+          <td><span class="plans-tag" style="background-color: #4ad9cd; color: black;">{PLANS.STANDARD_1000}</span></td>
+          <td><b>{PLANS.COST_1000}</b></td>
+          <td>{PLANS.TOKEN_PRICE_1000}</td>
+          <td>150</td>
+          <td class="cloud-tags">
+            <span class="plans-tag" style="background-color: #E20074; color: white;" title={PLANS.TOOLTIP_OTC}>{PLANS.OTC}</span>
+            <span class="plans-tag" title={PLANS.TOOLTIP_AZURE}>{PLANS.AZURE}</span>
+            <span class="plans-tag" title={PLANS.TOOLTIP_GCP}>{PLANS.GCP}</span>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="plans-tag" style="background-color: #4dd1e0; color: black;">{PLANS.STANDARD_2000}</span></td>
+          <td><b>{PLANS.COST_2000}</b></td>
+          <td>{PLANS.TOKEN_PRICE_2000}</td>
+          <td>300</td>
+          <td class="cloud-tags">
+            <span class="plans-tag" style="background-color: #E20074; color: white;" title={PLANS.TOOLTIP_OTC}>{PLANS.OTC}</span>
+            <span class="plans-tag" title={PLANS.TOOLTIP_AZURE}>{PLANS.AZURE}</span>
+            <span class="plans-tag" title={PLANS.TOOLTIP_GCP}>{PLANS.GCP}</span>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="plans-tag" style="background-color: #5ec2ed; color: black;">{PLANS.STANDARD_3000}</span></td>
+          <td><b>{PLANS.COST_3000}</b></td>
+          <td>{PLANS.TOKEN_PRICE_3000}</td>
+          <td>450</td>
+          <td class="cloud-tags">
+            <span class="plans-tag" style="background-color: #E20074; color: white;" title={PLANS.TOOLTIP_OTC}>{PLANS.OTC}</span>
+            <span class="plans-tag" title={PLANS.TOOLTIP_AZURE}>{PLANS.AZURE}</span>
+            <span class="plans-tag" title={PLANS.TOOLTIP_GCP}>{PLANS.GCP}</span>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="plans-tag" style="background-color: #84b0f5; color: black;">{PLANS.STANDARD_4000}</span></td>
+          <td><b>{PLANS.COST_4000}</b></td>
+          <td>{PLANS.TOKEN_PRICE_4000}</td>
+          <td>600</td>
+          <td class="cloud-tags">
+            <span class="plans-tag" style="background-color: #E20074; color: white;" title={PLANS.TOOLTIP_OTC}>{PLANS.OTC}</span>
+            <span class="plans-tag" title={PLANS.TOOLTIP_AZURE}>{PLANS.AZURE}</span>
+            <span class="plans-tag" title={PLANS.TOOLTIP_GCP}>{PLANS.GCP}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <small>* OTC-Hosted Large Language Models</small>
+  </div>
+
+  <!-- Models Section -->
+  <div class="plans-section" style="margin-top: 32px;">
+    <h2 class="plans-title">{PLANS.MODELS.TITLE}</h2>
+    <p>{PLANS.MODELS.SUBTITLE}</p>
+
+    <div style="margin: 16px 0;">
+      <label class="plans-label">{PLANS.MODELS.SELECTED_RATE_PLAN}</label>
+      <select id="plan-select" class="plans-select" style="width: 200px;">
+        <option value="Tarif Basic Template">Basic</option>
+        <option value="Tarif Standard1000 Template">Standard 1000</option>
+        <option value="Tarif Standard2000 Template">Standard 2000</option>
+        <option value="Tarif Standard3000 Template">Standard 3000</option>
+        <option value="Tarif Standard4000 Template">Standard 4000</option>
+      </select>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-border" style="margin: 16px 0;">
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 1; min-width: 150px;">
+          <label class="plans-label">{PLANS.SEARCH}</label>
+          <input type="text" id="filter-search" class="plans-input" placeholder={PLANS.SEARCH} />
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label class="plans-label">{PLANS.PRICE_RANGE}</label>
+          <select id="filter-price" class="plans-select">
+            <option value="">All</option>
+            <option value="0-2">{PLANS.PRICE_RANGE_UNDER_2}</option>
+            <option value="2-5">{PLANS.PRICE_RANGE_2_TO_5}</option>
+            <option value="5">{PLANS.PRICE_RANGE_OVER_5}</option>
+          </select>
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label class="plans-label">{PLANS.SERVER_LOCATION}</label>
+          <select id="filter-location" class="plans-select">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label class="plans-label">{PLANS.CLOUD}</label>
+          <select id="filter-cloud" class="plans-select">
+            <option value="">All</option>
+          </select>
+        </div>
+        <button id="filter-clear" class="plans-btn" style="display: none;">{PLANS.CLEAR_FILTER}</button>
+      </div>
+    </div>
+
+    <!-- Models Table -->
+    <table class="plans-table" id="models-table">
+      <thead>
+        <tr>
+          <th data-sort="cloud">{PLANS.CLOUD}</th>
+          <th data-sort="name">{PLANS.MODEL_NAME}</th>
+          <th data-sort="inputPrice">{PLANS.INPUT_TOKEN_PRICE}</th>
+          <th data-sort="outputPrice">{PLANS.OUTPUT_TOKEN_PRICE}</th>
+          <th data-sort="serverLocation">{PLANS.SERVER_LOCATION}</th>
+          <th data-sort="inputToken">{PLANS.INPUT_TOKEN_LIMIT}</th>
+          <th data-sort="outputToken">{PLANS.OUTPUT_TOKEN_LIMIT}</th>
+          <th data-sort="RPMLimit">{PLANS.RPM_LIMIT}</th>
+        </tr>
+      </thead>
+      <tbody id="models-tbody"></tbody>
+    </table>
+    <p id="no-results" style="display: none; text-align: center; padding: 24px;">{PLANS.NO_PRICING_FOUND}</p>
+  </div>
+</div>
+
+<style>
+  .plans-section { margin-bottom: 24px; }
+  .plans-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .plans-title { margin: 0 0 8px 0; font-size: 28px; font-weight: 600; }
+  .plans-label { display: block; margin-bottom: 4px; font-size: 12px; color: var(--sl-color-gray-3); }
+  .plans-select, .plans-input {
+    padding: 8px; border-radius: 4px; border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-bg); color: var(--sl-color-text); font-size: 14px; width: 100%;
+  }
+  .plans-btn {
+    padding: 6px 14px; border-radius: 4px; border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-bg); color: var(--sl-color-text); cursor: pointer; font-size: 13px; white-space: nowrap;
+  }
+  .plans-btn:hover { background: var(--sl-color-gray-6); }
+  .cloud-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .rate-plans-table { border: 1px solid var(--sl-color-gray-5); }
+  #models-table th { cursor: pointer; user-select: none; white-space: nowrap; }
+  #models-table th:hover { background: var(--sl-color-gray-6); }
+  #models-table th .sort-arrow { margin-left: 4px; font-size: 10px; }
+  #models-table th .sort-arrow.active { color: #e20074; }
+  .model-name-cell { font-weight: 500; }
+  .license-link { color: var(--sl-color-accent); text-decoration: none; font-size: 0.8em; }
+  .license-link:hover { text-decoration: underline; }
+</style>
+
+<script>
+  const plansData = JSON.parse(document.getElementById('plans-data')!.textContent!);
+
+  let currentPlan = 'Tarif Basic Template';
+  let sortKey = 'name';
+  let sortAsc = true;
+  let rows: any[] = [];
+
+  const planSelect = document.getElementById('plan-select') as HTMLSelectElement;
+  const searchInput = document.getElementById('filter-search') as HTMLInputElement;
+  const priceFilter = document.getElementById('filter-price') as HTMLSelectElement;
+  const locationFilter = document.getElementById('filter-location') as HTMLSelectElement;
+  const cloudFilter = document.getElementById('filter-cloud') as HTMLSelectElement;
+  const clearBtn = document.getElementById('filter-clear') as HTMLButtonElement;
+  const tbody = document.getElementById('models-tbody')!;
+  const noResults = document.getElementById('no-results')!;
+
+  function loadPlan() {
+    const plan = plansData.find((p: any) => p.packageName === currentPlan);
+    rows = plan?.rows || [];
+    populateFilters();
+    renderTable();
+  }
+
+  function populateFilters() {
+    const locations = new Set<string>();
+    const clouds = new Set<string>();
+    rows.forEach((r: any) => {
+      if (r.serverLocation && r.serverLocation !== '-') locations.add(r.serverLocation);
+      if (r.cloud && r.cloud !== '-') clouds.add(r.cloud);
+    });
+
+    const locVal = locationFilter.value;
+    locationFilter.innerHTML = '<option value="">All</option>';
+    [...locations].sort().forEach(loc => {
+      locationFilter.innerHTML += `<option value="${loc}">${loc}</option>`;
+    });
+    locationFilter.value = locVal;
+
+    const cloudVal = cloudFilter.value;
+    cloudFilter.innerHTML = '<option value="">All</option>';
+    [...clouds].sort().forEach(c => {
+      cloudFilter.innerHTML += `<option value="${c}">${c}</option>`;
+    });
+    cloudFilter.value = cloudVal;
+  }
+
+  function getFilteredRows() {
+    let result = rows;
+    const search = searchInput.value.toLowerCase();
+    if (search) {
+      result = result.filter((r: any) =>
+        r.name.toLowerCase().includes(search) ||
+        r.serverLocation.toLowerCase().includes(search) ||
+        r.cloud.toLowerCase().includes(search)
+      );
+    }
+    const price = priceFilter.value;
+    if (price) {
+      if (price.includes('-')) {
+        const [min, max] = price.split('-').map(Number);
+        result = result.filter((r: any) => r.inputPrice >= min && r.inputPrice < max);
+      } else {
+        result = result.filter((r: any) => r.inputPrice >= Number(price));
+      }
+    }
+    const loc = locationFilter.value;
+    if (loc) result = result.filter((r: any) => r.serverLocation === loc);
+    const cloud = cloudFilter.value;
+    if (cloud) result = result.filter((r: any) => r.cloud === cloud);
+
+    result = [...result].sort((a: any, b: any) => {
+      let aVal = a[sortKey];
+      let bVal = b[sortKey];
+      if (typeof aVal === 'string') aVal = aVal.toLowerCase();
+      if (typeof bVal === 'string') bVal = bVal.toLowerCase();
+      if (aVal < bVal) return sortAsc ? -1 : 1;
+      if (aVal > bVal) return sortAsc ? 1 : -1;
+      return 0;
+    });
+
+    return result;
+  }
+
+  function fmt(n: number) {
+    return n.toLocaleString('en-US', { minimumFractionDigits: 0 });
+  }
+
+  function renderTable() {
+    const filtered = getFilteredRows();
+    if (filtered.length === 0) {
+      tbody.innerHTML = '';
+      noResults.style.display = 'block';
+    } else {
+      noResults.style.display = 'none';
+      tbody.innerHTML = filtered.map((r: any) => `
+        <tr>
+          <td><span class="plans-tag">${r.cloud}</span></td>
+          <td class="model-name-cell">
+            ${r.name}
+            ${r.license ? `<br/><a href="${r.license}" target="_blank" class="license-link">License</a>` : ''}
+          </td>
+          <td>${r.inputPrice.toFixed(2)}</td>
+          <td>${r.outputPrice.toFixed(2)}</td>
+          <td>${r.serverLocation} ${r.flag}</td>
+          <td>${fmt(r.inputToken)}</td>
+          <td>${fmt(r.outputToken)}</td>
+          <td>${fmt(r.RPMLimit)}</td>
+        </tr>
+      `).join('');
+    }
+
+    document.querySelectorAll('#models-table th[data-sort]').forEach(th => {
+      const key = th.getAttribute('data-sort')!;
+      const arrow = th.querySelector('.sort-arrow');
+      if (arrow) {
+        arrow.textContent = key === sortKey ? (sortAsc ? ' ▲' : ' ▼') : ' ⇅';
+        arrow.classList.toggle('active', key === sortKey);
+      }
+    });
+
+    clearBtn.style.display = (searchInput.value || priceFilter.value || locationFilter.value || cloudFilter.value) ? '' : 'none';
+  }
+
+  document.querySelectorAll('#models-table th[data-sort]').forEach(th => {
+    const span = document.createElement('span');
+    span.className = 'sort-arrow';
+    span.textContent = ' ⇅';
+    th.appendChild(span);
+  });
+
+  planSelect.addEventListener('change', () => { currentPlan = planSelect.value; loadPlan(); });
+  searchInput.addEventListener('input', renderTable);
+  priceFilter.addEventListener('change', renderTable);
+  locationFilter.addEventListener('change', renderTable);
+  cloudFilter.addEventListener('change', renderTable);
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    priceFilter.value = '';
+    locationFilter.value = '';
+    cloudFilter.value = '';
+    renderTable();
+  });
+
+  document.querySelectorAll('#models-table th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.getAttribute('data-sort')!;
+      if (sortKey === key) { sortAsc = !sortAsc; }
+      else { sortKey = key; sortAsc = true; }
+      renderTable();
+    });
+  });
+
+  loadPlan();
+</script>

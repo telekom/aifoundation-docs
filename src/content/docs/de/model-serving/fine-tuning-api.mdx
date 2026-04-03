@@ -1,0 +1,494 @@
+---
+title: Fine-Tuning-API
+---
+
+## Einleitung
+
+Dieses Dokument stellt unsere Fine-Tuning-API vor und beschreibt, wie die Upload-API fuer Aufgaben wie das Hochladen, Auflisten und Loeschen von Dateien sowie den Fine-Tuning-Server fuer Fine-Tuning-Zwecke verwendet wird. Es beschreibt ausserdem, wie Datensatzformate validiert werden, um sicherzustellen, dass sie einsatzbereit sind. Beide APIs integrieren sich mit dem OpenAI-Paket in Python fuer ein einfacheres Datenmanagement.
+
+## Fine-Tuning-API-Workflow
+Die Fine-Tuning-API umfasst 2 Hauptkomponenten: 
+- **Upload-API**  
+- **Fine-Tuning-Server**
+
+Die Upload-API ermoeglicht es Ihnen, Dateien fuer Zwecke wie **Fine-Tune** und **Embedding** hochzuladen. Unterstuetzte Formate sind PDF, TXT, DOCX, CSV, JSON, JSONL und ZIP. 
+
+Fuer Fine-Tuning mit mehreren Dokumenten muessen Sie diese in eine ZIP-Datei komprimieren und mit dem Zweck **fine-tune** hochladen.
+
+**Dokumentendateien**: Neben dem OpenAI-JSONL-Datensatz erlauben wir Benutzern, eine ZIP-Datei hochzuladen, die Dokumentdateien in folgenden Formaten enthaelt: PDF, TXT, DOCX, CSV, JSON.
+Die ZIP-Datei wird auf unserem Server entpackt, wo wir alle Dateien mit dem unterstuetzten Format herausfiltern. Diese Dateien werden dann in mehrere kleinere Abschnitte aufgeteilt, um einen synthetischen RAG-Datensatz mit Kontext, Frage und Antwort zu generieren.
+Nachdem das Modell mit diesen Datensaetzen feinabgestimmt wurde, koennen Benutzer unsere Evaluate-API verwenden, um zu sehen, wie sehr sich die RAG-Genauigkeit fuer das spezifische Dokument verbessert hat.
+
+**Vorformatierte Datensaetze**: Wenn Sie einen Datensatz hochladen, der bereits im OpenAI-JSONL-Format vorliegt, wird er direkt an den Fine-Tuning-Server gesendet und ist bereit fuer das Fine-Tuning.
+Sie koennen auch den Validate-Dataset-Endpunkt verwenden, um sicherzustellen, dass Ihre JSONL-Datei dem korrekten Format entspricht.
+
+<div style="background-color: white; padding: 10px; border-radius: 8px; display: inline-block;">
+  <img src="https://github.com/user-attachments/assets/5e5f9672-5eb3-4217-b249-8694b174b963" alt="Pre-Formatted Datasets Workflow" style="display: block;" />
+</div>
+
+
+## Upload-API
+### Abhaengigkeiten
+
+```py
+pip install openai
+```
+
+### Umgebungsvariablen setzen
+
+Setzen Sie zunaechst die Umgebungsvariablen fuer die API-Basis-URL und den API-Schluessel.
+
+Im Terminal:
+
+```
+export API_BASE=https://llm-server.llmhub.t-systems.net/v2
+# Adding LLMHUB API key
+export API_KEY=YOUR_API_KEY
+# Testing the API_KEY
+curl -H "Authorization: Bearer $API_KEY" $API_BASE/models
+```
+
+### Client initialisieren
+
+Initialisieren Sie den OpenAI-Client mit dem API-Schluessel und der Basis-URL.
+
+In Python:
+
+```py
+import os
+from openai import OpenAI
+
+api_base = os.getenv('API_BASE')
+api_key = os.getenv('API_KEY')
+
+client = OpenAI(
+    api_key=os.getenv('API_KEY'),
+    base_url=os.getenv('API_BASE')
+)
+```
+
+### Datei hochladen
+
+#### Datensaetze fuer Fine-Tuning hochladen
+
+Um eine Datei fuer Fine-Tuning-Zwecke hochzuladen, geben Sie "purpose" als "fine-tune" an.
+
+```py
+file_path = "/path/to/your_dataset.jsonl"
+client.files.create(
+  file=open(file_path, "rb"),
+  purpose="fine-tune"
+)
+```
+
+**Ausgabe:**
+
+```
+FileObject(id='file-abc123', bytes=1, created_at='2024-10-22T15:10:45.770750+02:00', filename='your_dataset.jsonl', object='file', purpose='fine-tune', status=None, status_details=None, validation={'object': 'validation', 'is_checked': False, 'is_valid': False, 'message': 'File is not yet validated.', 'errors': {}, 'is_generated_dataset': False})
+```
+
+#### Anfrageparameter
+
+**file** file: `Required`
+
+Das Dateiobjekt (nicht der Dateiname), das hochgeladen werden soll.
+
+**purpose** string: `Required`
+
+Der beabsichtigte Zweck der hochgeladenen Datei. Verwenden Sie "fine-tune" fuer Fine-Tuning.
+
+### Hochgeladene Dateien auflisten
+
+Alle hochgeladenen Dateien auflisten.
+
+```py
+files_list = client.files.list(
+    purpose="fine-tune"
+)
+
+# Iterate over the files and print their details
+for file_obj in files_list.data:
+    print(f"ID: {file_obj.id}")
+    print(f"Bytes: {file_obj.bytes}")
+    print(f"Created At: {file_obj.created_at}")
+    print(f"Filename: {file_obj.filename}")
+    print(f"Object: {file_obj.object}")
+    print(f"Purpose: {file_obj.purpose}")
+    print("-" * 40)
+```
+
+**Ausgabe:**
+
+```
+ID: file-abc123
+Bytes: 1
+Created At: 2024-10-22T15:10:45.770750+02:00
+Filename: your_dataset.jsonl
+Object: file
+Purpose: fine-tune
+----------------------------------------
+```
+
+### Datei loeschen
+
+Eine bestimmte Datei anhand ihrer ID loeschen.
+
+```py
+client.files.delete("file-abc123")
+```
+
+**Ausgabe:**
+
+```
+FileDeleted(id='file-abc123', deleted=True, object='file')
+```
+
+#### Anfrageparameter
+
+**file_id** string: `Required` 
+
+Die ID der zu loeschenden Datei. Diese ID kann ueber die Funktion zum Auflisten von Dateien abgerufen werden.
+
+## Datensatz validieren
+
+Der Validate-Endpunkt stellt die Qualitaet und Korrektheit von Datensaetzen im OpenAI-Template sicher, die fuer das Fine-Tuning von Modellen verwendet werden. Dieser Endpunkt hilft, potenzielle Probleme in Ihrem Datensatz zu identifizieren und zu beheben, bevor Sie mit dem Fine-Tuning-Prozess fortfahren.
+Wenn der Benutzer diese API nicht vor dem Ausloesen von Fine-Tuning-Jobs aufruft, wird sie automatisch vor dem Start des Fine-Tuning-Jobs aufgerufen. Dasselbe gilt fuer die Dataset-Generierungs-API.
+
+### Beispieldatensatz
+
+Hier ist ein Beispiel eines Datensatzes im JSON-Format:
+
+```json
+[
+    {
+        "messages": [
+            {"role": "system", "content": "Marv is a factual chatbot that is also sarcastic."},
+            {"role": "user", "content": "What's the capital of France?"},
+            {"role": "assistant", "content": "Paris", "weight": 0},
+            {"role": "user", "content": "Can you be more sarcastic?"},
+            {"role": "assistant", "content": "Paris, as if everyone doesn't know that already.", "weight": 1}
+        ]
+    }
+]
+```
+
+### Beispiel zur Datensatzvalidierung
+
+```py
+import httpx
+
+# The URL you want to send the POST request to
+base_url = os.getenv('API_BASE')
+endpoint = '/files/validate/'
+file_id = 'file-abc123'
+
+url = f"{base_url}{endpoint}{file_id}"
+
+# The headers, including the api-key
+headers = {
+    "Content-Type": "application/json",
+    "api-key": "YOUR_API_KEY"
+}
+
+# Send the POST request
+with httpx.Client() as httpx_client:
+    response = httpx_client.get(url, headers=headers)
+
+# Check the response
+print(f"Status Code: {response.status_code}")
+print(f"Response Content: {response.text}")
+
+```
+
+**Ausgabe:**
+
+```
+Response Content: {"file_id":"file-abc123","object":"validation","message":"Your validation request is in progress. Please use retrieve file api to get update about the validation result after sometime."}
+```
+
+#### Anfrageparameter
+
+**file_id** string: `Required`
+
+Die ID der zu validierenden Datei.
+
+### Fazit
+
+Dieses Dokument bietet einen kurzen Ueberblick ueber die Verwendung der Upload-API zum Hochladen, Auflisten, Loeschen von Dateien und Validieren von Datensaetzen. Diese API ist essenziell fuer die Vorbereitung und Verwaltung von Dateien fuer das Fine-Tuning von Modellen.
+
+# Fine-Tune-API
+
+### Umgebung einrichten
+```py
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv('API_KEY'),
+    base_url=os.getenv('API_BASE')
+)
+```
+
+### Fine-Tuning-Job erstellen
+
+Erstellt einen Fine-Tuning-Job, der den Prozess der Erstellung eines neuen Modells aus einem gegebenen Datensatz startet.
+
+**Endpunkt**: `POST /fine_tuning/jobs`
+
+**Beschreibung**: Einen Fine-Tuning-Job erstellen.
+
+**Parameter**:
+- **training_file** (string, `Required`): Datei-ID der zu verwendenden Trainingsdatei. Diese kann ueber den Endpunkt **Hochgeladene Dateien auflisten** abgerufen werden.
+- **model** (string, `Required`): Das zu feinabstimmende Modell.
+- **hyperparameters** (object, optional): Hyperparameter fuer das Fine-Tuning.
+- **n_epochs** (integer): Anzahl der Epochen fuer das Training des Modells.
+
+**Antwort**:
+- **id** (string): Eindeutiger Bezeichner fuer den Fine-Tune-Job.
+- **object** (string): Objekttyp, immer `fine-tune`.
+- **model** (string): Modell, das feinabgestimmt wird.
+- **created_at** (string): Zeitstempel der Job-Erstellung.
+- **status** (string): Aktueller Status des Jobs.
+- **training_file** (string): Fuer das Fine-Tuning verwendete Trainingsdatei.
+- **hyperparameters** (object): Fuer das Fine-Tuning verwendete Hyperparameter.
+
+```py
+client.fine_tuning.jobs.create(
+  training_file="file-abc123",
+  model="Meta-Llama-3.1-8B-Instruct",
+  hyperparameters={
+    "n_epochs":2,
+  }
+)
+```
+
+Ausgabe:
+```
+FineTuningJob(id='ftjob-abc123', created_at='2024-10-22T15:01:33.106192+02:00', error=None, fine_tuned_model='Meta-Llama-3.1-8B-Instruct-ft-e65f94', finished_at=None, hyperparameters=Hyperparameters(n_epochs=1, eval_batch_size=None, batch_size=None), model='Meta-Llama-3.1-8B-Instruct', object='fine-tune.job', organization_id=None, result_files=None, seed=None, status='queued', trained_tokens=None, training_file='file-abc123', validation_file=None, estimated_finish=None, integrations=None, suffix='ft', validation_ratio=None, message=None)
+```
+
+### Fine-Tuning-Jobs auflisten
+
+Dieser Endpunkt ruft eine Liste aller vom Benutzer erstellten Fine-Tuning-Jobs ab. Er hilft bei der Ueberwachung und Verwaltung des Status aller eingereichten Fine-Tuning-Aufgaben.
+
+**Endpunkt**: `GET /finetune-jobs`
+
+**Beschreibung**: Eine Liste von Fine-Tuning-Jobs abrufen.
+
+**Parameter**:
+
+ **after** (string, optional): ID des Jobs, nach dem begonnen werden soll, fuer die Paginierung.
+- **limit** (integer, optional): Maximale Anzahl der abzurufenden Jobs. Standard ist 3, Maximum ist 10.
+
+**Antwort**:
+- **id** (string): Eindeutiger Bezeichner fuer den Fine-Tune-Job.
+- **object** (string): Objekttyp, immer `fine-tune`.
+- **model** (string): Modell, das feinabgestimmt wird.
+- **created_at** (string): Zeitstempel der Job-Erstellung.
+- **status** (string): Aktueller Status des Jobs.
+- **training_file** (string): Fuer das Fine-Tuning verwendete Trainingsdatei.
+- **hyperparameters** (object): Fuer das Fine-Tuning verwendete Hyperparameter.
+
+```py
+import json
+
+# Get the list of fine-tuning jobs
+response = client.fine_tuning.jobs.list(limit=10)
+
+#Optional
+# Convert the response to the desired dictionary format
+response_dict = {
+    "object": response.object,
+    "data": [
+        {
+            "id": job.id,
+            "object": job.object,
+            "model": job.model,
+            "created_at": job.created_at,
+            "status": job.status,
+            "training_file": job.training_file,
+            "hyperparameters": {
+                "n_epochs": job.hyperparameters.n_epochs,
+                "batch_size": job.hyperparameters.batch_size
+            }
+        } for job in response.data
+    ],
+    "has_more": response.has_more
+}
+
+# Pretty-print the JSON response
+print(json.dumps(response_dict, indent=4))
+```
+Ausgabe
+```
+{
+    "object": "list",
+    "data": [
+        {
+            "id": "ftjob-abc123",
+            "object": "fine-tune",
+            "model": "Meta-Llama-3-8B-Instruct",
+            "created_at": "2024-06-27T09:21:22.712964+00:00",
+            "status": "stopped",
+            "training_file": "file-abc123",
+            "hyperparameters": {
+                "n_epochs": 2,
+            }
+        },
+        {
+            "id": "ftjob-abc1234",
+            "object": "fine-tune",
+            "model": "Meta-Llama-3.1-8B-Instruct",
+            "created_at": "2024-06-27T09:24:33.443283+00:00",
+            "status": "queued",
+            "training_file": "file-abc1234",
+            "hyperparameters": {
+                "n_epochs": 2,
+            }
+        }
+    ],
+    "has_more": false
+}
+```
+
+### Fine-Tuning-Ereignisse auflisten
+
+Dieser Endpunkt ruft eine Liste von Ereignissen fuer einen bestimmten Fine-Tuning-Job ab. Er liefert detaillierte Protokolle und Statusaktualisierungen zur Ueberwachung des Fortschritts des Jobs.
+
+**Endpunkt**: `GET /finetune-jobs/{fine_tune_id}/events`
+
+**Beschreibung**: Eine Liste von Ereignissen fuer einen bestimmten Fine-Tuning-Job abrufen.
+
+**Parameter**:
+- **limit** (integer, optional): Maximale Anzahl der abzurufenden Ereignisse. Standard ist 10, Maximum ist 100.
+- **after** (string, optional): ID des Ereignisses, nach dem begonnen werden soll, fuer die Paginierung.
+
+**Antwort**:
+- **object** (string): Objekttyp, immer `list`.
+- **data** (array): Array von Ereignisobjekten.
+  - **created_at** (string): Zeitstempel der Ereigniserstellung.
+  - **level** (string): Log-Level des Ereignisses (z.B. `info`, `warning`, `error`).
+  - **message** (string): Nachricht, die das Ereignis beschreibt.
+  - **type** (string): Typ des Ereignisses (z.B. `start`, `submitted`, `succeeded`, `failed`).
+
+```py
+events = client.fine_tuning.jobs.list_events(
+    fine_tuning_job_id="ftjob-abc123",
+    limit=10
+)
+
+#Optional
+# Convert the response to the desired dictionary format
+response_dict = {
+    "object": events.object,
+    "data": [
+        {
+            "created_at": event.created_at,
+            "level": event.level,
+            "message": event.message,
+            "type": event.type
+        } for event in events.data
+    ],
+    "has_more": events.has_more
+}
+
+# Pretty-print the JSON response
+print(json.dumps(response_dict, indent=4))
+```
+Ausgabe
+```
+{
+    "object": "list",
+    "data": [
+        {
+            "created_at": "2024-06-27T09:24:33",
+            "level": "info",
+            "message": "Fine-tuning job started",
+            "type": "start"
+        },
+        {
+            "created_at": "2024-06-27T09:25:38",
+            "level": "info",
+            "message": "Fine-tuning job submitted",
+            "type": "submitted"
+        }
+    ],
+    "has_more": false
+}
+```
+### Einen Fine-Tune-Job abbrechen
+
+Dieser Endpunkt ermoeglicht es dem Benutzer, einen laufenden Fine-Tuning-Job abzubrechen. Er stoppt den Job und aktualisiert seinen Status auf 'cancelled'.
+
+**Endpunkt**: `POST /finetune-jobs/{fine_tune_id}/cancel`
+
+**Beschreibung**: Einen bestimmten Fine-Tuning-Job abbrechen.
+
+**Parameter**:
+- **fine_tuning_job_id** (string, `Required`): Die ID des abzubrechenden Fine-Tuning-Jobs.
+
+**Antwort**:
+- **id** (string): Eindeutiger Bezeichner fuer den Fine-Tune-Job.
+- **object** (string): Objekttyp, immer `fine-tune`.
+- **model** (string): Modell, das feinabgestimmt wird.
+- **created_at** (string): Zeitstempel der Job-Erstellung.
+- **status** (string): Aktualisierter Status des Jobs.
+- **training_file** (string): Fuer das Fine-Tuning verwendete Trainingsdatei.
+- **hyperparameters** (object): Fuer das Fine-Tuning verwendete Hyperparameter.
+
+```py
+client.fine_tuning.jobs.cancel("ftjob-abc123")
+```
+Ausgabe
+```
+FineTuningJob(id='ftjob-abc123', created_at='2024-06-27T09:24:33.443283+00:00', error=None, fine_tuned_model=None, finished_at=None, hyperparameters=Hyperparameters(n_epochs=2, batch_size=1), model='Meta-Llama-3-8B-Instruct', object='fine-tune', organization_id=None, result_files=None, status='stopped', trained_tokens=None, training_file='file-abc123', validation_file=None, integrations=[])
+```
+
+# LM-Benchmarking & Monitoring
+
+Um die Trainingsmetriken und den Validierungsverlust zu sehen, muessen Benutzer uns den W&B-API-Schluessel sowie den Namen des W&B-Projekts mitteilen.
+
+Zusaetzlich haben wir eine Benchmarking-API fuer das feinabgestimmte LLM-Modell, bei der es mit den weit verbreiteten Benchmarking-Frameworks und -Metriken evaluiert wird: LM Evaluation Harness und die Needle-in-a-Haystack-Methode fuer die LLM-Evaluierung.
+
+In diesem Fall wird MLflow zur Ueberwachung sowohl des Trainings- als auch des Benchmarking-Prozesses verwendet. Sie koennen Ihre Trainings- und Benchmarking-Ergebnisse unter folgendem Link einsehen: https://mlflow.llm-serving.llmhub.t-systems.net.
+
+## LM-Benchmarking
+### LM Evaluation Harness Benchmark
+Dies ist ein weit verbreitetes Benchmarking-Framework zur Evaluierung von Sprachmodellen ueber verschiedene Aufgaben hinweg. In diesem Rahmen haben wir es verwendet, um die Leistung des Modells nach dem Fine-Tuning zu messen. Die Evaluierungsaufgaben umfassten die am haeufigsten verwendeten Benchmark-Aufgaben wie:
+
+- **MMLU** (Massive Multitask Language Understanding): Eine Aufgabe, die das Wissen von Modellen ueber mehrere Domaenen hinweg evaluiert, einschliesslich MINT, Geisteswissenschaften, Sozialwissenschaften usw.
+- **HellaSwag**: Eine Aufgabe zum gesunden Menschenverstand, bei der Modelle das passendste Ende einer gegebenen Geschichte vorhersagen muessen.
+- **ARC Challenge**: Ein Datensatz bestehend aus naturwissenschaftlichen Fragen zur Pruefung von Schlussfolgerungen und Logik.
+- **GPQA**: Ein Multiple-Choice-Frage-Antwort-Datensatz mit sehr schwierigen Fragen, die von Experten in Biologie, Physik und Chemie geschrieben und validiert wurden.
+
+Referenz: https://github.com/EleutherAI/lm-evaluation-harness?tab=readme-ov-file
+
+
+![image](https://github.com/user-attachments/assets/2ff53fef-416e-4a46-9ebd-38e759010beb)
+
+### RAG Needle-in-a-Haystack-Benchmark
+Der Needle-in-a-Haystack-Benchmark testet die Faehigkeit des Modells, Fragen zu beantworten, indem relevante Informationen in einem groesseren Kontext gefunden werden. Das Ziel ist, dass das Modell die richtige Information (die "Nadel") inmitten vieler irrelevanter Details (der "Heuhaufen") findet.
+
+Um diese Aufgabe anspruchsvoller zu gestalten, werden zusaetzliche irrelevante Informationen (Distraktoren) neben dem richtigen Kontext hinzugefuegt. Eine Erhoehung dieser Stoerungen macht es fuer das Modell schwieriger, die richtige Antwort zu finden.
+
+Die Leistung des Modells wird mit der benutzerdefinierten GEval-Metrik von Deepeval https://docs.confident-ai.com/docs/metrics-llm-evals gemessen, wobei speziell die Korrektheit evaluiert wird - es wird sichergestellt, dass die Ausgabe mit der erwarteten Antwort uebereinstimmt, und falsche oder unvollstaendige Antworten werden bestraft.
+| Metrik-Werte vs. Kontextlaenge | Metrik-Werte vs. Anzahl der Chunks      |
+| ------------- | ------------- |
+| ![image](https://github.com/user-attachments/assets/a77ba677-d9fe-43e8-83bf-d2f5092b1b51) | ![image](https://github.com/user-attachments/assets/0ae71c7d-66b2-42bd-a3ee-e18cec745080) |
+
+## MLflow-Monitoring
+Mit MLflow koennen Sie nun jeden Fine-Tuning-Job ueberwachen. Jedes Mal, wenn Sie ein neues Modell oder einen neuen Datensatz verwenden, wird automatisch ein neues MLflow-Experiment erstellt. Im Abschnitt "Runs" koennen Sie Ihren Fine-Tuning-Job anhand seines Run-Namens und Zeitstempels finden.
+
+![image](https://github.com/user-attachments/assets/0f4cd6fc-2da3-4cd2-a7de-16f4d1113540)
+
+Fuer jeden Fine-Tuning-Job gibt es zwei Haupt-Runs zur Ueberwachung:
+
+### 1. Ueberwachung des Fine-Tuning-Prozesses
+
+![image](https://github.com/user-attachments/assets/b5d98068-23fa-412d-9c94-5e53dc2b2023)
+
+### 2. Ueberwachung der Benchmarking-Ergebnisse
+
+In den MLflow-Artefakten finden Sie die LM Evaluation Harness Benchmark-Ergebnisse und die RAG Needle-in-a-Haystack-Benchmark-Ergebnisse fuer Ihr feinabgestimmtes Modell.
+
+![image](https://github.com/user-attachments/assets/d788f790-62f9-4556-a701-69ae27e903bf)

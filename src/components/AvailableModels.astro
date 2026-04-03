@@ -1,0 +1,168 @@
+---
+import PlansData from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
+import countries from '../shared/lib/countryCodeWithFlags.json';
+
+function capitalize(s: string) {
+  if (!s) return '-';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function getFlag(name: string) {
+  const search = name.toLowerCase();
+  const found = countries.find((c: any) => String(c.name).toLowerCase().includes(search));
+  return found?.flag || '';
+}
+
+const plan = PlansData[PlansData.length - 2];
+const allModels = (plan?.modelQuotaConfigs || []).map((m: any) => ({
+  name: m.displayModelName,
+  provider: m.deploymentRegion.split('-')[0].toUpperCase() || '-',
+  hosted: capitalize(m.deploymentRegion.split('-')[1] || '-'),
+  flag: getFlag(m.deploymentRegion.split('-')[1] || ''),
+}));
+
+const topNames = ["Meta LLama 3.3 70B", "Claude 4 Sonnet", "GPT 4.1"];
+const topModels = allModels.filter((m: any) => topNames.includes(m.name));
+---
+
+<div class="models-grid" id="models-grid">
+  <div class="models-set" id="models-top">
+    {topModels.map((model: any) => (
+      <div class="model-card">
+        <h4 class="model-card__name">{model.name}</h4>
+        <button class="model-card__copy" title="Copy model name" data-copy={model.name}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+        <p class="model-card__info">Cloud: <strong>{model.provider}</strong></p>
+        <p class="model-card__info">
+          Server Location: <strong>{model.hosted}</strong>
+          <span class="model-card__flag">{model.flag}</span>
+        </p>
+        <span class="model-card__badge">Available</span>
+      </div>
+    ))}
+  </div>
+  <div class="models-set models-set--hidden" id="models-all">
+    {allModels.map((model: any) => (
+      <div class="model-card">
+        <h4 class="model-card__name">{model.name}</h4>
+        <button class="model-card__copy" title="Copy model name" data-copy={model.name}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+        <p class="model-card__info">Cloud: <strong>{model.provider}</strong></p>
+        <p class="model-card__info">
+          Server Location: <strong>{model.hosted}</strong>
+          <span class="model-card__flag">{model.flag}</span>
+        </p>
+        <span class="model-card__badge">Available</span>
+      </div>
+    ))}
+  </div>
+  <div class="models-toggle">
+    <button id="models-toggle-btn" class="models-toggle__btn">Show More</button>
+  </div>
+</div>
+
+<style>
+  .models-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: stretch;
+  }
+  .model-card {
+    flex: 1 1 30%;
+    min-width: 200px;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background-color: var(--sl-color-bg);
+    color: var(--sl-color-text);
+  }
+  .models-set {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: stretch;
+    width: 100%;
+  }
+  .models-set--hidden {
+    display: none;
+  }
+  .model-card__name {
+    margin: 0;
+    padding: 0 15px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-height: 1.5em;
+  }
+  .model-card__copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--sl-color-text);
+  }
+  .model-card__info {
+    font-size: 0.9em;
+    margin-bottom: 2px;
+  }
+  .model-card__flag {
+    display: inline-flex;
+    margin-left: 4px;
+    font-size: 18px;
+  }
+  .model-card__badge {
+    background-color: #4caf50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-top: 8px;
+    align-self: center;
+  }
+  .models-toggle {
+    flex-basis: 100%;
+    text-align: center;
+    margin-top: 16px;
+  }
+  .models-toggle__btn {
+    background-color: #0070f3;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .models-toggle__btn:hover {
+    background-color: #005bb5;
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('models-toggle-btn');
+  const topSet = document.getElementById('models-top');
+  const allSet = document.getElementById('models-all');
+  let expanded = false;
+
+  btn?.addEventListener('click', () => {
+    expanded = !expanded;
+    if (topSet) topSet.style.display = expanded ? 'none' : 'flex';
+    if (allSet) allSet.style.display = expanded ? 'flex' : 'none';
+    btn.textContent = expanded ? 'Show Less' : 'Show More';
+  });
+
+  // Copy button handlers
+  document.querySelectorAll('.model-card__copy').forEach(copyBtn => {
+    copyBtn.addEventListener('click', () => {
+      const name = (copyBtn as HTMLElement).dataset.copy;
+      if (name) navigator.clipboard.writeText(name);
+    });
+  });
+</script>
