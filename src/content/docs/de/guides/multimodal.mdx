@@ -1,0 +1,157 @@
+---
+title: "Multimodal (Vision)"
+---
+
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+AI Foundation Services bietet Vision-Modelle, die Bilder zusammen mit Text analysieren können. Verwenden Sie dieselbe Chat Completions API mit Bildinhalten.
+
+:::note[Voraussetzungen]
+- Ein API-Schlüssel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK oder HTTP-Client installiert ([Schnellstart](/getting-started/quickstart))
+- Ein visionfähiges Modell (siehe [Verfügbare Modelle](/getting-started/models))
+:::
+
+**Was Sie lernen werden:**
+- Wie Sie Bilder von URLs analysieren
+- Wie Sie lokale Bilder per Base64-Kodierung senden
+- Welche Modelle Vision-Funktionen unterstützen
+
+
+## Ein Bild von einer URL analysieren
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl -X POST "$OPENAI_BASE_URL/chat/completions" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "gemini-2.5-flash",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {"type": "text", "text": "What is in this image?"},
+              {"type": "image_url", "image_url": {"url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400"}}
+            ]
+          }
+        ],
+        "max_tokens": 1024
+      }'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    response = client.chat.completions.create(
+        model="gemini-2.5-flash",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "What's in this image?"},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400"
+                        },
+                    },
+                ],
+            }
+        ],
+        max_tokens=1024,
+    )
+
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript showLineNumbers
+    import OpenAI from "openai";
+
+    const client = new OpenAI();
+
+    const response = await client.chat.completions.create({
+      model: "gemini-2.5-flash",
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "What's in this image?" },
+            {
+              type: "image_url",
+              image_url: {
+                url: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400",
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 1024,
+    });
+
+    console.log(response.choices[0].message.content);
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Ein lokales Bild analysieren (Base64)
+
+Sie können auch ein lokales Bild als Base64-kodierten String übergeben:
+
+```python showLineNumbers
+import base64
+
+from openai import OpenAI
+
+client = OpenAI()
+
+def encode_image(image_path):
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+base64_image = encode_image("/path/to/your/image.jpg")
+
+response = client.chat.completions.create(
+    model="Qwen3-VL-30B-A3B-Instruct-FP8",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What's in this image?"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+                },
+            ],
+        }
+    ],
+    max_tokens=1000,
+)
+
+print(response.choices[0].message.content)
+```
+
+
+## Verfügbare Vision-Modelle
+
+| Modell | Anbieter | Fähigkeiten |
+|---|---|---|
+| `Qwen3-VL-30B-A3B-Instruct-FP8` | T-Cloud (Deutschland) | Bildverständnis, OCR |
+| `gemini-2.5-flash` | Google Cloud | Bild- + Videoverständnis |
+| `gpt-4.1` | Azure | Bildverständnis |
+
+Die aktuelle Liste finden Sie unter [Verfügbare Modelle](/getting-started/models).
+
+
+## Nächste Schritte
+
+- [Visual RAG](/guides/visual-rag) — Dokumente mit Text- + Bildverständnis indizieren und abrufen
+- [Function Calling](/guides/function-calling) — Modelle mit externen Tools verbinden
+- [Streaming](/guides/streaming) — Antworten für bessere UX streamen

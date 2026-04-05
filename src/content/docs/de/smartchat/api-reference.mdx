@@ -1,0 +1,76 @@
+---
+title: "RAG API Reference"
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+Interagieren Sie mit der SmartChat RAG API ueber HTTP-Anfragen. Der Zugriff auf die API erfolgt ueber ein Gateway mit mehreren Backend-Diensten.
+
+
+## Basis-URL & Routing
+
+Anfragen folgen dem Format: `<base_url>/<service_path>/<route>`
+
+**Beispiel:** `https://api-gateway.ai.t-systems.net/config-manager/redoc`
+
+| Teil | Wert |
+|---|---|
+| Basis-URL | `https://api-gateway.ai.t-systems.net` |
+| Dienstpfad | `config-manager` |
+| Route | `redoc` |
+
+
+## Authentifizierung
+
+Erhalten Sie ein Bearer-Token vom [Authentifizierungs-Endpunkt](https://api-gateway.ai.t-systems.net/redoc#tag/Auth/operation/get_user_token_api_v1_auth_user_post) und fuegen Sie dann das `access_token` in alle nachfolgenden Anfragen ein.
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    # Authenticate
+    curl --location '<BASE_URL>/api/v1/auth/user' \
+      --header 'Content-Type: application/json' \
+      --data '{
+        "username": "<USERNAME>",
+        "password": "<PASSWORD>"
+      }'
+
+    # Use the token
+    curl --location '<BASE_URL>/chat-session-manager/api/v1/sessions/' \
+      --header 'Authorization: Bearer <ACCESS_TOKEN>'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python showLineNumbers
+    import requests
+    import json
+
+    base_url = "<BASE_URL>"
+
+    # Authenticate
+    payload = json.dumps({"username": "<USERNAME>", "password": "<PASSWORD>"})
+    headers = {"Content-Type": "application/json"}
+    response = requests.post(f"{base_url}/api/v1/auth/user", headers=headers, data=payload)
+
+    # Add token to headers
+    headers["Authorization"] = f"Bearer {response.json()['access_token']}"
+
+    # Make authenticated requests
+    response = requests.get(f"{base_url}/chat-session-manager/api/v1/sessions/", headers=headers)
+    print(response.json())
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Dienste
+
+| Dienst | Pfad | Dokumentation | Beschreibung |
+|---|---|---|---|
+| **API Gateway** | — | [Link](https://api-gateway.ai.t-systems.net/redoc) | Authentifizierung und Einstiegspunkt |
+| **Config Manager** | `config-manager` | [Link](https://api-gateway.ai.t-systems.net/config-manager/redoc) | Mandanten- und RAG-Konfigurationen |
+| **User Manager** | `user-manager` | [Link](https://api-gateway.ai.t-systems.net/user-manager/redoc) | Benutzer, Rollen und Gruppen |
+| **File Manager** | `file-manager` | [Link](https://api-gateway.ai.t-systems.net/file-manager/redoc) | Dateien, Dateigruppen, Wissensbasen |
+| **Ingest Master** | `ingest-master` | [Link](https://api-gateway.ai.t-systems.net/ingest-master/redoc) | Datei-Ingestion-Orchestrierung |
+| **Chat Session Manager** | `chat-session-manager` | [Link](https://api-gateway.ai.t-systems.net/chat-session-manager/redoc) | Sitzungen, Verlauf, Feedback |
+| **Query Pipeline** | `query-pipeline` | [Link](https://api-gateway.ai.t-systems.net/query-pipeline/redoc) | Chat-Antwortgenerierung |

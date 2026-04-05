@@ -1,0 +1,260 @@
+---
+import pricingData from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
+
+const OFFLINE_MODELS = new Set([
+  'gpt-4.1-nano', 'gpt-4o-mini', 'GPT-5-Codex', 'gpt-5-nano',
+  'Mistral-Large-2411', 'Mistral-Medium-3', 'o1', 'text-embedding-ada-002',
+]);
+
+const EXTRA_MODELS = [
+  { modelId: 'gpt-5.2', name: 'GPT 5.2', provider: 'Azure', hosted: 'Sweden', countryCode: 'se', dataProcessing: 'EU' },
+  { modelId: 'Qwen3-Coder-30B-A3B-Instruct-FP8', name: 'Qwen 3 Coder 30B', provider: 'T-Cloud', hosted: 'Germany', countryCode: 'de', dataProcessing: 'Germany' },
+];
+
+const SORT_ORDER = [
+  'GPT OSS 120B', 'Qwen 3 Next 80B Instruct', 'Qwen 3 VL 30B Instruct', 'Qwen 3 30B',
+  'Meta LLama 3.3 70B', 'Mistral Small 24B Instruct 2501', 'Qwen 3 Coder 30B', 'Qwen2.5 Coder 32B Instruct',
+  'GPT 5.2', 'GPT 5', 'GPT 5 Mini', 'o4 Mini', 'o3',
+  'Claude 4.5 Sonnet', 'Claude 4 Sonnet', 'Gemini 3 Pro', 'Gemini 2.5 Pro', 'Gemini 2.5 Flash',
+  'GPT 4.1', 'GPT 4.1 Mini', 'GPT 4o', 'GPT Image 1', 'o3 Mini', 'o1 Mini', 'Claude 3.7 Sonnet',
+  'Embedding BGE M3', 'Jina Embeddings v2 Base De', 'Jina Embeddings v2 Base Code',
+  'TSI Col Qwen 2 2b v1.0', 'Whisper Large v3', 'Whisper Large v3 Turbo', 'Teuken 7B Instruct',
+];
+
+// Map country names to ISO 3166-1 alpha-2 codes for flag icons
+const COUNTRY_TO_CODE: Record<string, string> = {
+  germany: 'de',
+  sweden: 'se',
+  france: 'fr',
+  europe: 'eu',
+  us: 'us',
+};
+
+function getCountryCode(countryName: string): string {
+  return COUNTRY_TO_CODE[countryName.toLowerCase()] ?? '';
+}
+
+function parseRegion(region: string): { provider: string; hosted: string; countryCode: string } {
+  const parts = region.split('-');
+  const raw = parts[0].toLowerCase();
+  const PROVIDER_MAP: Record<string, string> = { otc: 'T-Cloud', azure: 'Azure', gcp: 'GCP' };
+  const provider = PROVIDER_MAP[raw] ?? raw.charAt(0).toUpperCase() + raw.slice(1);
+
+  let country = parts[1] ?? '';
+  country = country.charAt(0).toUpperCase() + country.slice(1).toLowerCase();
+  const countryCode = getCountryCode(country);
+
+  const dataProcessing = raw === 'otc' ? 'Germany' : 'EU';
+  return { provider, hosted: country, countryCode, dataProcessing };
+}
+
+// Get the second-to-last plan
+const plan = pricingData[pricingData.length - 2];
+const configs = plan.modelQuotaConfigs;
+
+interface ModelCard {
+  modelId: string;
+  name: string;
+  provider: string;
+  hosted: string;
+  countryCode: string;
+  dataProcessing: string;
+}
+
+// Build model cards from pricing data (filtering out offline models)
+const pricingModels: ModelCard[] = configs
+  .filter((c: { exactModelName: string }) => !OFFLINE_MODELS.has(c.exactModelName))
+  .map((c: { exactModelName: string; displayModelName: string; deploymentRegion: string }) => {
+    const { provider, hosted, countryCode, dataProcessing } = parseRegion(c.deploymentRegion);
+    return {
+      modelId: c.exactModelName,
+      name: c.displayModelName,
+      provider,
+      hosted,
+      countryCode,
+      dataProcessing,
+    };
+  });
+
+// Combine with extra models
+const allModels: ModelCard[] = [...pricingModels, ...EXTRA_MODELS];
+
+// Deduplicate by name (extras override pricing if same name)
+const modelMap = new Map<string, ModelCard>();
+for (const m of allModels) {
+  modelMap.set(m.name, m);
+}
+
+// Sort by priority list, then alphabetical for unlisted
+const sortedModels = [...modelMap.values()].sort((a, b) => {
+  const ai = SORT_ORDER.indexOf(a.name);
+  const bi = SORT_ORDER.indexOf(b.name);
+  if (ai !== -1 && bi !== -1) return ai - bi;
+  if (ai !== -1) return -1;
+  if (bi !== -1) return 1;
+  return a.name.localeCompare(b.name);
+});
+
+const INITIAL_COUNT = 3;
+---
+
+<div class="available-models">
+  <div class="models-grid" id="models-grid">
+    {sortedModels.map((model, index) => (
+      <div class:list={['model-card', { 'model-card--hidden': index >= INITIAL_COUNT }]} data-index={index}>
+        <button
+          class="model-card__copy"
+          data-model-id={model.modelId}
+          title={`Copy model ID: ${model.modelId}`}
+          aria-label={`Copy model ID ${model.modelId}`}
+        ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+        <h4 class="model-card__name">{model.name}</h4>
+        <div class="model-card__details">
+          <span>Cloud: <strong>{model.provider}</strong></span>
+          <span>Server Location: <strong>{model.hosted}</strong> {model.countryCode && <span class={`fi fi-${model.countryCode}`} style="margin-left: 4px;" />}</span>
+          <span>Data Processing: <strong>{model.dataProcessing}</strong></span>
+        </div>
+      </div>
+    ))}
+  </div>
+  {sortedModels.length > INITIAL_COUNT && (
+    <button class="models-toggle" id="models-toggle" data-total={sortedModels.length} data-initial={INITIAL_COUNT}>
+      Show More ({sortedModels.length - INITIAL_COUNT} more)
+    </button>
+  )}
+</div>
+
+<style>
+  .available-models {
+    margin: 1.5rem 0;
+  }
+
+  .models-grid > .model-card {
+    margin: 0;
+  }
+
+  .models-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .model-card {
+    position: relative;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-white);
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .model-card--hidden {
+    display: none;
+  }
+
+  .model-card__name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
+    min-height: 2.5em;
+  }
+
+  .model-card__copy {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    color: var(--sl-color-gray-3);
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+
+  .model-card__copy:hover {
+    opacity: 1;
+    color: var(--sl-color-white);
+  }
+
+  .model-card__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-2, var(--sl-color-white));
+  }
+
+  .model-card__provider {
+    font-weight: 500;
+  }
+
+
+  .models-toggle {
+    display: block;
+    margin: 1.25rem auto 0;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--sl-color-white);
+    background: var(--sl-color-gray-5, var(--sl-color-gray-6));
+    border: 1px solid var(--sl-color-gray-4, var(--sl-color-gray-5));
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .models-toggle:hover {
+    background: var(--sl-color-gray-4, var(--sl-color-gray-5));
+  }
+</style>
+
+<script>
+  function setup() {
+    const toggle = document.getElementById('models-toggle') as HTMLButtonElement | null;
+    if (!toggle) return;
+
+    const total = Number(toggle.dataset.total);
+    const initial = Number(toggle.dataset.initial);
+    let expanded = false;
+
+    toggle.addEventListener('click', () => {
+      expanded = !expanded;
+      const cards = document.querySelectorAll<HTMLElement>('.model-card');
+      cards.forEach((card) => {
+        const idx = Number(card.dataset.index);
+        if (idx >= initial) {
+          card.classList.toggle('model-card--hidden', !expanded);
+        }
+      });
+      toggle.textContent = expanded
+        ? 'Show Less'
+        : `Show More (${total - initial} more)`;
+    });
+
+    // Copy model ID to clipboard
+    document.querySelectorAll<HTMLButtonElement>('.model-card__copy').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const modelId = btn.dataset.modelId;
+        if (!modelId) return;
+        try {
+          await navigator.clipboard.writeText(modelId);
+          const original = btn.textContent;
+          btn.textContent = '✅';
+          setTimeout(() => { btn.textContent = original; }, 1500);
+        } catch {
+          // Fallback: do nothing silently
+        }
+      });
+    });
+  }
+
+  // Run on initial load and on Astro page transitions
+  setup();
+  document.addEventListener('astro:after-swap', setup);
+</script>

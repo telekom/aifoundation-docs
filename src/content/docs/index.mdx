@@ -1,0 +1,74 @@
+---
+title: "AI Foundation Services"
+---
+
+import { LinkCard, TabItem, Tabs } from '@astrojs/starlight/components';
+import AvailableModels from '../../components/AvailableModels.astro';
+
+Access 30+ open-source and proprietary LLMs through a single, OpenAI-compatible API. Switch from OpenAI with one line of code. T-Cloud models are processed exclusively in Germany; hyperscaler models are processed in the EU.
+
+<div class="hero-badges">
+  <span class="hero-badge">GDPR Compliant</span>
+  <span class="hero-badge">T-Cloud: Germany Only</span>
+  <span class="hero-badge">OpenAI Compatible</span>
+</div>
+
+<div class="link-card-row">
+<LinkCard title="Get Free API Key" href="https://apikey.llmhub.t-systems.net/" description="Request a trial API key to start building." />
+<LinkCard title="Quickstart Guide" href="/getting-started/quickstart" description="Get up and running in under 5 minutes." />
+</div>
+
+## Try It Now
+
+Drop in your API key and start building — the API is identical to OpenAI's:
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl -X POST "https://llm-server.llmhub.t-systems.net/v2/chat/completions" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "Llama-3.3-70B-Instruct",
+        "messages": [{"role": "user", "content": "Hello from AIFS"}]
+      }'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python
+    from openai import OpenAI
+
+    client = OpenAI(base_url="https://llm-server.llmhub.t-systems.net/v2")
+
+    response = client.chat.completions.create(
+        model="Llama-3.3-70B-Instruct",
+        messages=[{"role": "user", "content": "Hello from AIFS"}],
+    )
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript
+    import OpenAI from "openai";
+
+    const client = new OpenAI({
+      baseURL: "https://llm-server.llmhub.t-systems.net/v2",
+    });
+
+    const response = await client.chat.completions.create({
+      model: "Llama-3.3-70B-Instruct",
+      messages: [{ role: "user", content: "Hello from AIFS" }],
+    });
+    console.log(response.choices[0].message.content);
+    ```
+  </TabItem>
+</Tabs>
+
+## Available Models
+
+<AvailableModels/>
+
+:::tip[Looking for pricing?]
+See the [Plans & Pricing](/plans) page for the complete model list with pricing details.
+:::
+

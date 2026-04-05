@@ -1,0 +1,179 @@
+---
+title: "Schnellstart"
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+Starten Sie in wenigen Minuten mit den AI Foundation Services. Diese Anleitung führt Sie durch die Installation des SDK, die Einrichtung der Authentifizierung und Ihren ersten API-Aufruf.
+
+
+## Schritt 1: OpenAI-Paket installieren
+
+AI Foundation Services verwendet eine OpenAI-kompatible API, sodass Sie die offiziellen OpenAI-SDKs nutzen können.
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```bash
+    pip install openai
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```bash
+    npm install openai
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Schritt 2: API-Schlüssel erhalten
+
+### Kostenloser Test-Schlüssel
+
+Starten Sie sofort mit einem kostenlosen Test-Schlüssel:
+
+1. Besuchen Sie das [API-Schlüssel-Portal](https://apikey.llmhub.t-systems.net/)
+2. Erstellen Sie ein Konto und generieren Sie Ihren API-Schlüssel
+3. Ihr Test-Schlüssel gibt Ihnen Zugang zu allen verfügbaren Modellen
+
+### Produktionsschlüssel
+
+Für produktive Workloads kaufen Sie über den [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/).
+
+
+## Schritt 3: Umgebungsvariablen setzen
+
+<Tabs>
+  <TabItem value="mac" label="macOS / Linux" default>
+    ```bash
+    export OPENAI_API_KEY="your_api_key_here"
+    export OPENAI_BASE_URL="https://llm-server.llmhub.t-systems.net/v2"
+    ```
+  </TabItem>
+  <TabItem value="windows-ps" label="Windows (PowerShell)">
+    ```powershell
+    $env:OPENAI_API_KEY = "your_api_key_here"
+    $env:OPENAI_BASE_URL = "https://llm-server.llmhub.t-systems.net/v2"
+    ```
+  </TabItem>
+  <TabItem value="windows-cmd" label="Windows (CMD)">
+    ```bash
+    setx OPENAI_API_KEY "your_api_key_here"
+    setx OPENAI_BASE_URL "https://llm-server.llmhub.t-systems.net/v2"
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Schritt 4: Ersten API-Aufruf durchführen
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl -X POST "$OPENAI_BASE_URL/chat/completions" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "Llama-3.3-70B-Instruct",
+        "messages": [
+          {"role": "system", "content": "You are a helpful assistant."},
+          {"role": "user", "content": "What is quantum computing in simple terms?"}
+        ],
+        "temperature": 0.5,
+        "max_tokens": 150
+      }'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python
+    from openai import OpenAI
+
+    client = OpenAI()  # Reads OPENAI_API_KEY and OPENAI_BASE_URL from env
+
+    response = client.chat.completions.create(
+        model="Llama-3.3-70B-Instruct",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "What is quantum computing in simple terms?"},
+        ],
+        temperature=0.5,
+        max_tokens=150,
+    )
+
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript
+    import OpenAI from "openai";
+
+    const client = new OpenAI(); // Reads OPENAI_API_KEY and OPENAI_BASE_URL from env
+
+    const response = await client.chat.completions.create({
+      model: "Llama-3.3-70B-Instruct",
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: "What is quantum computing in simple terms?" },
+      ],
+      temperature: 0.5,
+      max_tokens: 150,
+    });
+
+    console.log(response.choices[0].message.content);
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Weitere Beispiele
+
+### Embeddings erstellen
+
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+texts = ["The quick brown fox jumps over the lazy dog", "Data science is fun!"]
+result = client.embeddings.create(input=texts, model="jina-embeddings-v2-base-de")
+
+print(f"Embedding dimension: {len(result.data[0].embedding)}")
+print(f"Token usage: {result.usage}")
+```
+
+### Vision / Multimodal
+
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model="Qwen3-VL-30B-A3B-Instruct-FP8",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What's in this image?"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400"
+                    },
+                },
+            ],
+        }
+    ],
+    max_tokens=300,
+)
+
+print(response.choices[0].message.content)
+```
+
+
+## Nächste Schritte
+
+- **[Authentifizierung](/getting-started/authentication)** — API-Schlüssel-Verwaltung und Best Practices
+- **[Verfügbare Modelle](/getting-started/models)** — Alle unterstützten Modelle durchsuchen
+- **[Chat-Completions-Anleitung](/guides/chat-completions)** — Detaillierte Anleitung mit Streaming, Parametern und mehr
+- **[LangChain-Integration](/integrations/langchain)** — AIFS mit LangChain für RAG verwenden
+- **[LlamaIndex-Integration](/integrations/llama-index)** — AIFS mit LlamaIndex für RAG verwenden

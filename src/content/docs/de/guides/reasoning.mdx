@@ -1,0 +1,86 @@
+---
+title: "Reasoning-Steuerung"
+---
+
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+Für Modelle, die Reasoning (Chain-of-Thought) unterstützen, können Sie die Tiefe des Reasoning-Prozesses mit dem Parameter `reasoning_effort` steuern.
+
+:::note[Voraussetzungen]
+- Ein API-Schlüssel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK installiert ([Schnellstart](/getting-started/quickstart))
+- Ein Reasoning-fähiges Modell (siehe Tabelle unten)
+:::
+
+**Was Sie lernen werden:**
+- Welche Modelle Reasoning-Steuerung unterstützen
+- Wie Sie den Parameter `reasoning_effort` verwenden
+- Wie Sie Reasoning für Qwen3-Modelle deaktivieren
+
+
+## Unterstützte Modelle
+
+| Modell | Reasoning-Steuerung |
+|---|---|
+| o1, o1-mini, o3, o3-mini, o4-mini | Parameter `reasoning_effort` |
+| Gemini 2.5 | Parameter `reasoning_effort` |
+| Claude 3.7, Claude 4 | Parameter `reasoning_effort` |
+| Qwen3 | Prompt-Schlüsselwort `/no_think` |
+
+
+## Verwendung von reasoning_effort
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    response = client.chat.completions.create(
+        model="claude-sonnet-4",
+        messages=[
+            {"role": "system", "content": "You are a concise and helpful assistant."},
+            {"role": "user", "content": "What is the capital of France?"},
+        ],
+        reasoning_effort="low",  # "low", "medium", or "high"
+    )
+
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+</Tabs>
+
+Der Parameter `reasoning_effort` akzeptiert drei Werte:
+- **`low`** — Schnelle Antworten, minimales Reasoning
+- **`medium`** — Ausgewogene Reasoning-Tiefe
+- **`high`** — Tiefgehendes Reasoning für komplexe Probleme
+
+
+## Reasoning für Qwen3 deaktivieren
+
+Für Qwen3-Modelle stellen Sie `/no_think` Ihrem Prompt voran, um Reasoning zu deaktivieren:
+
+```python showLineNumbers
+from openai import OpenAI
+
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model="Qwen3-30B-A3B-FP8",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "/no_think What is your name?"},
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+
+## Nächste Schritte
+
+- [Chat Completions](/guides/chat-completions) — Standard-Chat-API-Nutzung
+- [Funktionsaufrufe](/guides/function-calling) — Reasoning-Modelle mit externen Tools verbinden
+- [Streaming](/guides/streaming) — Antworten von Reasoning-Modellen streamen

@@ -1,0 +1,130 @@
+---
+title: "Lokale Wissensbasis-Anleitung"
+---
+
+# Chat mit der lokalen Wissensbasis
+
+Diese Anleitung fuehrt Sie durch Authentifizierung, Sitzungserstellung, lokalen Datei-Upload, Ingestion und Prompting.
+
+
+## Voraussetzungen
+
+- **Zugangsdaten** fuer eine gehostete SmartChat RAG API mit der Rolle `CHAT_USER`
+- Ein **vorkonfigurierter** SmartChat RAG API-Server
+- Eine **PDF-Datei** zum Hochladen
+
+
+## 1. Authentifizieren
+
+```python showLineNumbers
+import requests
+import json
+
+base_url = "<BASE_URL>"
+
+payload = json.dumps({"username": "<USERNAME>", "password": "<PASSWORD>"})
+headers = {"Content-Type": "application/json"}
+
+response = requests.post(f"{base_url}/api/v1/auth/user", headers=headers, data=payload)
+headers["Authorization"] = f"Bearer {response.json()['access_token']}"
+```
+
+## 2. Standard-Chat-Konfiguration abrufen
+
+```python showLineNumbers
+response = requests.get(f"{base_url}/config-manager/api/v1/user/configs", headers=headers)
+
+configs = response.json()
+default_config = [c for c in configs if c["userGroupId"] == "default"][0]
+
+default_local_config_id = default_config["localKbConfigs"][0]["id"]
+allowed_llms = default_config["localKbConfigs"][0]["allowed_llms"]
+```
+
+## 3. Dateien hochladen
+
+```python showLineNumbers
+import time
+
+file_paths = ["PATH_TO_FILE_1", "PATH_TO_FILE_2"]
+params = {"kb": "local"}
+files = [("files", open(fp, "rb")) for fp in file_paths]
+
+response = requests.post(f"{base_url}/file-manager/api/v1/files/", headers=headers, params=params, files=files)
+
+pending_files = response.json()
+pending_file_ids = [f["fileId"] for f in pending_files]
+
+# Poll until uploaded
+while True:
+    params = {"kb": "local", "fileIds": pending_file_ids}
+    response = requests.get(f"{base_url}/file-manager/api/v1/files/", headers=headers, params=params)
+    files = response.json()
+
+    if all(f["status"] in ["uploaded", "duplicated"] for f in files):
+        break
+    if all(f["status"] in ["error", "file_too_large", "file_type_not_supported"] for f in files):
+        raise Exception("Couldn't upload files")
+    time.sleep(2)
+
+uploaded_files = files
+```
+
+## 4. Dateien ingestieren
+
+```python showLineNumbers
+for uploaded_file in uploaded_files:
+    metadata = {
+        "file_id": uploaded_file["fileId"],
+        "user_id": uploaded_file["userId"],
+        "file_name": uploaded_file["fileName"],
+        "file_uri": uploaded_file["fileUri"],
+    }
+    body = {
+        "filePath": uploaded_file["fileUri"],
+        "role": "user",
+        "metadata": metadata,
+    }
+
+    requests.post(f"{base_url}/ingest-master/api/v1/task", headers=headers, json=body)
+
+    # Poll until ingested
+    while True:
+        params = {"file_path": uploaded_file["fileUri"], "role": "user"}
+        response = requests.post(f"{base_url}/ingest-master/api/v1/tasks/file", headers=headers, params=params)
+        status = response.json()[-1]["status"]
+
+        if status == "ingested":
+            break
+        if status == "ingestion_failed":
+            raise Exception("Couldn't ingest file")
+
+ingested_files = uploaded_files
+```
+
+## 5. Chat-Sitzung erstellen
+
+```python showLineNumbers
+body = {
+    "title": "Testing the SmartChat RAG API",
+    "config": {
+        "localConfigId": default_local_config_id,
+        "globalContext": False,
+        "activeFiles": [f["fileId"] for f in ingested_files],
+        "chatModel": allowed_llms[0]["name"],
+    },
+}
+response = requests.post(f"{base_url}/chat-session-manager/api/v1/sessions/", headers=headers, json=body)
+session_id = response.json()["sessionId"]
+```
+
+## 6. Chatten
+
+```python showLineNumbers
+body = {
+    "sessionId": session_id,
+    "userPrompt": "Can you summarize the context to me?",
+}
+response = requests.post(f"{base_url}/query-pipelines/api/v1/chat", headers=headers, json=body)
+print(response.json())
+```

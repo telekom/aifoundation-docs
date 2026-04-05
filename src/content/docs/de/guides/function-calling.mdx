@@ -1,0 +1,192 @@
+---
+title: "Funktionsaufrufe"
+---
+
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+Funktionsaufrufe ermöglichen es Modellen, strukturierte JSON-Argumente für von Ihnen definierte Funktionen zu generieren und so die Integration mit externen Tools und APIs zu ermöglichen.
+
+:::note[Voraussetzungen]
+- Ein API-Schlüssel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK installiert ([Schnellstart](/getting-started/quickstart))
+- Ein Modell, das Funktionsaufrufe unterstützt (OpenAI-, Google- oder Anthropic-Modelle)
+:::
+
+**Was Sie lernen werden:**
+- Wie Sie Tools/Funktionen definieren, die das Modell aufrufen kann
+- Wie Sie Funktionsaufrufe mit der Responses API verwenden
+- Wie Sie strukturierte Daten mithilfe von JSON Schema extrahieren
+
+
+## Einfaches Beispiel
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "format": {
+                            "type": "string",
+                            "enum": ["celsius", "fahrenheit"],
+                            "description": "The temperature unit to use.",
+                        },
+                    },
+                    "required": ["location", "format"],
+                },
+            },
+        },
+    ]
+
+    messages = [
+        {"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."},
+        {"role": "user", "content": "What's the weather like today in Hamburg?"},
+    ]
+
+    response = client.chat.completions.create(
+        model="gpt-4.1",
+        messages=messages,
+        tools=tools,
+    )
+
+    print(response.choices[0].message)
+    ```
+  </TabItem>
+</Tabs>
+
+**Beispielausgabe:**
+```
+ChatCompletionMessage(
+    content=None,
+    role='assistant',
+    tool_calls=[
+        ChatCompletionMessageToolCall(
+            id='call_adnFRLazqswLI1ky6FU2O40u',
+            function=Function(
+                arguments='{"location":"Hamburg","format":"celsius"}',
+                name='get_current_weather'
+            ),
+            type='function'
+        )
+    ]
+)
+```
+
+
+## Funktionsaufrufe mit der Responses API
+
+```python showLineNumbers
+from openai import OpenAI
+
+client = OpenAI()
+
+tools = [
+    {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current temperature for a given location.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "City and country e.g. Bogota, Colombia",
+                }
+            },
+            "required": ["location"],
+            "additionalProperties": False,
+        },
+    }
+]
+
+response = client.responses.create(
+    model="gpt-4.1",
+    input=[{"role": "user", "content": "What is the weather like in Paris today?"}],
+    tools=tools,
+)
+
+print(response.output)
+```
+
+
+## Strukturierte Ausgabe (JSON Schema)
+
+Text in ein strukturiertes Schema parsen:
+
+```python showLineNumbers
+import json
+from openai import OpenAI
+
+client = OpenAI()
+
+description = """
+Our Premium Laptop Backpack features padded compartments that fit
+laptops up to 15.6 inches. Available in navy blue, black, and gray.
+Price: $79.99, on sale for $64.99.
+"""
+
+response = client.responses.create(
+    model="gpt-4.1",
+    input=f"Extract structured product information: {description}",
+    text={
+        "format": {
+            "type": "json_schema",
+            "name": "product_details",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "product_name": {"type": "string"},
+                    "features": {"type": "array", "items": {"type": "string"}},
+                    "colors": {"type": "array", "items": {"type": "string"}},
+                    "pricing": {
+                        "type": "object",
+                        "properties": {
+                            "regular_price": {"type": "number"},
+                            "sale_price": {"type": "number"},
+                            "currency": {"type": "string"},
+                        },
+                        "required": ["regular_price", "sale_price", "currency"],
+                        "additionalProperties": False,
+                    },
+                },
+                "required": ["product_name", "features", "colors", "pricing"],
+                "additionalProperties": False,
+            },
+            "strict": True,
+        }
+    },
+)
+
+print(json.dumps(json.loads(response.output[0].content[0].text), indent=2))
+```
+
+
+## Kompatibilität
+
+:::note
+Funktionsaufrufe werden von OpenAI-, Google- und Anthropic-Modellen unterstützt. Nicht alle auf T-Cloud gehosteten Open-Source-Modelle unterstützen diese Funktion bereits. Für die beste Erfahrung auf T-Cloud empfehlen wir die Verwendung von Modellen mit vollständiger Funktionsaufruf-Kompatibilität.
+
+Die Responses API wird derzeit nur für OpenAI-Modelle vollständig unterstützt.
+:::
+
+
+## Nächste Schritte
+
+- [Streaming](/guides/streaming) — Funktionsaufruf-Antworten in Echtzeit streamen
+- [Chat Completions](/guides/chat-completions) — Grundlegende Chat-API-Nutzung
+- [API-Endpunkte](/reference/api-endpoints) — Vollständige Endpunkt-Referenz

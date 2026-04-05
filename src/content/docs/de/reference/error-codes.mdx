@@ -1,0 +1,82 @@
+---
+title: "Fehlercodes"
+---
+
+Wenn eine API-Anfrage fehlschlägt, enthält die Antwort einen HTTP-Statuscode und eine Fehlermeldung. Hier finden Sie die häufigsten Fehler und deren Behebung.
+
+
+## HTTP-Statuscodes
+
+| Code | Name | Beschreibung | Lösung |
+|---|---|---|---|
+| `400` | Bad Request | Ungültiges Anfrageformat oder Parameter | Überprüfen Sie Ihren Anfragekörper und die Parameter |
+| `401` | Unauthorized | Fehlender oder ungültiger API-Schlüssel | Überprüfen Sie Ihren `Authorization: Bearer`-Header |
+| `403` | Forbidden | API-Schlüssel hat keine Berechtigung für diese Ressource | Überprüfen Sie Ihre Tarifstufe oder kontaktieren Sie den Support |
+| `404` | Not Found | Ungültiger Endpunkt oder Modell nicht gefunden | Überprüfen Sie die URL und den Modellnamen |
+| `429` | Too Many Requests | Rate-Limit überschritten | Warten und mit exponentiellem Backoff erneut versuchen |
+| `500` | Internal Server Error | Serverseitiger Fehler | Nach kurzer Verzögerung erneut versuchen |
+| `503` | Service Unavailable | Modell ist vorübergehend nicht verfügbar | [Modellstatus](https://uptime.llmhub.t-systems.net/status/health) prüfen und erneut versuchen |
+
+
+## Fehlerantwort-Format
+
+```json
+{
+  "detail": "Incorrect API key provided"
+}
+```
+
+:::note
+Einige Endpunkte (z. B. über Azure bereitgestellte Modelle wie GPT-4.1) können OpenAI-formatierte Fehlerobjekte zurückgeben:
+```json
+{
+  "error": {
+    "message": "Invalid API key provided.",
+    "type": "authentication_error",
+    "code": "invalid_api_key"
+  }
+}
+```
+:::
+
+
+## Umgang mit Rate-Limits (429)
+
+Wenn Sie ein Rate-Limit erreichen, implementieren Sie exponentielles Backoff:
+
+```python
+import time
+from openai import OpenAI, RateLimitError
+
+client = OpenAI()
+
+def call_with_retry(messages, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return client.chat.completions.create(
+                model="Llama-3.3-70B-Instruct",
+                messages=messages,
+            )
+        except RateLimitError:
+            wait = 2 ** attempt
+            print(f"Rate limited. Retrying in {wait}s...")
+            time.sleep(wait)
+    raise Exception("Max retries exceeded")
+```
+
+
+## Häufige Probleme
+
+### "Model not found"
+- Überprüfen Sie, ob der Modellname exakt übereinstimmt (Groß-/Kleinschreibung beachten)
+- Verwenden Sie die [Modelle-API](/reference/api-endpoints), um verfügbare Modelle zu prüfen
+- Einige Modelle sind möglicherweise nur in bestimmten Tarifstufen verfügbar
+
+### "Invalid API key"
+- Stellen Sie sicher, dass der Schlüssel korrekt in Ihrer Umgebung gesetzt ist
+- Prüfen Sie, ob der Schlüssel abgelaufen ist
+- Besuchen Sie das [API-Schlüssel-Portal](https://apikey.llmhub.t-systems.net/), um Schlüssel zu verwalten
+
+### "Context length exceeded"
+- Reduzieren Sie die Eingabelänge oder setzen Sie einen niedrigeren Wert für `max_tokens`
+- Überprüfen Sie die `max_sequence_length` des Modells in den [Modell-Metadaten](/getting-started/models)

@@ -1,0 +1,189 @@
+---
+title: "Chat Completions"
+---
+
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The Chat Completions API is the primary way to interact with LLMs on AI Foundation Services. It's fully compatible with the OpenAI Chat API.
+
+:::note[Prerequisites]
+- An API key ([get one here](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK or HTTP client installed ([Quickstart](/getting-started/quickstart))
+:::
+
+**What you'll learn:**
+- How to send chat completion requests with system and user messages
+- How to use streaming for real-time responses
+- How to use the Completion and Responses APIs
+- Key parameters for controlling output
+
+
+## Basic Usage
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl -X POST "$OPENAI_BASE_URL/chat/completions" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "Llama-3.3-70B-Instruct",
+        "messages": [
+          {"role": "system", "content": "You are a helpful assistant."},
+          {"role": "user", "content": "What is T-Cloud?"}
+        ],
+        "temperature": 0.1,
+        "max_tokens": 256
+      }'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    response = client.chat.completions.create(
+        model="Llama-3.3-70B-Instruct",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "What is T-Cloud?"},
+        ],
+        temperature=0.1,
+        max_tokens=256,
+    )
+
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript showLineNumbers
+    import OpenAI from "openai";
+
+    const client = new OpenAI();
+
+    const response = await client.chat.completions.create({
+      model: "Llama-3.3-70B-Instruct",
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: "What is T-Cloud?" },
+      ],
+      temperature: 0.1,
+      max_tokens: 256,
+    });
+
+    console.log(response.choices[0].message.content);
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Streaming
+
+Enable streaming to receive tokens as they're generated. Set `stream: true` in your request:
+
+```python
+stream = client.chat.completions.create(
+    model="Llama-3.3-70B-Instruct",
+    messages=[{"role": "user", "content": "Write a short poem about AI."}],
+    stream=True,
+)
+
+for chunk in stream:
+    if chunk.choices and chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+```
+
+For full streaming documentation including error handling, function calling with streams, and stream options, see the **[Streaming guide](/guides/streaming)**.
+
+
+## Completion API
+
+The Completion API sends raw text directly to the LLM without the chat message format.
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    completion = client.completions.create(
+        model="Llama-3.3-70B-Instruct",
+        prompt="What is the Python programming language?",
+        stream=False,
+        temperature=0.2,
+        max_tokens=128,
+    )
+
+    print(completion.choices[0].text)
+    ```
+  </TabItem>
+</Tabs>
+
+:::note
+The Completions API is only available for open-source models. To get correct behavior, you need to follow the model's specific prompt template. **We recommend always using the [Chat Completions API](#basic-usage) instead.**
+:::
+
+
+## Response API
+
+Using an up-to-date version of the OpenAI Python package, you can use the Responses API:
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    response = client.responses.create(
+        model="gpt-4.1",
+        input="Write a one-sentence bedtime story about a unicorn.",
+    )
+
+    print(response.output_text)
+    ```
+  </TabItem>
+</Tabs>
+
+You can also use both input and instructions fields:
+
+```python showLineNumbers
+response = client.responses.create(
+    model="gpt-4.1",
+    instructions="You are a professional copywriter. Focus on benefits rather than features.",
+    input="Create a product description for NoiseGuard Pro Headphones.",
+    temperature=0.7,
+    max_output_tokens=200,
+)
+
+print(response.output[0].content[0].text)
+```
+
+:::note
+The Responses API is currently fully supported only for OpenAI models (e.g., `gpt-4.1`, `gpt-4o`). T-Cloud-hosted open-source models have limited support.
+:::
+
+
+## Parameters
+
+| Parameter | Type | Description |
+|---|---|---|
+| `model` | string | Model ID (e.g., `Llama-3.3-70B-Instruct`) |
+| `messages` | array | List of message objects with `role` and `content` |
+| `temperature` | float | Sampling temperature (0-2). Lower = more deterministic |
+| `max_tokens` | integer | Maximum tokens to generate |
+| `stream` | boolean | Enable streaming responses |
+| `top_p` | float | Nucleus sampling parameter |
+
+For the full API specification, see the [API Reference](https://llm-server.llmhub.t-systems.net/redoc).
+
+
+## Next Steps
+
+- [Streaming](/guides/streaming) — Stream responses token-by-token
+- [Function Calling](/guides/function-calling) — Connect models to external tools
+- [Multimodal](/guides/multimodal) — Analyze images alongside text
+- [Asynchronous Requests](/guides/asynchronous-requests) — Queue-based processing for batch workloads

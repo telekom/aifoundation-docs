@@ -1,0 +1,74 @@
+---
+title: "AI Foundation Services"
+---
+
+import { LinkCard, TabItem, Tabs } from '@astrojs/starlight/components';
+import AvailableModels from '../../../components/AvailableModels.astro';
+
+Greifen Sie auf über 30 Open-Source- und proprietäre LLMs über eine einzige, OpenAI-kompatible API zu. Wechseln Sie von OpenAI mit nur einer Zeile Code. T-Cloud-Modelle werden ausschließlich in Deutschland verarbeitet; Hyperscaler-Modelle werden in der EU verarbeitet.
+
+<div class="hero-badges">
+  <span class="hero-badge">DSGVO-konform</span>
+  <span class="hero-badge">T-Cloud: Nur Deutschland</span>
+  <span class="hero-badge">OpenAI-kompatibel</span>
+</div>
+
+<div class="link-card-row">
+<LinkCard title="Kostenlosen API-Schlüssel erhalten" href="https://apikey.llmhub.t-systems.net/" description="Fordern Sie einen Test-API-Schlüssel an, um mit der Entwicklung zu beginnen." />
+<LinkCard title="Schnellstartanleitung" href="/de/getting-started/quickstart" description="In weniger als 5 Minuten einsatzbereit." />
+</div>
+
+## Jetzt ausprobieren
+
+Geben Sie Ihren API-Schlüssel ein und legen Sie los — die API ist identisch mit der von OpenAI:
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    curl -X POST "https://llm-server.llmhub.t-systems.net/v2/chat/completions" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "Llama-3.3-70B-Instruct",
+        "messages": [{"role": "user", "content": "Hello from AIFS"}]
+      }'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python
+    from openai import OpenAI
+
+    client = OpenAI(base_url="https://llm-server.llmhub.t-systems.net/v2")
+
+    response = client.chat.completions.create(
+        model="Llama-3.3-70B-Instruct",
+        messages=[{"role": "user", "content": "Hello from AIFS"}],
+    )
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+    ```javascript
+    import OpenAI from "openai";
+
+    const client = new OpenAI({
+      baseURL: "https://llm-server.llmhub.t-systems.net/v2",
+    });
+
+    const response = await client.chat.completions.create({
+      model: "Llama-3.3-70B-Instruct",
+      messages: [{ role: "user", content: "Hello from AIFS" }],
+    });
+    console.log(response.choices[0].message.content);
+    ```
+  </TabItem>
+</Tabs>
+
+## Verfügbare Modelle
+
+<AvailableModels/>
+
+:::tip[Preise gesucht?]
+Die vollständige Modellliste mit Preisdetails finden Sie auf der Seite [Tarife & Preise](/de/plans).
+:::
+

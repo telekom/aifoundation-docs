@@ -1,0 +1,557 @@
+---
+import allPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
+import countryData from '../shared/lib/countryCodeWithFlags.json';
+
+interface Props {
+  selectedPlanId?: string;
+}
+const { selectedPlanId = '' } = Astro.props;
+
+// Plan display config
+const planConfigs = [
+  { packageName: 'Tarif Basic Template',         label: 'Basic',         color: '#4de0af', minConsumption: '-',      tokenPrice: '3.53', rpm: '20',  clouds: ['T-Cloud'] },
+  { packageName: 'Tarif Standard1000 Template',   label: 'Standard 1000', color: '#4ad9cd', minConsumption: '\u20AC1,000', tokenPrice: '3.53', rpm: '150', clouds: ['T-Cloud', 'Azure', 'GCP'] },
+  { packageName: 'Tarif Standard2000 Template',   label: 'Standard 2000', color: '#4dd1e0', minConsumption: '\u20AC2,000', tokenPrice: '2.89', rpm: '300', clouds: ['T-Cloud', 'Azure', 'GCP'] },
+  { packageName: 'Tarif Standard3000 Template',   label: 'Standard 3000', color: '#5ec2ed', minConsumption: '\u20AC3,000', tokenPrice: '2.23', rpm: '450', clouds: ['T-Cloud', 'Azure', 'GCP'] },
+  { packageName: 'Tarif Standard4000 Template',   label: 'Standard 4000', color: '#84b0f5', minConsumption: '\u20AC4,000', tokenPrice: '1.75', rpm: '600', clouds: ['T-Cloud', 'Azure', 'GCP'] },
+];
+
+// Helper: parse deployment region
+function parseCloud(deploymentRegion: string): string {
+  const lower = deploymentRegion.toLowerCase();
+  const provider = lower.split('-')[0];
+  if (provider === 'otc') return 'T-Cloud';
+  if (provider === 'azure') return 'Azure';
+  if (provider === 'gcp') return 'GCP';
+  return deploymentRegion;
+}
+
+const COUNTRY_CODES: Record<string, string> = {
+  germany: 'de', sweden: 'se', france: 'fr', europe: 'eu', us: 'us',
+};
+
+function parseLocation(deploymentRegion: string): { name: string; code: string } {
+  const parts = deploymentRegion.toLowerCase().split('-');
+  if (parts.length < 2) return { name: deploymentRegion, code: '' };
+  const raw = parts[1];
+  const name = raw.charAt(0).toUpperCase() + raw.slice(1);
+  const code = COUNTRY_CODES[raw] || '';
+  return { name, code };
+}
+
+// Build plan data for client-side use
+const plansData = allPricing.map((plan: any) => {
+  const config = planConfigs.find(c => c.packageName === plan.packageName);
+  const models = (plan.modelQuotaConfigs || []).map((m: any) => {
+    const cloud = parseCloud(m.deploymentRegion);
+    const { name: locName, code: locCode } = parseLocation(m.deploymentRegion);
+    const rows: any[] = [{
+      cloud,
+      displayName: m.displayModelName,
+      subName: m.modelLabel || '',
+      inputPrice: m.inputPricePerMillionTokens,
+      outputPrice: m.outputPricePerMillionTokens,
+      serverLocation: locName,
+      locationCode: locCode,
+      inputTokenMin: m.inputTokenPerMinuteLimit,
+      outputTokenMin: m.outputTokenPerMinuteLimit,
+      rpm: m.requestPerMinuteLimit,
+      isSubRow: false,
+    }];
+    if (m.modelQuotaMetadata?.data) {
+      for (const sub of m.modelQuotaMetadata.data) {
+        rows.push({
+          cloud,
+          displayName: sub.displayModelName || m.displayModelName,
+          subName: sub.modelLabel || '',
+          inputPrice: sub.inputPricePerMillionTokens ?? m.inputPricePerMillionTokens,
+          outputPrice: sub.outputPricePerMillionTokens ?? m.outputPricePerMillionTokens,
+          serverLocation: locName,
+          locationCode: locCode,
+          inputTokenMin: sub.inputTokenPerMinuteLimit ?? m.inputTokenPerMinuteLimit,
+          outputTokenMin: sub.outputTokenPerMinuteLimit ?? m.outputTokenPerMinuteLimit,
+          rpm: sub.requestPerMinuteLimit ?? m.requestPerMinuteLimit,
+          isSubRow: true,
+        });
+      }
+    }
+    return rows;
+  }).flat();
+  return {
+    packageName: plan.packageName,
+    label: config?.label || plan.packageName,
+    models,
+  };
+});
+
+const showRatePlans = !selectedPlanId;
+const initialPlanIndex = selectedPlanId
+  ? plansData.findIndex((p: any) => p.packageName === selectedPlanId)
+  : 0;
+const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
+---
+
+<div class="plans-page" data-plans={JSON.stringify(plansData)} data-initial-index={effectiveIndex} data-locked={selectedPlanId ? 'true' : 'false'}>
+
+  {showRatePlans && (
+    <section class="rate-plans-section">
+      <h2>Rate Plans</h2>
+      <p>AI Foundation Services offers pay-as-you-go pricing. Prices vary by model, agreement, and rate plan.</p>
+      <p>Please contact us for more information on the dedicated and on-premises hosting options.</p>
+      <div class="table-wrapper">
+        <table class="plans-table">
+          <thead>
+            <tr>
+              <th>Plan</th>
+              <th>Min. Consumption</th>
+              <th>Token Price *<br/><small>&euro;/Mil. Tokens</small></th>
+              <th>RPM *<br/><small>Req/Min</small></th>
+              <th>Cloud</th>
+            </tr>
+          </thead>
+          <tbody>
+            {planConfigs.map(plan => (
+              <tr>
+                <td>
+                  <span class="plans-tag" style={`background:${plan.color};color:#000`}>
+                    {plan.label}
+                  </span>
+                </td>
+                <td>{plan.minConsumption}</td>
+                <td>{plan.tokenPrice}</td>
+                <td>{plan.rpm}</td>
+                <td>
+                  {plan.clouds.map((cloud, i) => (
+                    <>
+                      {i > 0 && ' '}
+                      <span class={`plans-tag ${cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud'}`}>
+                        {cloud}
+                      </span>
+                    </>
+                  ))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <small>* T-Cloud-Hosted Large Language Models</small>
+      </div>
+    </section>
+  )}
+
+  <section class="models-section">
+    <h2>Models & Pricing</h2>
+    <p>Choose the right model for your use case - from fast responses to deep analysis</p>
+
+    <div class="models-controls">
+      {!selectedPlanId && (
+        <div class="control-group">
+          <label for="plan-selector">Rate Plan</label>
+          <select id="plan-selector">
+            {plansData.map((plan: any, i: number) => (
+              <option value={i} selected={i === effectiveIndex}>
+                {plan.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      <div class="control-group">
+        <label for="model-search">Search</label>
+        <input type="text" id="model-search" placeholder="Filter models..." />
+      </div>
+      <div class="control-group">
+        <label for="location-filter">Server Location</label>
+        <select id="location-filter">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="cloud-filter">Cloud</label>
+        <select id="cloud-filter">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="price-filter">Price Range</label>
+        <select id="price-filter">
+          <option value="">All</option>
+          <option value="0-2">Under €2/MTok</option>
+          <option value="2-5">€2-5/MTok</option>
+          <option value="5+">Over €5/MTok</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="plans-table" id="models-table">
+        <thead>
+          <tr>
+            <th>Data Processing Location</th>
+            <th data-sort="displayName">Model Name <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="inputPrice">Input Token Price<br/><small>&euro;/Mil. Tokens</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="outputPrice">Output Token Price<br/><small>&euro;/Mil. Tokens</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="cloud">Hosting Platform <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="serverLocation">Server Location <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="inputTokenMin">Input Token Limit <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="outputTokenMin">Output Token Limit <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="rpm">RPM Limit<br/><small>Request/Min</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+          </tr>
+        </thead>
+        <tbody id="models-tbody">
+          <!-- Populated by client-side script -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+  function initPlansPage() {
+    const container = document.querySelector('.plans-page') as HTMLElement;
+    if (!container) return;
+
+    const plansData = JSON.parse(container.dataset.plans || '[]');
+    let currentIndex = parseInt(container.dataset.initialIndex || '0', 10);
+    const locked = container.dataset.locked === 'true';
+
+    const selector = document.getElementById('plan-selector') as HTMLSelectElement | null;
+    const searchInput = document.getElementById('model-search') as HTMLInputElement | null;
+    const locationFilter = document.getElementById('location-filter') as HTMLSelectElement | null;
+    const cloudFilter = document.getElementById('cloud-filter') as HTMLSelectElement | null;
+    const priceFilter = document.getElementById('price-filter') as HTMLSelectElement | null;
+    const tbody = document.getElementById('models-tbody') as HTMLTableSectionElement | null;
+    const table = document.getElementById('models-table') as HTMLTableElement | null;
+
+    let sortKey = '';
+    let sortAsc = true;
+    let searchTerm = '';
+
+    function populateFilterDropdowns() {
+      const plan = plansData[currentIndex];
+      if (!plan) return;
+
+      const locations = new Set<string>();
+      const clouds = new Set<string>();
+      for (const m of plan.models) {
+        if (m.serverLocation) locations.add(m.serverLocation);
+        if (m.cloud) clouds.add(m.cloud);
+      }
+
+      if (locationFilter) {
+        const current = locationFilter.value;
+        locationFilter.innerHTML = '<option value="">All</option>';
+        [...locations].sort().forEach(loc => {
+          const opt = document.createElement('option');
+          opt.value = loc;
+          opt.textContent = loc;
+          if (loc === current) opt.selected = true;
+          locationFilter.appendChild(opt);
+        });
+      }
+
+      if (cloudFilter) {
+        const current = cloudFilter.value;
+        cloudFilter.innerHTML = '<option value="">All</option>';
+        [...clouds].sort().forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c;
+          if (c === current) opt.selected = true;
+          cloudFilter.appendChild(opt);
+        });
+      }
+    }
+
+    function getModels() {
+      const plan = plansData[currentIndex];
+      if (!plan) return [];
+      let models = [...plan.models];
+
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        models = models.filter((m: any) =>
+          m.displayName.toLowerCase().includes(term) ||
+          m.subName.toLowerCase().includes(term) ||
+          m.cloud.toLowerCase().includes(term) ||
+          m.serverLocation.toLowerCase().includes(term)
+        );
+      }
+
+      if (locationFilter && locationFilter.value) {
+        const loc = locationFilter.value;
+        models = models.filter((m: any) => m.serverLocation === loc);
+      }
+
+      if (cloudFilter && cloudFilter.value) {
+        const cloud = cloudFilter.value;
+        models = models.filter((m: any) => m.cloud === cloud);
+      }
+
+      if (priceFilter && priceFilter.value) {
+        const val = priceFilter.value;
+        if (val === '0-2') {
+          models = models.filter((m: any) => m.inputPrice >= 0 && m.inputPrice < 2);
+        } else if (val === '2-5') {
+          models = models.filter((m: any) => m.inputPrice >= 2 && m.inputPrice < 5);
+        } else if (val === '5+') {
+          models = models.filter((m: any) => m.inputPrice >= 5);
+        }
+      }
+
+      if (sortKey) {
+        models.sort((a: any, b: any) => {
+          let va = a[sortKey];
+          let vb = b[sortKey];
+          if (typeof va === 'number' && typeof vb === 'number') {
+            return sortAsc ? va - vb : vb - va;
+          }
+          va = String(va).toLowerCase();
+          vb = String(vb).toLowerCase();
+          if (va < vb) return sortAsc ? -1 : 1;
+          if (va > vb) return sortAsc ? 1 : -1;
+          return 0;
+        });
+      }
+
+      return models;
+    }
+
+    function formatNumber(n: number): string {
+      return n != null ? n.toLocaleString('en-US') : '-';
+    }
+
+    function formatPrice(n: number): string {
+      return n != null ? n.toFixed(2) : '-';
+    }
+
+    function render() {
+      if (!tbody) return;
+      const models = getModels();
+      tbody.innerHTML = '';
+
+      for (const m of models) {
+        const tr = document.createElement('tr');
+        if (m.isSubRow) tr.classList.add('sub-row');
+
+        const cloudClass = m.cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
+        const isEU = m.cloud === 'T-Cloud';
+        const dpLocation = isEU ? '<span class="fi fi-eu"></span> EU' : '<span class="fi fi-eu"></span> EU & Worldwide';
+        tr.innerHTML = `
+          <td>${dpLocation}</td>
+          <td>
+            <strong>${m.displayName}</strong>
+            ${m.subName && m.subName !== m.displayName ? `<br><small>${m.subName}</small>` : ''}
+          </td>
+          <td><strong>&euro; ${formatPrice(m.inputPrice)}</strong></td>
+          <td><strong>&euro; ${formatPrice(m.outputPrice)}</strong></td>
+          <td><span class="plans-tag ${cloudClass}">${m.cloud}</span></td>
+          <td>${m.locationCode ? `<span class="fi fi-${m.locationCode}"></span> ` : ''}${m.serverLocation}</td>
+          <td>${formatNumber(m.inputTokenMin)}</td>
+          <td>${formatNumber(m.outputTokenMin)}</td>
+          <td>${formatNumber(m.rpm)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      if (models.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="9" style="text-align:center;padding:1rem;">No models found.</td>';
+        tbody.appendChild(tr);
+      }
+
+      // Update sort icons
+      if (table) {
+        table.querySelectorAll('th[data-sort]').forEach(th => {
+          const icon = th.querySelector('.sort-icon') as HTMLElement;
+          if (!icon) return;
+          const key = (th as HTMLElement).dataset.sort;
+          if (key === sortKey) {
+            icon.textContent = sortAsc ? '\u25B4' : '\u25BE';
+            icon.classList.add('active');
+          } else {
+            icon.textContent = '\u25B4\u25BE';
+            icon.classList.remove('active');
+          }
+        });
+      }
+    }
+
+    // Event: plan selector
+    if (selector && !locked) {
+      selector.addEventListener('change', () => {
+        currentIndex = parseInt(selector.value, 10);
+        populateFilterDropdowns();
+        render();
+      });
+    }
+
+    // Event: search
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        searchTerm = searchInput.value;
+        render();
+      });
+    }
+
+    // Event: location filter
+    if (locationFilter) {
+      locationFilter.addEventListener('change', () => render());
+    }
+
+    // Event: cloud filter
+    if (cloudFilter) {
+      cloudFilter.addEventListener('change', () => render());
+    }
+
+    // Event: price filter
+    if (priceFilter) {
+      priceFilter.addEventListener('change', () => render());
+    }
+
+    // Event: sortable headers
+    if (table) {
+      table.querySelectorAll('th[data-sort]').forEach(th => {
+        th.addEventListener('click', () => {
+          const key = (th as HTMLElement).dataset.sort || '';
+          if (sortKey === key) {
+            sortAsc = !sortAsc;
+          } else {
+            sortKey = key;
+            sortAsc = true;
+          }
+          render();
+        });
+      });
+    }
+
+    populateFilterDropdowns();
+    render();
+  }
+
+  // Run on initial load and on Astro page transitions
+  document.addEventListener('astro:page-load', initPlansPage);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPlansPage);
+  } else {
+    initPlansPage();
+  }
+</script>
+
+<style is:global>
+  .plans-page {
+    width: 100%;
+  }
+
+  .rate-plans-section {
+    margin-bottom: 2rem;
+  }
+
+  .models-section {
+    margin-bottom: 2rem;
+  }
+
+  .table-wrapper {
+    width: 100%;
+  }
+
+  .plans-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    table-layout: fixed;
+    overflow-wrap: break-word;
+  }
+
+  .plans-table th,
+  .plans-table td {
+    border: 1px solid var(--sl-color-gray-5);
+    padding: 0.35rem 0.4rem;
+    text-align: left;
+  }
+
+  .plans-table th {
+    background: var(--sl-color-gray-6);
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;
+  }
+
+  .plans-table tbody tr:hover {
+    background: var(--sl-color-gray-6);
+  }
+
+  .plans-table tbody tr.sub-row {
+    opacity: 0.85;
+    font-size: 0.85rem;
+  }
+
+  .plans-tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .tag-tcloud {
+    background: #e20074 !important;
+    color: var(--sl-color-white) !important;
+  }
+
+  .tag-cloud {
+    background: var(--sl-color-gray-5);
+    color: var(--sl-color-white);
+  }
+
+  .sort-icon {
+    font-size: 1rem;
+    margin-left: 0.25rem;
+    opacity: 0.5;
+  }
+
+  .sort-icon.active {
+    color: #e20074;
+    opacity: 1;
+  }
+
+  .models-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .control-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0 0 0.2rem 0;
+    line-height: 1;
+  }
+
+  .control-group select,
+  .control-group input {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 4px;
+    background: var(--sl-color-gray-6);
+    color: inherit;
+    font-size: 0.9rem;
+    height: 2rem;
+    min-width: 200px;
+    box-sizing: border-box;
+  }
+
+  .control-group select:focus,
+  .control-group input:focus {
+    outline: 2px solid #e20074;
+    outline-offset: -1px;
+  }
+</style>
