@@ -211,6 +211,17 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     const container = document.querySelector('.plans-page') as HTMLElement;
     if (!container) return;
 
+    // Mark the title's content panel so CSS can target it
+    const contentPanel = container.closest('.content-panel');
+    const titlePanel = contentPanel?.previousElementSibling;
+    if (titlePanel?.classList.contains('content-panel')) {
+      titlePanel.classList.add('plans-title-panel');
+    }
+
+    // Tell the header grid to lay out as if there's a right sidebar,
+    // since our content margin already mimics that alignment.
+    document.documentElement.setAttribute('data-has-toc', '');
+
     const plansData = JSON.parse(container.dataset.plans || '[]');
     let currentIndex = parseInt(container.dataset.initialIndex || '0', 10);
     const locked = container.dataset.locked === 'true';
@@ -452,14 +463,12 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
   }
 
   .table-wrapper {
-    width: 100%;
+    width: fit-content;
   }
 
   .plans-table {
-    width: 100%;
     border-collapse: collapse;
     font-size: 0.8rem;
-    table-layout: fixed;
     overflow-wrap: break-word;
   }
 

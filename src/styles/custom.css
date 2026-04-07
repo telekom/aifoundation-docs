@@ -11,18 +11,31 @@
 	--sl-color-accent-high: #9e0050;
 }
 
-/* Plans page — full width, no overflow constraints */
-.sl-markdown-content:has(.plans-page),
-.sl-container:has(.plans-page),
-.content-panel:has(.plans-page) {
-	max-width: 100%;
-	width: 100%;
+/* Plans page — JS sets data-has-toc so the header search aligns with content.
+   Override the main-pane width back to 100% since there's no actual right sidebar,
+   then widen the sl-container with explicit margin to keep left-edge alignment. */
+@media (min-width: 72rem) {
+	.main-pane:has(.plans-page) {
+		width: 100% !important;
+	}
+	.sl-container:has(.plans-page),
+	.plans-title-panel > .sl-container {
+		max-width: none;
+		margin-inline-start: max(0px, calc((100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2 - var(--sl-content-pad-x)));
+		margin-inline-end: 0;
+	}
 }
 
 .main-pane:has(.plans-page),
 .main-frame:has(.plans-page) {
 	overflow: visible !important;
 	max-height: none !important;
+}
+
+/* Keep LinkCards and pagination at normal content width on wide plans page */
+.sl-markdown-content:has(.plans-page) .sl-link-card,
+.sl-container:has(.plans-page) .pagination-links {
+	max-width: var(--sl-content-width);
 }
 
 /* Hero Badges */
