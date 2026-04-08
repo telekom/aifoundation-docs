@@ -347,7 +347,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
         const cloudClass = m.cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
         const isEU = m.cloud === 'T-Cloud';
-        const dpLocation = isEU ? '<span class="fi fi-eu"></span> EU' : '<span class="fi fi-eu"></span> EU & Worldwide';
+        const dpLocation = isEU ? '<span class="fi fi-eu"></span> EU' : '\u{1F310} EU & Worldwide';
         tr.innerHTML = `
           <td>${dpLocation}</td>
           <td>
