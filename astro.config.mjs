@@ -72,7 +72,17 @@ export default defineConfig({
 						{ label: 'Global Chat', slug: 'smartchat/global-chat' },
 					],
 				},
-				{ label: 'Plans & Pricing', slug: 'plans' },
+				{
+					label: 'Plans & Pricing',
+					items: [
+						{ label: 'Plans Overview', slug: 'plans' },
+						{ label: 'Basic', slug: 'plans/basic' },
+						{ label: 'Standard 1000', slug: 'plans/standard-1000' },
+						{ label: 'Standard 2000', slug: 'plans/standard-2000' },
+						{ label: 'Standard 3000', slug: 'plans/standard-3000' },
+						{ label: 'Standard 4000', slug: 'plans/standard-4000' },
+					],
+				},
 				{ label: 'FAQ', slug: 'faq' },
 				{
 					label: 'Links',

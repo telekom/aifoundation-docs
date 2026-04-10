@@ -7,6 +7,52 @@ interface Props {
 }
 const { selectedPlanId = '' } = Astro.props;
 
+// Detect locale from URL path
+const isDE = Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/de';
+
+const t = {
+  ratePlansTitle: isDE ? 'Tarife' : 'Rate Plans',
+  subtitle: isDE
+    ? 'Die AI Foundation Services Plattform bietet eine nutzungsabhängige Preisgestaltung. Die Preise variieren je nach Modell, Vereinbarung und Tarif.'
+    : 'AI Foundation Services offers pay-as-you-go pricing. Prices vary by model, agreement, and rate plan.',
+  subtitle2: isDE
+    ? 'Bitte kontaktieren Sie uns für weitere Informationen zu den dedizierten und on-premises Hosting-Optionen.'
+    : 'Please contact us for more information on the dedicated and on-premises hosting options.',
+  thPlan: isDE ? 'Tarif' : 'Plan',
+  thMinConsumption: isDE ? 'Mindestverbrauch' : 'Min. Consumption',
+  thTokenPrice: isDE ? 'Beispiel Token Preis *' : 'Token Price *',
+  thTokenPriceUnit: '€/Mil. Tokens',
+  thRPM: isDE ? 'Beispiel RPM *' : 'RPM *',
+  thRPMUnit: isDE ? 'Anfragen/Minute' : 'Req/Min',
+  thCloud: isDE ? 'Cloud Anbieter' : 'Cloud',
+  footnote: '* T-Cloud-Hosted Large Language Models',
+  modelsTitle: isDE ? 'Modelle & Preise' : 'Models & Pricing',
+  modelsSubtitle: isDE
+    ? 'Wählen Sie das richtige Modell für Ihren Anwendungsfall – von schnellen Antworten bis hin zu tiefgreifenden Analysen.'
+    : 'Choose the right model for your use case - from fast responses to deep analysis',
+  labelRatePlan: isDE ? 'Gewählter Tarif' : 'Rate Plan',
+  labelSearch: isDE ? 'Suche' : 'Search',
+  labelServerLocation: 'Server Location',
+  labelCloud: 'Cloud',
+  labelPriceRange: 'Price Range',
+  placeholderSearch: isDE ? 'Modelle filtern...' : 'Filter models...',
+  optionAll: isDE ? 'Alle' : 'All',
+  priceUnder2: 'Under €2/MTok',
+  price2to5: '€2-5/MTok',
+  priceOver5: 'Over €5/MTok',
+  thDPLocation: 'Data Processing Location',
+  thModelName: isDE ? 'Modellname' : 'Model Name',
+  thInputPrice: 'Input Token Price',
+  thOutputPrice: 'Output Token Price',
+  thHostingPlatform: 'Hosting Platform',
+  thServerLocation: 'Server Location',
+  thInputTokenLimit: 'Input Token Limit',
+  thOutputTokenLimit: 'Output Token Limit',
+  thRPMLimit: 'RPM Limit',
+  noModels: isDE ? 'Keine Modelle gefunden.' : 'No models found.',
+  euWorldwide: isDE ? 'EU & Weltweit' : 'EU & Worldwide',
+};
+
 // Plan display config
 const planConfigs = [
   { packageName: 'Tarif Basic Template',         label: 'Basic',         color: '#4de0af', minConsumption: '-',      tokenPrice: '3.53', rpm: '20',  clouds: ['T-Cloud'] },
@@ -91,22 +137,22 @@ const initialPlanIndex = selectedPlanId
 const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 ---
 
-<div class="plans-page" data-plans={JSON.stringify(plansData)} data-initial-index={effectiveIndex} data-locked={selectedPlanId ? 'true' : 'false'}>
+<div class="plans-page" data-plans={JSON.stringify(plansData)} data-initial-index={effectiveIndex} data-locked={selectedPlanId ? 'true' : 'false'} data-t={JSON.stringify(t)}>
 
   {showRatePlans && (
     <section class="rate-plans-section">
-      <h2>Rate Plans</h2>
-      <p>AI Foundation Services offers pay-as-you-go pricing. Prices vary by model, agreement, and rate plan.</p>
-      <p>Please contact us for more information on the dedicated and on-premises hosting options.</p>
+      <h2>{t.ratePlansTitle}</h2>
+      <p>{t.subtitle}</p>
+      <p>{t.subtitle2}</p>
       <div class="table-wrapper">
         <table class="plans-table">
           <thead>
             <tr>
-              <th>Plan</th>
-              <th>Min. Consumption</th>
-              <th>Token Price *<br/><small>&euro;/Mil. Tokens</small></th>
-              <th>RPM *<br/><small>Req/Min</small></th>
-              <th>Cloud</th>
+              <th>{t.thPlan}</th>
+              <th>{t.thMinConsumption}</th>
+              <th>{t.thTokenPrice}<br/><small>{t.thTokenPriceUnit}</small></th>
+              <th>{t.thRPM}<br/><small>{t.thRPMUnit}</small></th>
+              <th>{t.thCloud}</th>
             </tr>
           </thead>
           <tbody>
@@ -134,19 +180,19 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
             ))}
           </tbody>
         </table>
-        <small>* T-Cloud-Hosted Large Language Models</small>
+        <small>{t.footnote}</small>
       </div>
     </section>
   )}
 
   <section class="models-section">
-    <h2>Models & Pricing</h2>
-    <p>Choose the right model for your use case - from fast responses to deep analysis</p>
+    <h2>{t.modelsTitle}</h2>
+    <p>{t.modelsSubtitle}</p>
 
     <div class="models-controls">
       {!selectedPlanId && (
         <div class="control-group">
-          <label for="plan-selector">Rate Plan</label>
+          <label for="plan-selector">{t.labelRatePlan}</label>
           <select id="plan-selector">
             {plansData.map((plan: any, i: number) => (
               <option value={i} selected={i === effectiveIndex}>
@@ -157,28 +203,28 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
         </div>
       )}
       <div class="control-group">
-        <label for="model-search">Search</label>
-        <input type="text" id="model-search" placeholder="Filter models..." />
+        <label for="model-search">{t.labelSearch}</label>
+        <input type="text" id="model-search" placeholder={t.placeholderSearch} />
       </div>
       <div class="control-group">
-        <label for="location-filter">Server Location</label>
+        <label for="location-filter">{t.labelServerLocation}</label>
         <select id="location-filter">
-          <option value="">All</option>
+          <option value="">{t.optionAll}</option>
         </select>
       </div>
       <div class="control-group">
-        <label for="cloud-filter">Cloud</label>
+        <label for="cloud-filter">{t.labelCloud}</label>
         <select id="cloud-filter">
-          <option value="">All</option>
+          <option value="">{t.optionAll}</option>
         </select>
       </div>
       <div class="control-group">
-        <label for="price-filter">Price Range</label>
+        <label for="price-filter">{t.labelPriceRange}</label>
         <select id="price-filter">
-          <option value="">All</option>
-          <option value="0-2">Under €2/MTok</option>
-          <option value="2-5">€2-5/MTok</option>
-          <option value="5+">Over €5/MTok</option>
+          <option value="">{t.optionAll}</option>
+          <option value="0-2">{t.priceUnder2}</option>
+          <option value="2-5">{t.price2to5}</option>
+          <option value="5+">{t.priceOver5}</option>
         </select>
       </div>
     </div>
@@ -187,15 +233,15 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
       <table class="plans-table" id="models-table">
         <thead>
           <tr>
-            <th>Data Processing Location</th>
-            <th data-sort="displayName">Model Name <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="inputPrice">Input Token Price<br/><small>&euro;/Mil. Tokens</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="outputPrice">Output Token Price<br/><small>&euro;/Mil. Tokens</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="cloud">Hosting Platform <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="serverLocation">Server Location <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="inputTokenMin">Input Token Limit <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="outputTokenMin">Output Token Limit <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="rpm">RPM Limit<br/><small>Request/Min</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th>{t.thDPLocation}</th>
+            <th data-sort="displayName">{t.thModelName} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="inputPrice">{t.thInputPrice}<br/><small>&euro;/Mil. Tokens</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="outputPrice">{t.thOutputPrice}<br/><small>&euro;/Mil. Tokens</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="cloud">{t.thHostingPlatform} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="serverLocation">{t.thServerLocation} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="inputTokenMin">{t.thInputTokenLimit} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="outputTokenMin">{t.thOutputTokenLimit} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="rpm">{t.thRPMLimit}<br/><small>Request/Min</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
           </tr>
         </thead>
         <tbody id="models-tbody">
@@ -223,6 +269,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     document.documentElement.setAttribute('data-has-toc', '');
 
     const plansData = JSON.parse(container.dataset.plans || '[]');
+    const translations = JSON.parse(container.dataset.t || '{}');
     let currentIndex = parseInt(container.dataset.initialIndex || '0', 10);
     const locked = container.dataset.locked === 'true';
 
@@ -251,7 +298,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
       if (locationFilter) {
         const current = locationFilter.value;
-        locationFilter.innerHTML = '<option value="">All</option>';
+        locationFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
         [...locations].sort().forEach(loc => {
           const opt = document.createElement('option');
           opt.value = loc;
@@ -263,7 +310,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
       if (cloudFilter) {
         const current = cloudFilter.value;
-        cloudFilter.innerHTML = '<option value="">All</option>';
+        cloudFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
         [...clouds].sort().forEach(c => {
           const opt = document.createElement('option');
           opt.value = c;
@@ -347,7 +394,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
         const cloudClass = m.cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
         const isEU = m.cloud === 'T-Cloud';
-        const dpLocation = isEU ? '<span class="fi fi-eu"></span> EU' : '\u{1F310} EU & Worldwide';
+        const dpLocation = isEU ? '<span class="fi fi-eu"></span> EU' : `\u{1F310} ${translations.euWorldwide || 'EU & Worldwide'}`;
         tr.innerHTML = `
           <td>${dpLocation}</td>
           <td>
@@ -367,7 +414,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
       if (models.length === 0) {
         const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="9" style="text-align:center;padding:1rem;">No models found.</td>';
+        tr.innerHTML = `<td colspan="9" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
         tbody.appendChild(tr);
       }
 
