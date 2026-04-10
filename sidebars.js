@@ -58,7 +58,18 @@ const sidebars = {
         'reference/rate-limits',
       ],
     },
-    { type: 'doc', id: 'plans-page', label: 'Plans & Pricing' },
+    {
+      type: 'category',
+      label: 'Plans & Pricing',
+      items: [
+        'plans/plans-page',
+        'plans/basic-plans-page',
+        'plans/standard1000-plans-page',
+        'plans/standard2000-plans-page',
+        'plans/standard3000-plans-page',
+        'plans/standard4000-plans-page',
+      ],
+    },
     { type: 'doc', id: 'faq', label: 'FAQ' },
   ],
 };
