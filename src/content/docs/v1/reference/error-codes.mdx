@@ -1,0 +1,89 @@
+---
+title: "Error Codes"
+---
+
+
+# Error Codes
+
+When an API request fails, the response includes an HTTP status code and an error message. Here are the common errors and how to resolve them.
+
+---
+
+## HTTP Status Codes
+
+| Code | Name | Description | Resolution |
+|---|---|---|---|
+| `400` | Bad Request | Invalid request format or parameters | Check your request body and parameters |
+| `401` | Unauthorized | Missing or invalid API key | Verify your `Authorization: Bearer` header |
+| `403` | Forbidden | API key lacks permission for this resource | Check your plan tier or contact support |
+| `404` | Not Found | Invalid endpoint or model not found | Verify the URL and model name |
+| `429` | Too Many Requests | Rate limit exceeded | Wait and retry with exponential backoff |
+| `500` | Internal Server Error | Server-side error | Retry after a brief delay |
+| `503` | Service Unavailable | Model is temporarily unavailable | Check [Model Status](https://uptime.llmhub.t-systems.net/status/health) and retry |
+
+---
+
+## Error Response Format
+
+```json
+{
+  "detail": "Incorrect API key provided"
+}
+```
+
+:::note
+Some endpoints (e.g., Azure-proxied models like GPT-4.1) may return OpenAI-style error objects:
+```json
+{
+  "error": {
+    "message": "Invalid API key provided.",
+    "type": "authentication_error",
+    "code": "invalid_api_key"
+  }
+}
+```
+:::
+
+---
+
+## Handling Rate Limits (429)
+
+When you hit a rate limit, implement exponential backoff:
+
+```python
+import time
+from openai import OpenAI, RateLimitError
+
+client = OpenAI()
+
+def call_with_retry(messages, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return client.chat.completions.create(
+                model="Llama-3.3-70B-Instruct",
+                messages=messages,
+            )
+        except RateLimitError:
+            wait = 2 ** attempt
+            print(f"Rate limited. Retrying in {wait}s...")
+            time.sleep(wait)
+    raise Exception("Max retries exceeded")
+```
+
+---
+
+## Common Issues
+
+### "Model not found"
+- Verify the model name matches exactly (case-sensitive)
+- Use the [List Models API](/reference/api-endpoints) to check available models
+- Some models may only be available on certain plan tiers
+
+### "Invalid API key"
+- Ensure the key is correctly set in your environment
+- Check that the key hasn't expired
+- Visit the [API Key Portal](https://apikey.llmhub.t-systems.net/) to manage keys
+
+### "Context length exceeded"
+- Reduce the input length or set a lower `max_tokens`
+- Check the model's `max_sequence_length` in the [model metadata](/getting-started/models)

@@ -1,0 +1,97 @@
+---
+title: "Reasoning Control"
+---
+
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+
+# Reasoning Control
+
+For models that support reasoning (chain-of-thought), you can control the depth of reasoning with the `reasoning_effort` parameter.
+
+:::note[Prerequisites]
+- An API key ([get one here](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK installed ([Quickstart](/getting-started/quickstart))
+- A reasoning-capable model (see table below)
+:::
+
+**What you'll learn:**
+- Which models support reasoning control
+- How to use the `reasoning_effort` parameter
+- How to disable reasoning for Qwen3 models
+
+---
+
+
+## Supported Models
+
+| Model | Reasoning Control |
+|---|---|
+| o1, o1-mini, o3, o3-mini, o4-mini | `reasoning_effort` parameter |
+| Gemini 2.5 | `reasoning_effort` parameter |
+| Claude 3.7, Claude 4 | `reasoning_effort` parameter |
+| Qwen3 | `/no_think` prompt keyword |
+
+---
+
+
+## Using reasoning_effort
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    response = client.chat.completions.create(
+        model="claude-sonnet-4",
+        messages=[
+            {"role": "system", "content": "You are a concise and helpful assistant."},
+            {"role": "user", "content": "What is the capital of France?"},
+        ],
+        reasoning_effort="low",  # "low", "medium", or "high"
+    )
+
+    print(response.choices[0].message.content)
+    ```
+  </TabItem>
+</Tabs>
+
+The `reasoning_effort` parameter accepts three values:
+- **`low`** — Fast responses, minimal reasoning
+- **`medium`** — Balanced reasoning depth
+- **`high`** — Deep reasoning for complex problems
+
+---
+
+
+## Disabling Reasoning for Qwen3
+
+For Qwen3 models, prepend `/no_think` to your prompt to disable reasoning:
+
+```python showLineNumbers
+from openai import OpenAI
+
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model="Qwen3-30B-A3B-FP8",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "/no_think What is your name?"},
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+---
+
+
+## Next Steps
+
+- [Chat Completions](/guides/chat-completions) — Standard chat API usage
+- [Function Calling](/guides/function-calling) — Connect reasoning models to external tools
+- [Streaming](/guides/streaming) — Stream reasoning model responses
