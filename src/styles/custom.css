@@ -3,6 +3,8 @@
 	--sl-color-accent-low: #3d0019;
 	--sl-color-accent: #e20074;
 	--sl-color-accent-high: #ff4da6;
+	/* Widen main content area to reduce right-sidebar whitespace */
+	--sl-content-width: 55rem;
 }
 
 :root[data-theme='light'] {
