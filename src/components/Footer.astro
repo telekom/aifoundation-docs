@@ -1,0 +1,77 @@
+---
+import Default from '@astrojs/starlight/components/Footer.astro';
+
+const isDE = Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/de';
+
+const links = isDE
+  ? [
+      { label: 'Impressum', href: 'https://www.t-systems.com/de/de/impressum' },
+      { label: 'Datenschutz', href: 'https://www.t-systems.com/de/de/datenschutz' },
+      { label: 'AGB', href: '#' },
+      { label: 'Verbraucherschutz', href: '#' },
+      { label: 'Produktinformationsblatt', href: '#' },
+      { label: 'Jugendschutz', href: 'https://www.telekom.com/de/konzern/compliance/details/jugendschutz-702466' },
+    ]
+  : [
+      { label: 'Imprint', href: 'https://www.t-systems.com/de/en/imprint' },
+      { label: 'Data privacy', href: 'https://www.t-systems.com/de/en/data-privacy' },
+      { label: 'Terms and conditions', href: '#' },
+      { label: 'Consumer protection', href: '#' },
+      { label: 'Product information sheet', href: '#' },
+      { label: 'Youth protection', href: 'https://www.telekom.com/en/corporate-responsibility/governance/protection-of-minors' },
+    ];
+---
+
+<Default {...Astro.props}><slot /></Default>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span class="site-footer-notice">&copy; Deutsche Telekom AG</span>
+    <nav class="site-footer-nav" aria-label={isDE ? 'Rechtliche Hinweise' : 'Legal'}>
+      <ul>
+        {links.map(({ label, href }) => (
+          <li><a href={href}>{label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--sl-color-gray-5);
+    padding: 1.5rem var(--sl-content-pad-x);
+    font-size: 0.85rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .site-footer-inner {
+    max-width: var(--sl-content-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .site-footer-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .site-footer-nav a {
+    color: var(--sl-color-gray-3);
+    text-decoration: none;
+  }
+
+  .site-footer-nav a:hover {
+    color: var(--sl-color-accent);
+    text-decoration: underline;
+  }
+</style>

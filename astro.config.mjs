@@ -10,6 +10,9 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'AI Foundation Services',
+			components: {
+				Footer: './src/components/Footer.astro',
+			},
 			logo: {
 				src: './src/assets/favicon_180x180.png',
 			},
