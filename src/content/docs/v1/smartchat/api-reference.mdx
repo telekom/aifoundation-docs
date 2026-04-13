@@ -1,0 +1,93 @@
+---
+title: "API Reference"
+---
+
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+
+# SmartChat API Reference
+
+Interact with the SmartChat RAG API via HTTP requests. The API is accessed through a gateway with multiple backend services.
+
+---
+
+
+## Base URL & Routing
+
+Requests follow the format: `<base_url>/<service_path>/<route>`
+
+**Example:** `https://api-gateway.ai.t-systems.net/config-manager/redoc`
+
+| Part | Value |
+|---|---|
+| Base URL | `https://api-gateway.ai.t-systems.net` |
+| Service path | `config-manager` |
+| Route | `redoc` |
+
+---
+
+
+## Registration
+
+Contact the AIFS team via **example@t-systems.com** for registration.
+
+---
+
+
+## Authentication
+
+Obtain a Bearer Token from the [authentication endpoint](https://api-gateway.ai.t-systems.net/redoc#tag/Auth/operation/get_user_token_api_v1_auth_user_post), then include the `access_token` in all subsequent requests.
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+    ```bash
+    # Authenticate
+    curl --location '<BASE_URL>/api/v1/auth/user' \
+      --header 'Content-Type: application/json' \
+      --data '{
+        "username": "<USERNAME>",
+        "password": "<PASSWORD>"
+      }'
+
+    # Use the token
+    curl --location '<BASE_URL>/chat-session-manager/api/v1/sessions/' \
+      --header 'Authorization: Bearer <ACCESS_TOKEN>'
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python showLineNumbers
+    import requests
+    import json
+
+    base_url = "<BASE_URL>"
+
+    # Authenticate
+    payload = json.dumps({"username": "<USERNAME>", "password": "<PASSWORD>"})
+    headers = {"Content-Type": "application/json"}
+    response = requests.post(f"{base_url}/api/v1/auth/user", headers=headers, data=payload)
+
+    # Add token to headers
+    headers["Authorization"] = f"Bearer {response.json()['access_token']}"
+
+    # Make authenticated requests
+    response = requests.get(f"{base_url}/chat-session-manager/api/v1/sessions/", headers=headers)
+    print(response.json())
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+
+## Services
+
+| Service | Path | Docs | Description |
+|---|---|---|---|
+| **API Gateway** | — | [link](https://api-gateway.ai.t-systems.net/redoc) | Authentication and entrypoint |
+| **Config Manager** | `config-manager` | [link](https://api-gateway.ai.t-systems.net/config-manager/redoc) | Tenant and RAG configurations |
+| **User Manager** | `user-manager` | [link](https://api-gateway.ai.t-systems.net/user-manager/redoc) | Users, roles, and groups |
+| **File Manager** | `file-manager` | [link](https://api-gateway.ai.t-systems.net/file-manager/redoc) | Files, file groups, knowledge bases |
+| **Ingest Master** | `ingest-master` | [link](https://api-gateway.ai.t-systems.net/ingest-master/redoc) | File ingestion orchestration |
+| **Chat Session Manager** | `chat-session-manager` | [link](https://api-gateway.ai.t-systems.net/chat-session-manager/redoc) | Sessions, history, feedback |
+| **Query Pipeline** | `query-pipeline` | [link](https://api-gateway.ai.t-systems.net/query-pipeline/redoc) | Chat response generation |

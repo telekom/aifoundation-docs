@@ -1,0 +1,141 @@
+---
+title: "LlamaIndex Integration"
+---
+
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+
+# LlamaIndex Integration
+
+Use AI Foundation Services with LlamaIndex for building RAG applications, indexing documents, and building chat engines.
+
+---
+
+
+## Setup
+
+```bash
+pip install llama-index llama-index-llms-azure-openai llama-index-embeddings-openai
+```
+
+---
+
+
+## Initialize LLM
+
+```python showLineNumbers
+import os
+from llama_index.llms.azure_openai import AzureOpenAI
+
+llm = AzureOpenAI(
+    deployment_name="gpt-4o",
+    api_key=os.getenv("OPENAI_API_KEY"),
+    azure_endpoint=os.getenv("OPENAI_BASE_URL"),
+    api_version="2023-07-01-preview",
+)
+
+# Test
+response_iter = llm.stream_complete("Tell me a joke.")
+for response in response_iter:
+    print(response.delta, end="", flush=True)
+```
+
+---
+
+
+## Initialize Embeddings
+
+```python showLineNumbers
+import os
+from llama_index.embeddings.openai import OpenAIEmbedding
+
+embed_model = OpenAIEmbedding(
+    model_name="jina-embeddings-v2-base-de",
+    api_key=os.getenv("OPENAI_API_KEY"),
+    api_base=os.getenv("OPENAI_BASE_URL"),
+)
+
+# Test
+query_embedding = embed_model.get_query_embedding("Hello world")
+print(f"Embedding dimension: {len(query_embedding)}")
+```
+
+---
+
+
+## Simple RAG Example
+
+### 1. Prepare Documents
+
+```bash
+mkdir example_data
+cd example_data
+wget https://abc.xyz/assets/a7/5b/9e5ae0364b12b4c883f3cf748226/goog-exhibit-99-1-q1-2023-19.pdf
+```
+
+### 2. Index Documents
+
+```python showLineNumbers
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+from llama_index.core.node_parser import SentenceSplitter
+
+documents = SimpleDirectoryReader(
+    input_dir="./example_data", filename_as_id=True
+).load_data()
+
+index = VectorStoreIndex.from_documents(
+    documents=documents,
+    transformations=[SentenceSplitter(chunk_size=512, chunk_overlap=20)],
+    embed_model=embed_model,
+)
+```
+
+### 3. Create Chat Engine
+
+```python showLineNumbers
+from llama_index.core.postprocessor import LongContextReorder
+from llama_index.core.memory import ChatMemoryBuffer
+
+CONTEXT_PROMPT = """\
+You are a helpful AI assistant. Answer based on the context provided.
+If the context doesn't help, say: I can't find that in the given context.
+
+Context:
+{context_str}
+
+Answer in the same language as the question.
+"""
+
+chat_engine = index.as_chat_engine(
+    llm=llm,
+    streaming=True,
+    chat_mode="context",
+    context_template=CONTEXT_PROMPT,
+    node_postprocessors=[LongContextReorder()],
+    memory=ChatMemoryBuffer.from_defaults(token_limit=6000),
+    similarity_top_k=10,
+)
+```
+
+### 4. Ask Questions
+
+```python showLineNumbers
+response = chat_engine.stream_chat("How much revenue did Alphabet generate?")
+for token in response.response_gen:
+    print(token, end="")
+```
+
+**Example output:**
+```
+According to the context, Alphabet generated $69,787 million in revenue
+in the quarter ended March 31, 2023.
+```
+
+---
+
+
+## Next Steps
+
+- **[Embeddings Guide](/guides/embeddings)** — Learn more about embedding models
+- **[LangChain Integration](/integrations/langchain)** — Alternative RAG framework

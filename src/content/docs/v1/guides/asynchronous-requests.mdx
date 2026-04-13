@@ -1,0 +1,270 @@
+---
+title: "Asynchronous Requests (Queue API)"
+---
+
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+
+# Asynchronous Requests (Queue API)
+
+Submit long-running API requests to a queue for asynchronous processing. The Queue API mirrors the standard endpoints but processes requests in the background, making it ideal for batch workloads and large inference jobs.
+
+:::note[Prerequisites]
+- An API key ([get one here](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK or HTTP client installed ([Quickstart](/getting-started/quickstart))
+:::
+
+**What you'll learn:**
+- How to submit requests to the Queue API
+- When to use async vs. synchronous endpoints
+- How to poll for and retrieve results
+
+---
+
+
+## When to Use the Queue API
+
+Use the `/queue` endpoints when:
+
+- **Long-running inference** — Large models or complex prompts that may exceed synchronous timeout limits
+- **Batch processing** — Submitting many requests without waiting for each to complete
+- **Background jobs** — Fire-and-forget workloads where you process results later
+- **Rate limit management** — Spreading load across time instead of bursting
+
+For interactive or real-time use cases (chatbots, streaming), use the standard `/v2` endpoints instead.
+
+---
+
+
+## Endpoint Mapping
+
+Every standard endpoint has a `/queue` equivalent:
+
+| Standard Endpoint | Queue Endpoint | Description |
+|---|---|---|
+| `POST /v2/chat/completions` | `POST /queue/chat/completions` | Chat completion |
+| `POST /v2/completions` | `POST /queue/completions` | Text completion |
+| `POST /v2/embeddings` | `POST /queue/embeddings` | Embeddings |
+| `POST /v2/audio/transcriptions` | `POST /queue/audio/transcriptions` | Audio transcription |
+| `POST /v2/audio/translations` | `POST /queue/audio/translations` | Audio translation |
+| `POST /v2/images/generations` | `POST /queue/images/generations` | Image generation |
+| `POST /v2/images/edits` | `POST /queue/images/edits` | Image editing |
+| `GET /v2/models` | `GET /queue/models` | List models |
+
+The request body for each queue endpoint is **identical** to its standard counterpart — just change the base path from `/v2` to `/queue`.
+
+---
+
+
+## Basic Usage
+
+Submit a chat completion to the queue:
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+
+```bash
+curl -X POST "https://llm-server.llmhub.t-systems.net/queue/chat/completions" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Llama-3.3-70B-Instruct",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "Write a detailed analysis of renewable energy trends in Europe."}
+    ],
+    "max_tokens": 2000
+  }'
+```
+
+  </TabItem>
+  <TabItem value="python" label="Python">
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://llm-server.llmhub.t-systems.net/queue",
+)
+
+response = client.chat.completions.create(
+    model="Llama-3.3-70B-Instruct",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Write a detailed analysis of renewable energy trends in Europe."},
+    ],
+    max_tokens=2000,
+)
+
+print(response.choices[0].message.content)
+```
+
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://llm-server.llmhub.t-systems.net/queue",
+});
+
+const response = await client.chat.completions.create({
+  model: "Llama-3.3-70B-Instruct",
+  messages: [
+    { role: "system", content: "You are a helpful assistant." },
+    { role: "user", content: "Write a detailed analysis of renewable energy trends in Europe." },
+  ],
+  max_tokens: 2000,
+});
+
+console.log(response.choices[0].message.content);
+```
+
+  </TabItem>
+</Tabs>
+
+---
+
+
+## Batch Processing Example
+
+Process multiple prompts efficiently using the queue:
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+
+```python
+import asyncio
+from openai import AsyncOpenAI
+
+client = AsyncOpenAI(
+    base_url="https://llm-server.llmhub.t-systems.net/queue",
+)
+
+prompts = [
+    "Summarize the benefits of solar energy.",
+    "Explain how wind turbines generate electricity.",
+    "Describe the future of hydrogen fuel cells.",
+]
+
+async def process_prompt(prompt):
+    response = await client.chat.completions.create(
+        model="Llama-3.3-70B-Instruct",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=500,
+    )
+    return response.choices[0].message.content
+
+async def main():
+    tasks = [process_prompt(p) for p in prompts]
+    results = await asyncio.gather(*tasks)
+    for prompt, result in zip(prompts, results):
+        print(f"Prompt: {prompt[:50]}...")
+        print(f"Result: {result[:100]}...\n")
+
+asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://llm-server.llmhub.t-systems.net/queue",
+});
+
+const prompts = [
+  "Summarize the benefits of solar energy.",
+  "Explain how wind turbines generate electricity.",
+  "Describe the future of hydrogen fuel cells.",
+];
+
+const results = await Promise.all(
+  prompts.map((prompt) =>
+    client.chat.completions.create({
+      model: "Llama-3.3-70B-Instruct",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 500,
+    })
+  )
+);
+
+results.forEach((result, i) => {
+  console.log(`Prompt: ${prompts[i]}`);
+  console.log(`Result: ${result.choices[0].message.content}\n`);
+});
+```
+
+  </TabItem>
+</Tabs>
+
+---
+
+
+## Queue Endpoints for Other APIs
+
+### Embeddings
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://llm-server.llmhub.t-systems.net/queue",
+)
+
+response = client.embeddings.create(
+    model="text-embedding-bge-m3",
+    input="The benefits of renewable energy in Europe",
+)
+
+print(f"Embedding dimension: {len(response.data[0].embedding)}")
+```
+
+### Audio Transcription
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://llm-server.llmhub.t-systems.net/queue",
+)
+
+with open("meeting_recording.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="whisper-large-v3",
+        file=audio_file,
+    )
+
+print(transcript.text)
+```
+
+### Image Generation
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://llm-server.llmhub.t-systems.net/queue",
+)
+
+result = client.images.generate(
+    model="gpt-image-1",
+    prompt="A futuristic data center powered by renewable energy",
+)
+
+print(result.data[0].b64_json[:50] + "...")
+```
+
+---
+
+
+## Next Steps
+
+- [Chat Completions](/guides/chat-completions) — Standard synchronous chat API
+- [Streaming](/guides/streaming) — Real-time token-by-token responses
+- [Rate Limits](/reference/rate-limits) — Understand TPM/RPM limits and headers
+- [API Endpoints](/reference/api-endpoints) — Full endpoint reference
