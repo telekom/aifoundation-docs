@@ -1,0 +1,144 @@
+---
+title: "Audio (Sprache-zu-Text)"
+---
+
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+AI Foundation Services bietet Whisper-basierte Audiomodelle fuer Transkription und Uebersetzung, kompatibel mit der OpenAI Audio API.
+
+:::note[Voraussetzungen]
+- Ein API-Schluessel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK oder HTTP-Client installiert ([Schnellstart](/de/getting-started/quickstart))
+- Eine Audiodatei (MP3, WAV, M4A, etc.)
+:::
+
+**Was Sie lernen werden:**
+- Wie Sie Audio in der Originalsprache zu Text transkribieren
+- Wie Sie Audio aus beliebigen Sprachen ins Englische uebersetzen
+- Verfuegbare Audiomodelle und Parameter
+
+
+## Audiomodelle auflisten
+
+Audiomodelle haben `model_type: "STT"` in ihren Metadaten. Verwenden Sie den Models-Endpunkt und filtern Sie:
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    models = client.models.list()
+    for model in models.data:
+        if model.meta_data.get("model_type") == "STT":
+            print(model.id)
+    ```
+  </TabItem>
+  <TabItem value="curl" label="curl">
+    ```bash
+    curl "$OPENAI_BASE_URL/models" \
+      -H "Authorization: Bearer $OPENAI_API_KEY"
+    # Filter results for models with model_type "STT"
+    # Available audio models: whisper-large-v3, whisper-large-v3-turbo
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Audio-Transkription
+
+Die Transkriptions-API wandelt Audio in Text in derselben Sprache wie die Eingabe um. Sie erkennt die Sprache automatisch aus den ersten 30 Sekunden, wenn `language` nicht angegeben wird.
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    with open("/path/to/audio_file.mp3", "rb") as audio_file:
+        transcription = client.audio.transcriptions.create(
+            model="whisper-large-v3",
+            file=audio_file,
+            # language="en"  # Optional: specify language
+        )
+
+    print(f"Transcription: {transcription.text}")
+    ```
+  </TabItem>
+  <TabItem value="curl" label="curl">
+    ```bash
+    curl -X POST "$OPENAI_BASE_URL/audio/transcriptions" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -F "model=whisper-large-v3" \
+      -F "language=en" \
+      -F "temperature=0.0" \
+      -F "file=@/path/to/audio_file.mp3"
+    ```
+  </TabItem>
+</Tabs>
+
+**Beispielausgabe:**
+```
+Transcription: The stale smell of old beer lingers. It takes heat to bring out the odor.
+A cold dip restores health and zest. A salt pickle tastes fine with ham.
+```
+
+
+## Audio-Uebersetzung
+
+Die Uebersetzungs-API uebersetzt Audio aus beliebigen Sprachen ins Englische.
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    with open("/path/to/audio_file.mp3", "rb") as audio_file:
+        translation = client.audio.translations.create(
+            model="whisper-large-v3",
+            file=audio_file,
+            temperature=1.0,
+        )
+
+    print(f"Translation: {translation.text}")
+    ```
+  </TabItem>
+  <TabItem value="curl" label="curl">
+    ```bash
+    curl -X POST "$OPENAI_BASE_URL/audio/translations" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -F "model=whisper-large-v3" \
+      -F "temperature=1.0" \
+      -F "file=@/path/to/audio_file.mp3"
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Parameter
+
+| Parameter | Typ | Beschreibung |
+|---|---|---|
+| `model` | string | Audiomodell-ID (z.B. `whisper-large-v3`) |
+| `file` | file | Die zu verarbeitende Audiodatei |
+| `language` | string | Optional. ISO-Sprachcode. Wird automatisch erkannt, wenn nicht angegeben. |
+| `temperature` | float | `0.0` fuer deterministische Ergebnisse, hoeher fuer variablere Ausgabe |
+
+
+## Wichtige Funktionen
+
+1. **Automatische Spracherkennung** — Erkennt die Eingabesprache aus den ersten 30 Sekunden
+2. **Anpassbare Ausgabe** — Verhalten mit `language`- und `temperature`-Parametern anpassen
+3. **Effiziente Verarbeitung** — Geringe Latenz fuer Transkription und Uebersetzung
+
+
+## Naechste Schritte
+
+- [Chat Completions](/de/guides/chat-completions) — Transkribierten Text mit LLMs verarbeiten
+- [Asynchrone Anfragen](/de/guides/asynchronous-requests) — Lange Audiodateien zur asynchronen Verarbeitung einreihen
+- [API-Endpunkte](/de/reference/api-endpoints) — Vollstaendige Endpunkt-Referenz

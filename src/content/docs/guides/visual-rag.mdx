@@ -1,0 +1,201 @@
+---
+title: "Visual RAG"
+---
+
+Visual RAG indexes your files in both text and image, combining the stability of text indexing with the flexibility of visual indexing. It can retrieve information from graphs, charts, and complex table layouts that text-based RAG systems miss.
+
+:::note[Prerequisites]
+- An API key with Visual RAG access (contact **AlFoundation@t-systems.com**)
+- OpenAI SDK installed ([Quickstart](/getting-started/quickstart))
+- Documents to index (PDF, PPTX, DOCX, HTML, or PNG)
+:::
+
+**What you'll learn:**
+- How to upload files and create vector stores
+- How to search with both text and image retrieval
+- How to build an end-to-end RAG pipeline
+
+**Supported formats:** PDF, PPTX, DOCX, HTML, PNG
+
+
+## Workflow
+
+![Visual RAG Workflow](/img/VisionRAG_workflow.jpg)
+
+
+## Setup
+
+```python
+import os
+
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url="https://llm-server.llmhub.t-systems.net/v1",  # Note: v1 for Visual RAG
+)
+```
+
+
+## File Operations
+
+### Upload a File
+
+```python
+uploaded = client.files.create(
+    file=open("/path/to/your_file.pdf", "rb"),
+    purpose="visual-rag",
+)
+print(f"File ID: {uploaded.id}")
+```
+
+### List Files
+
+```python
+file_list = client.files.list(purpose="visual-rag")
+for f in file_list.data:
+    print(f"ID: {f.id}, Name: {f.filename}")
+```
+
+### Get File Info
+
+```python
+file_info = client.files.retrieve("file-abc123")
+print(file_info)
+```
+
+### Delete a File
+
+```python
+client.files.delete("file-abc123")
+```
+
+
+## Vector Store Operations
+
+### Create a Vector Store
+
+```python
+vs = client.vector_stores.create(
+    name="my_vs",
+    chunking_strategy={
+        "text_embedding_model": "text-embedding-bge-m3",
+        "vision_embedding_model": "tsi-embedding-colqwen2-2b-v1",
+    },
+)
+print(f"Vector Store ID: {vs.id}")
+```
+
+### List Vector Stores
+
+```python
+for vs in client.vector_stores.list():
+    print(f"{vs.name} ({vs.id}) - {vs.file_counts}")
+```
+
+### Ingest a File
+
+```python
+client.vector_stores.files.create(
+    vector_store_id="xyz-456",
+    file_id="file-abc123",
+    chunking_strategy={
+        "chunk_size": 1024,
+        "chunk_overlap": 100,
+    },
+)
+```
+
+### List Ingested Files
+
+```python
+files = client.vector_stores.files.list(vector_store_id="xyz-456")
+for f in files.data:
+    print(f"{f.id} - {f.created_at}")
+```
+
+### Delete an Ingested File
+
+```python
+client.vector_stores.files.delete(
+    vector_store_id="xyz-456",
+    file_id="file-abc123",
+)
+```
+
+### Delete a Vector Store
+
+```python
+client.vector_stores.delete(vector_store_id="xyz-456")
+```
+
+
+## Retrieval
+
+Search your vector store with both text and image results:
+
+```python
+results = client.vector_stores.search(
+    vector_store_id="xyz-456",
+    query="Which new features are supported?",
+    extra_body={
+        "top_k_texts": 3,
+        "top_k_images": 2,
+    },
+)
+
+for result in results:
+    if result.content[0].type == "text":
+        print("Text result:", result.content[0].text[:200])
+    elif result.content[0].type == "base64":
+        print(f"Image result from {result.filename}, page {result.page_number}")
+```
+
+
+## End-to-End RAG Example
+
+Combine retrieval with LLM inference for a complete Visual RAG pipeline:
+
+```python
+from openai import OpenAI
+
+rag_client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url="https://llm-server.llmhub.t-systems.net/v1",
+)
+llm_client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url="https://llm-server.llmhub.t-systems.net/v2",
+)
+
+# 1. Retrieve relevant context
+contexts = rag_client.vector_stores.search(
+    vector_store_id="xyz-456",
+    query="What are the key metrics?",
+    extra_body={"top_k_texts": 5, "top_k_images": 3},
+)
+
+# 2. Build prompt with text and image contexts
+content = [{"type": "text", "text": f"Based on the following context, answer: What are the key metrics?\n\n"}]
+for ctx in contexts:
+    if ctx.content[0].type == "text":
+        content[0]["text"] += ctx.content[0].text + "\n\n"
+    elif ctx.content[0].type == "base64":
+        content.append({"type": "image_url", "image_url": {"url": ctx.content[0].text}})
+
+# 3. Get answer from LLM
+response = llm_client.chat.completions.create(
+    model="claude-sonnet-4",
+    messages=[{"role": "user", "content": content}],
+    max_tokens=2048,
+)
+
+print(response.choices[0].message.content)
+```
+
+
+## Next Steps
+
+- [Embeddings](/guides/embeddings) — Text-only embeddings for simpler RAG
+- [Multimodal](/guides/multimodal) — Analyze images with vision models
+- [LangChain Integration](/integrations/langchain) — Use RAG with LangChain

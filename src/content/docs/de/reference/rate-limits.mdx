@@ -1,0 +1,130 @@
+---
+title: "Rate-Limits"
+---
+
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+Rate-Limits schützen den Dienst und gewährleisten eine faire Nutzung. Limits werden pro Tarifstufe definiert und variieren je nach Modell.
+
+
+## Limits nach Tarifstufe
+
+| Metrik | Basic | Standard4000 |
+|---|---|---|
+| **Token pro Minute (TPM)** | 18.750 Eingabe | Bis zu 150.000 Eingabe |
+| **Anfragen pro Minute (RPM)** | 20 | Bis zu 600 |
+
+Genaue Limits variieren je nach Modell. Weitere Details finden Sie auf der Seite [Tarife & Preise](/de/plans) oder laden Sie die [Leistungsbeschreibung (PDF)](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) herunter.
+
+
+## Wie Rate-Limits funktionieren
+
+- **TPM (Token pro Minute)** — Maximale Anzahl verarbeiteter Eingabe-Token pro Minute
+- **RPM (Anfragen pro Minute)** — Maximale Anzahl von API-Anfragen pro Minute
+- Limits gelten pro API-Schlüssel
+- Sowohl Eingabe- als auch Ausgabe-Token zählen zu den TPM-Limits
+
+
+## Rate-Limit-Antwort-Header
+
+Antworten von Azure-gehosteten Modellen (GPT, o-Serie) enthalten Header, die Ihnen helfen, die Nutzung im Verhältnis zu den Limits zu verfolgen:
+
+:::note
+Rate-Limit-Header werden derzeit von Azure-gehosteten Modellen zurückgegeben (z. B. `gpt-4.1`, `o3-mini`). Open-Source-Modelle, die auf T-Cloud gehostet werden (z. B. `Llama-3.3-70B-Instruct`), geben diese Header nicht zurück.
+:::
+
+| Header | Beschreibung |
+|---|---|
+| `x-ratelimit-limit-requests` | Maximale erlaubte Anfragen pro Minute |
+| `x-ratelimit-limit-tokens` | Maximale erlaubte Token pro Minute |
+| `x-ratelimit-remaining-requests` | Verbleibende Anfragen im aktuellen Zeitfenster |
+| `x-ratelimit-remaining-tokens` | Verbleibende Token im aktuellen Zeitfenster |
+| `x-ratelimit-reset-requests` | Zeit bis zum Zurücksetzen des Anfrage-Limits |
+| `x-ratelimit-reset-tokens` | Zeit bis zum Zurücksetzen des Token-Limits |
+
+### Header auslesen
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+
+```python
+import os
+import httpx
+
+# Use httpx directly to inspect response headers
+response = httpx.post(
+    "https://llm-server.llmhub.t-systems.net/v2/chat/completions",
+    headers={"Authorization": f"Bearer {os.getenv('OPENAI_API_KEY')}"},
+    json={
+        "model": "gpt-4.1",
+        "messages": [{"role": "user", "content": "Hello"}],
+        "max_tokens": 10,
+    },
+)
+
+print(f"Requests remaining: {response.headers.get('x-ratelimit-remaining-requests')}")
+print(f"Tokens remaining:   {response.headers.get('x-ratelimit-remaining-tokens')}")
+print(f"Resets in:          {response.headers.get('x-ratelimit-reset-requests')}")
+```
+
+  </TabItem>
+  <TabItem value="curl" label="curl">
+
+```bash
+curl -i -X POST "$OPENAI_BASE_URL/chat/completions" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4.1",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "max_tokens": 10
+  }'
+
+# The -i flag shows response headers including:
+# x-ratelimit-remaining-requests: 19
+# x-ratelimit-remaining-tokens: 18740
+# x-ratelimit-reset-requests: 3s
+```
+
+  </TabItem>
+</Tabs>
+
+
+## Umgang mit Rate-Limits
+
+Wenn Sie ein Rate-Limit überschreiten, gibt die API einen `429 Too Many Requests`-Fehler zurück. Best Practices:
+
+1. **Antwort-Header überwachen** — Prüfen Sie die `x-ratelimit-remaining-*`-Header, um Limits nicht zu erreichen
+2. **Exponentielles Backoff implementieren** — Verlängern Sie die Wartezeit zwischen Wiederholungsversuchen
+3. **Anfragen bündeln** — Fassen Sie mehrere kleine Anfragen zu weniger größeren zusammen
+4. **Antworten cachen** — Vermeiden Sie das Wiederholen identischer Anfragen
+5. **Queue-API verwenden** — Für Batch-Workloads nutzen Sie [asynchrone Anfragen](/guides/asynchronous-requests), um die Last zu verteilen
+
+```python
+import time
+
+from openai import OpenAI, RateLimitError
+
+client = OpenAI()
+
+def safe_completion(messages, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return client.chat.completions.create(
+                model="Llama-3.3-70B-Instruct",
+                messages=messages,
+            )
+        except RateLimitError:
+            wait_time = 2 ** attempt
+            print(f"Rate limited. Waiting {wait_time}s...")
+            time.sleep(wait_time)
+    raise Exception("Max retries exceeded")
+```
+
+
+## Höhere Limits benötigt?
+
+- **Tarif upgraden** — Höhere Stufen haben deutlich höhere TPM- und RPM-Limits
+- **Dedizierte Instanzen** — Für Enterprise-Workloads kontaktieren Sie uns für dedizierte GPU-Ressourcen mit individuellen Rate-Limits
+- **Kontakt:** [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/) oder wenden Sie sich an das AIFS-Team unter [ai@t-systems.com](mailto:ai@t-systems.com)

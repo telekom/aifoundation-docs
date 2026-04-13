@@ -1,0 +1,177 @@
+---
+title: "Fine-Tuning"
+---
+
+# Fine-Tuning API
+
+Fine-tune models with your own data using techniques like LoRA and DPO with RLHF. The Fine-Tuning API is compatible with the OpenAI fine-tuning interface.
+
+:::note[Prerequisites]
+- An API key with fine-tuning enabled (contact **AlFoundation@t-systems.com**)
+- OpenAI SDK installed ([Quickstart](/getting-started/quickstart))
+- Training data in JSONL format or document files (PDF, TXT, DOCX, CSV, JSON)
+:::
+
+**What you'll learn:**
+- How to upload and validate training datasets
+- How to create and manage fine-tuning jobs
+- How to monitor training progress with MLflow
+
+
+## Overview
+
+The Fine-Tuning API includes two components:
+- **Upload API** — Upload training data files
+- **Fine-Tuning Server** — Create and manage fine-tuning jobs
+
+**Supported models:** Mistral-Nemo-Instruct-2407, Llama-3.1-70B-Instruct
+
+**Supported file formats:** PDF, TXT, DOCX, CSV, JSON, JSONL, ZIP
+
+
+## Workflow
+
+![Fine-Tuning Workflow](https://github.com/user-attachments/assets/5e5f9672-5eb3-4217-b249-8694b174b963)
+
+**Two paths for training data:**
+
+1. **Document files** — Upload a ZIP of PDFs, TXT, DOCX, CSV, or JSON files. They will be chunked and used to generate a synthetic RAG dataset (context + question + answer).
+2. **Pre-formatted JSONL** — Upload an OpenAI-format JSONL dataset directly. Use the validate endpoint to check formatting.
+
+
+## Setup
+
+```python
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("OPENAI_BASE_URL"),
+)
+```
+
+
+## Upload Training Data
+
+```python
+file_path = "/path/to/your_dataset.jsonl"
+uploaded = client.files.create(
+    file=open(file_path, "rb"),
+    purpose="fine-tune",
+)
+print(uploaded.id)  # e.g., "file-abc123"
+```
+
+### List Uploaded Files
+
+```python
+files = client.files.list(purpose="fine-tune")
+for f in files.data:
+    print(f"ID: {f.id}, Filename: {f.filename}, Created: {f.created_at}")
+```
+
+### Delete a File
+
+```python
+client.files.delete("file-abc123")
+```
+
+
+## Validate Dataset
+
+Ensure your JSONL follows the correct format before fine-tuning:
+
+```python
+import httpx
+
+url = f"{os.getenv('OPENAI_BASE_URL')}/files/validate/{file_id}"
+headers = {"Content-Type": "application/json", "api-key": os.getenv("OPENAI_API_KEY")}
+
+with httpx.Client() as http_client:
+    response = http_client.get(url, headers=headers)
+    print(response.json())
+```
+
+### Dataset Format
+
+```json
+[
+    {
+        "messages": [
+            {"role": "system", "content": "Marv is a factual chatbot that is also sarcastic."},
+            {"role": "user", "content": "What's the capital of France?"},
+            {"role": "assistant", "content": "Paris", "weight": 0},
+            {"role": "user", "content": "Can you be more sarcastic?"},
+            {"role": "assistant", "content": "Paris, as if everyone doesn't know that already.", "weight": 1}
+        ]
+    }
+]
+```
+
+
+## Create a Fine-Tuning Job
+
+```python
+job = client.fine_tuning.jobs.create(
+    training_file="file-abc123",
+    model="Llama-3.3-70B-Instruct",
+    hyperparameters={"n_epochs": 2},
+)
+print(f"Job ID: {job.id}, Status: {job.status}")
+```
+
+### List Fine-Tuning Jobs
+
+```python
+jobs = client.fine_tuning.jobs.list(limit=10)
+for job in jobs.data:
+    print(f"ID: {job.id}, Model: {job.model}, Status: {job.status}")
+```
+
+### Monitor Job Events
+
+```python
+events = client.fine_tuning.jobs.list_events(
+    fine_tuning_job_id="ftjob-abc123",
+    limit=10,
+)
+for event in events.data:
+    print(f"[{event.created_at}] {event.level}: {event.message}")
+```
+
+### Cancel a Job
+
+```python
+client.fine_tuning.jobs.cancel("ftjob-abc123")
+```
+
+
+## Benchmarking & Monitoring
+
+### LM Evaluation Harness
+
+Fine-tuned models are evaluated using standard benchmarks:
+- **MMLU** — Knowledge across STEM, humanities, social sciences
+- **HellaSwag** — Commonsense reasoning
+- **ARC Challenge** — Science reasoning and logic
+- **GPQA** — Expert-level questions in biology, physics, chemistry
+
+### RAG Needle in a Haystack
+
+Tests the model's ability to find relevant information within large contexts with distractors.
+
+### MLflow Monitoring
+
+Monitor training and benchmarking at: [MLflow Dashboard](https://mlflow.llm-serving.llmhub.t-systems.net)
+
+Each fine-tuning job creates an MLflow experiment with:
+1. **Training metrics** — Loss curves, training progress
+2. **Benchmark scores** — LM Evaluation Harness and Needle in a Haystack results
+
+
+## Next Steps
+
+- [Chat Completions](/guides/chat-completions) — Use your fine-tuned model
+- [Available Models](/getting-started/models) — Browse all available models
+- [API Endpoints](/reference/api-endpoints) — Full endpoint reference

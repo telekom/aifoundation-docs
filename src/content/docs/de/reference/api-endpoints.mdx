@@ -1,0 +1,116 @@
+---
+title: "API-Endpunkte"
+---
+
+AI Foundation Services bietet eine OpenAI-kompatible REST-API. Alle Endpunkte verwenden die Basis-URL:
+
+```
+https://llm-server.llmhub.t-systems.net/v2
+```
+
+Die vollständige OpenAPI-Spezifikation finden Sie in der [interaktiven API-Dokumentation (Redoc)](https://llm-server.llmhub.t-systems.net/redoc).
+
+
+## Endpunkte
+
+| Methode | Endpunkt | Beschreibung |
+|---|---|---|
+| `GET` | `/models` | Alle verfügbaren Modelle auflisten |
+| `GET` | `/models/{model_id}` | Modelldetails und Metadaten abrufen |
+| `POST` | `/chat/completions` | Eine Chat-Vervollständigung erstellen |
+| `POST` | `/completions` | Eine Text-Vervollständigung erstellen |
+| `POST` | `/embeddings` | Embeddings erstellen |
+| `POST` | `/audio/transcriptions` | Audio in Text transkribieren |
+| `POST` | `/audio/translations` | Audio ins Englische übersetzen |
+| `GET` | `/audio/models` | Verfügbare Audio-Modelle auflisten |
+| `POST` | `/images/generations` | Bilder aus Text generieren |
+| `POST` | `/responses` | Eine Antwort erstellen (Responses API) |
+| `POST` | `/fine_tuning/jobs` | Einen Fine-Tuning-Auftrag erstellen |
+| `GET` | `/fine_tuning/jobs` | Fine-Tuning-Aufträge auflisten |
+| `POST` | `/fine_tuning/jobs/{id}/cancel` | Einen Fine-Tuning-Auftrag abbrechen |
+| `GET` | `/fine_tuning/jobs/{id}/events` | Fine-Tuning-Ereignisse auflisten |
+| `POST` | `/files` | Eine Datei hochladen |
+| `GET` | `/files` | Hochgeladene Dateien auflisten |
+| `DELETE` | `/files/{id}` | Eine Datei löschen |
+
+### Queue-Endpunkte (Asynchron)
+
+Alle wichtigen Endpunkte haben `/queue`-Varianten für asynchrone Verarbeitung. Weitere Details finden Sie im [Leitfaden für asynchrone Anfragen](/guides/asynchronous-requests).
+
+| Methode | Endpunkt | Beschreibung |
+|---|---|---|
+| `POST` | `/queue/chat/completions` | Asynchrone Chat-Vervollständigung |
+| `POST` | `/queue/completions` | Asynchrone Text-Vervollständigung |
+| `POST` | `/queue/embeddings` | Asynchrone Embeddings |
+| `POST` | `/queue/audio/transcriptions` | Asynchrone Audio-Transkription |
+| `POST` | `/queue/audio/translations` | Asynchrone Audio-Übersetzung |
+| `POST` | `/queue/images/generations` | Asynchrone Bildgenerierung |
+| `POST` | `/queue/images/edits` | Asynchrone Bildbearbeitung |
+| `GET` | `/queue/models` | Modelle auflisten (Queue) |
+
+
+## API-Versionierung
+
+Die API verwendet versionierte Pfade:
+
+| Pfad-Präfix | Zweck | Beispiele |
+|---|---|---|
+| `/v2` | **Standard** — LLM-Inferenz, Embeddings, Audio, Bilder | `/v2/chat/completions`, `/v2/embeddings` |
+| `/v1` | Visual RAG, Vektorspeicher, Dateiverwaltung | `/v1/vector_stores`, `/v1/files` |
+| `/queue` | Asynchrone Verarbeitung (spiegelt `/v2`-Endpunkte) | `/queue/chat/completions` |
+
+- Verwenden Sie `/v2` für alle Standard-LLM-API-Aufrufe (dies ist der Standard bei Verwendung von OpenAI-SDKs mit unserer Basis-URL)
+- Verwenden Sie `/v1` für Visual RAG und Dateiverwaltungsoperationen
+- Verwenden Sie `/queue` für lang laufende oder Batch-Workloads
+
+
+## Authentifizierung
+
+Alle Anfragen erfordern einen API-Schlüssel im `Authorization`-Header:
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+Weitere Details zur Einrichtung finden Sie unter [Authentifizierung](/getting-started/authentication).
+
+
+## Anfrageformat
+
+Alle POST-Anfragen verwenden JSON:
+
+```bash
+curl -X POST "https://llm-server.llmhub.t-systems.net/v2/chat/completions" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "Llama-3.3-70B-Instruct", "messages": [{"role": "user", "content": "Hello"}]}'
+```
+
+
+## Antwortformat
+
+Antworten folgen dem OpenAI-Antwortformat. Für Chat-Vervollständigungen:
+
+```json
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1710000000,
+  "model": "Llama-3.3-70B-Instruct",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! How can I help you today?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10,
+    "completion_tokens": 9,
+    "total_tokens": 19
+  }
+}
+```

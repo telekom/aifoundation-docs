@@ -1,0 +1,301 @@
+---
+title: "Streaming"
+---
+
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+Streamen Sie Antworten Token für Token mit Server-Sent Events (SSE) für eine schnellere Zeit bis zum ersten Token und ein besseres Benutzererlebnis in interaktiven Anwendungen.
+
+:::note[Voraussetzungen]
+- Ein API-Schlüssel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK oder HTTP-Client installiert ([Schnellstart](/getting-started/quickstart))
+:::
+
+**Was Sie lernen werden:**
+- Wie Sie Streaming für Chat-Vervollständigungen aktivieren
+- Wie Sie Streaming-Chunks in verschiedenen Programmiersprachen verarbeiten
+- Wie Sie Streaming mit Function Calling verwenden
+- Fehlerbehandlungsmuster für Streams
+
+
+## Warum Streaming?
+
+Ohne Streaming wartet die API, bis die gesamte Antwort generiert ist, bevor sie zurückgesendet wird. Mit Streaming:
+
+- **Schnellere wahrgenommene Antwort** — Das erste Token kommt in Millisekunden an, statt Sekunden auf die vollständige Antwort zu warten
+- **Bessere UX** — Benutzer sehen Text progressiv erscheinen, wie beim menschlichen Tippen
+- **Geringerer Speicherverbrauch** — Token werden bei Ankunft verarbeitet, statt die gesamte Antwort zu puffern
+- **Frühzeitiger Abbruch** — Generierung kann mitten im Stream gestoppt werden, wenn die Ausgabe nicht den Erwartungen entspricht
+
+
+## Einfaches Streaming
+
+Aktivieren Sie Streaming, indem Sie `stream: true` in Ihrer Anfrage setzen:
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+
+```bash
+curl -X POST "$OPENAI_BASE_URL/chat/completions" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Llama-3.3-70B-Instruct",
+    "messages": [{"role": "user", "content": "Explain quantum computing"}],
+    "stream": true
+  }'
+```
+
+Die Antwort ist ein Stream von `data:`-Zeilen im SSE-Format:
+
+```
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","choices":[{"delta":{"role":"assistant"},"index":0}]}
+
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","choices":[{"delta":{"content":"Quantum"},"index":0}]}
+
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","choices":[{"delta":{"content":" computing"},"index":0}]}
+
+...
+
+data: [DONE]
+```
+
+  </TabItem>
+  <TabItem value="python" label="Python">
+
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+stream = client.chat.completions.create(
+    model="Llama-3.3-70B-Instruct",
+    messages=[{"role": "user", "content": "Explain quantum computing"}],
+    stream=True,
+)
+
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end="", flush=True)
+
+print()  # newline at end
+```
+
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI();
+
+const stream = await client.chat.completions.create({
+  model: "Llama-3.3-70B-Instruct",
+  messages: [{ role: "user", content: "Explain quantum computing" }],
+  stream: true,
+});
+
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content;
+  if (content) {
+    process.stdout.write(content);
+  }
+}
+
+console.log(); // newline at end
+```
+
+  </TabItem>
+</Tabs>
+
+
+## Die vollständige Antwort sammeln
+
+Wenn Sie sowohl die Streaming-Ausgabe als auch den vollständigen Text benötigen:
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+stream = client.chat.completions.create(
+    model="Llama-3.3-70B-Instruct",
+    messages=[{"role": "user", "content": "List 5 EU countries"}],
+    stream=True,
+)
+
+full_response = []
+for chunk in stream:
+    if not chunk.choices:
+        continue
+    content = chunk.choices[0].delta.content
+    if content:
+        full_response.append(content)
+        print(content, end="", flush=True)
+
+complete_text = "".join(full_response)
+print(f"\n\nTotal length: {len(complete_text)} characters")
+```
+
+  </TabItem>
+  <TabItem value="node" label="Node.js">
+
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI();
+
+const stream = await client.chat.completions.create({
+  model: "Llama-3.3-70B-Instruct",
+  messages: [{ role: "user", content: "List 5 EU countries" }],
+  stream: true,
+});
+
+const chunks = [];
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content;
+  if (content) {
+    chunks.push(content);
+    process.stdout.write(content);
+  }
+}
+
+const completeText = chunks.join("");
+console.log(`\n\nTotal length: ${completeText.length} characters`);
+```
+
+  </TabItem>
+</Tabs>
+
+
+## Streaming mit Function Calling
+
+Beim Streaming mit Tools/Funktionen kommen die Tool-Call-Argumente inkrementell über mehrere Chunks:
+
+```python
+from openai import OpenAI
+import json
+
+client = OpenAI()
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string", "description": "City name"},
+                },
+                "required": ["location"],
+            },
+        },
+    }
+]
+
+stream = client.chat.completions.create(
+    model="gpt-4.1",
+    messages=[{"role": "user", "content": "What's the weather in Berlin?"}],
+    tools=tools,
+    stream=True,
+)
+
+tool_calls = {}
+for chunk in stream:
+    if not chunk.choices:
+        continue
+    delta = chunk.choices[0].delta
+
+    if delta.tool_calls:
+        for tc in delta.tool_calls:
+            if tc.id:
+                tool_calls[tc.index] = {
+                    "id": tc.id,
+                    "function": {"name": tc.function.name, "arguments": ""},
+                }
+            if tc.function.arguments:
+                tool_calls[tc.index]["function"]["arguments"] += tc.function.arguments
+
+# Process completed tool calls
+for tc in tool_calls.values():
+    args = json.loads(tc["function"]["arguments"])
+    print(f"Tool: {tc['function']['name']}, Args: {args}")
+```
+
+
+## Fehlerbehandlung
+
+Behandeln Sie Verbindungsabbrüche und Fehler während des Streamings elegant:
+
+```python
+from openai import OpenAI, APIError, APIConnectionError
+
+client = OpenAI()
+
+def stream_with_retry(messages, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            stream = client.chat.completions.create(
+                model="Llama-3.3-70B-Instruct",
+                messages=messages,
+                stream=True,
+            )
+            full_response = []
+            for chunk in stream:
+                if not chunk.choices:
+                    continue
+                content = chunk.choices[0].delta.content
+                if content:
+                    full_response.append(content)
+                    print(content, end="", flush=True)
+            print()
+            return "".join(full_response)
+
+        except APIConnectionError:
+            print(f"\nConnection lost. Retry {attempt + 1}/{max_retries}...")
+        except APIError as e:
+            print(f"\nAPI error: {e}. Retry {attempt + 1}/{max_retries}...")
+
+    raise Exception("Max retries exceeded")
+```
+
+
+## Stream-Optionen
+
+Fordern Sie Nutzungsstatistiken im letzten Chunk mit `stream_options` an:
+
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+stream = client.chat.completions.create(
+    model="Llama-3.3-70B-Instruct",
+    messages=[{"role": "user", "content": "Hello!"}],
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+for chunk in stream:
+    if chunk.usage:
+        print(f"\nTokens — prompt: {chunk.usage.prompt_tokens}, "
+              f"completion: {chunk.usage.completion_tokens}, "
+              f"total: {chunk.usage.total_tokens}")
+    elif chunk.choices and chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+```
+
+
+## Nächste Schritte
+
+- [Chat-Vervollständigungen](/guides/chat-completions) — Nicht-streamende Chat-API-Nutzung
+- [Function Calling](/guides/function-calling) — Tools mit der API definieren und verwenden
+- [Asynchrone Anfragen](/guides/asynchronous-requests) — Warteschlangenbasierte Verarbeitung für Batch-Workloads
+- [Fehlercodes](/reference/error-codes) — API-Fehler behandeln

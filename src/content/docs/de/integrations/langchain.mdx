@@ -1,0 +1,74 @@
+---
+title: "LangChain-Integration"
+---
+
+Nutzen Sie AI Foundation Services mit LangChain für RAG, Chains und Agenten-Workflows. Da AIFS OpenAI-kompatibel ist, können Sie das Paket `langchain-openai` direkt verwenden.
+
+
+## Einrichtung
+
+```bash
+pip install langchain langchain-openai
+```
+
+
+## LLM initialisieren
+
+```python showLineNumbers
+import os
+
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    openai_api_key=os.getenv("OPENAI_API_KEY"),
+    openai_api_base=os.getenv("OPENAI_BASE_URL"),
+    model_name="Llama-3.3-70B-Instruct",
+    streaming=True,
+)
+
+# Test
+for chunk in llm.stream("Write me a short poem about cloud computing."):
+    if chunk.content:
+        print(chunk.content, end="", flush=True)
+```
+
+
+## Embeddings initialisieren
+
+```python showLineNumbers
+from typing import List
+from langchain_openai import OpenAIEmbeddings
+import os
+
+class AIFSEmbeddings(OpenAIEmbeddings):
+    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+        embeddings = self.client.create(input=texts, model=self.model)
+        return [embed.embedding for embed in embeddings.data]
+
+    async def aembed_documents(self, texts: List[str]) -> List[List[float]]:
+        embeddings = await self.async_client.create(input=texts, model=self.model)
+        return [embed.embedding for embed in embeddings.data]
+
+    def embed_query(self, text: str) -> List[float]:
+        return self.embed_documents([text])[0]
+
+    async def aembed_query(self, text: str) -> List[float]:
+        embed = await self.aembed_documents([text])
+        return embed[0]
+
+embed_model = AIFSEmbeddings(
+    openai_api_key=os.getenv("OPENAI_API_KEY"),
+    openai_api_base=os.getenv("OPENAI_BASE_URL"),
+    model="text-embedding-bge-m3",
+)
+
+# Test
+embeddings = embed_model.embed_documents(["Hello!", "World!"])
+print(f"Dimensions: {len(embeddings[0])}")
+```
+
+
+## Nächste Schritte
+
+- **[Embeddings-Leitfaden](/guides/embeddings)** — Erfahren Sie mehr über Embedding-Modelle
+- **[LlamaIndex-Integration](/integrations/llama-index)** — Alternatives RAG-Framework

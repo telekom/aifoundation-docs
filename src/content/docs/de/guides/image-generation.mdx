@@ -1,0 +1,75 @@
+---
+title: "Bildgenerierung"
+---
+
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+Generieren Sie Bilder aus Textbeschreibungen mithilfe der OpenAI-kompatiblen Images API.
+
+:::note[Voraussetzungen]
+- Ein API-Schlüssel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
+- OpenAI SDK oder HTTP-Client installiert ([Schnellstart](/getting-started/quickstart))
+:::
+
+**Was Sie lernen werden:**
+- Wie Sie Bilder aus Textbeschreibungen generieren
+- Wie Sie generierte Bilder dekodieren und speichern
+- Verfügbare Bildgenerierungsmodelle
+
+
+## Grundlegende Verwendung
+
+<Tabs>
+  <TabItem value="python" label="Python" default>
+    ```python showLineNumbers
+    import base64
+    from openai import OpenAI
+
+    client = OpenAI()
+
+    prompt = """
+    A background with server racks and cables, with a futuristic city skyline
+    visible through a large window at sunrise. The room has blue and green LED
+    lights illuminating the equipment.
+    """
+
+    result = client.images.generate(
+        model="gpt-image-1",
+        prompt=prompt,
+    )
+
+    # Decode and save the image
+    image_bytes = base64.b64decode(result.data[0].b64_json)
+    with open("generated_image.png", "wb") as f:
+        f.write(image_bytes)
+
+    print("Image saved to generated_image.png")
+    ```
+  </TabItem>
+  <TabItem value="curl" label="curl">
+    ```bash
+    curl -X POST "$OPENAI_BASE_URL/images/generations" \
+      -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "gpt-image-1",
+        "prompt": "A futuristic data center at sunrise with blue LED lights"
+      }'
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Verfügbare Modelle
+
+| Modell | Anbieter | Beschreibung |
+|---|---|---|
+| `gpt-image-1` | Azure | OpenAIs Bildgenerierungsmodell |
+
+
+## Nächste Schritte
+
+- [Multimodal](/guides/multimodal) — Bilder mit Vision-Modellen analysieren
+- [Asynchrone Anfragen](/guides/asynchronous-requests) — Bildgenerierung für Stapelverarbeitung in die Warteschlange stellen
+- [API-Endpunkte](/reference/api-endpoints) — Vollständige Endpunkt-Referenz
