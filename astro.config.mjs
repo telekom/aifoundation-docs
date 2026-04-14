@@ -67,6 +67,16 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Plugins',
+					items: [
+						{ label: 'Cline', slug: 'plugins/cline' },
+						{ label: 'Continue for VS Code', slug: 'plugins/continue-vscode' },
+						{ label: 'Continue for JetBrains', slug: 'plugins/continue-jetbrain' },
+						{ label: 'OpenCode', slug: 'plugins/opencode' },
+						{ label: 'Roo Code', slug: 'plugins/roo-code' },
+					],
+				},
+				{
 					label: 'Reference',
 					items: [
 						{ label: 'API Endpoints', slug: 'reference/api-endpoints' },
