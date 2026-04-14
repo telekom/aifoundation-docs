@@ -1,0 +1,101 @@
+---
+title: "Continue for JetBrains"
+---
+
+Continue for AI Engineer is a custom version of the Continue plugin for JetBrains IDEs. It brings chat, inline edits, autocomplete, and coding agents directly into IntelliJ-based workflows so you can work with AI models without leaving your editor.
+
+## Key Features
+
+- Chat interface for questions, code explanations, and development assistance
+- Inline edits for targeted code changes inside the editor
+- Autocomplete for low-latency code suggestions while you type
+- Coding agents for multi-step tasks such as reading files, running commands, and applying changes
+
+## Installation
+
+1. Open **Settings** in your JetBrains IDE and select **Plugins**.
+2. On the Plugins page, click the settings icon and choose **Manage Plugin Repositories**.
+3. In the **Custom Plugin Repositories** dialog, add the following repository URL:
+
+```text
+https://plugins.dev.aie.ai.t-systems.net/v1/registry/434192/packages/latest/info?package_name=continue-jetbrains&file_pattern=jetbrainupdatexml
+```
+
+4. Click **OK** to save the repository list and apply the changes.
+5. Open the marketplace, search for **Continue for AI Engineer**, and install it.
+
+## Config File Setup
+
+After the first installation, open the AI Engineer Continue plugin and choose **Local config**. This opens an empty `config.yaml` file that you can update with your model, base URL, and API key details.
+
+1. Choose a model ID from [Available Models](https://docs.llmhub.t-systems.net/getting-started/models):
+
+```yaml
+model: gpt-oss-120b
+```
+
+2. Set the base URL:
+
+```yaml
+apiBase: https://llm-server.llmhub.t-systems.net/v2/coding
+```
+
+3. Generate an API key in [LLM Serving API Keys](https://apikey.llmhub.t-systems.net/dashboard):
+
+```yaml
+apiKey: gen-************************************************
+```
+
+4. Assign one or more roles to the model, such as `chat`, `edit`, `apply`, `autocomplete`, or `embed`:
+
+```yaml
+roles:
+  - chat
+```
+
+::::note[Windows only]
+If you use IntelliJ or PyCharm on Windows, add your proxy settings to the configuration file:
+
+```yaml
+requestOptions:
+  proxy: YourProxyHost:Port
+```
+::::
+
+### Example `config.yaml`
+
+```yaml
+name: Local Config
+version: 1.0.0
+schema: v1
+models:
+  - name: gpt-4.1
+    model: gpt-4.1
+    provider: openai
+    apiBase: https://llm-server.llmhub.t-systems.net/v2/coding
+    apiKey: gen-************************************************
+    roles:
+      - chat
+    requestOptions:
+      proxy: YourProxyHost:Port
+  - name: Qwen3-30B-A3B-FP8
+    model: Qwen3-30B-A3B-FP8
+    provider: openai
+    apiBase: https://llm-server.llmhub.t-systems.net/v2/coding
+    apiKey: gen-************************************************
+    roles:
+      - chat
+      - edit
+      - apply
+    requestOptions:
+      proxy: YourProxyHost:Port
+```
+
+Once the config is saved, you can start a chat and use Continue in your JetBrains IDE.
+
+## Updating
+
+Automatic updates are included for the JetBrains plugin whenever a new version is published.
+
+- The plugin can fetch updates automatically when they are available.
+- You can also check manually in `Settings -> Appearance & Behavior -> System Settings -> Updates`.
