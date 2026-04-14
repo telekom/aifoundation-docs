@@ -1,0 +1,58 @@
+---
+title: "OpenCode"
+---
+
+OpenCode is an open-source AI coding agent that runs in the terminal and can be used alongside any editor or IDE.
+
+## Key Features
+
+- LSP support that loads the right language tooling for the model
+- Multi-session workflows so you can run multiple agents on the same project
+- Shareable session links for collaboration and debugging
+- MCP support for external tools and data sources
+- Editor-agnostic workflow that works in any IDE
+
+## Installation and Setup
+
+::::note[Proxy usage]
+Like most command-line tools, OpenCode may require proxy settings in your shell environment:
+
+```bash
+http_proxy=<your-proxy-url><:port>
+https_proxy=<your-proxy-url><:port>
+```
+::::
+
+1. Add the npm registry:
+
+```bash
+npm config set @aie:registry https://plugins.dev.aie.ai.t-systems.net/v1/npm
+```
+
+2. Install OpenCode globally:
+
+```bash
+npm install -g @aie/opencode
+```
+
+3. If you are on Windows and need a proxy, set the required environment variables before starting OpenCode.
+
+4. Get an API key from the portal:
+
+- [AI Foundation Services API Key Portal](https://apikey.llmhub.t-systems.net/)
+
+5. Run OpenCode:
+
+```bash
+opencode
+```
+
+6. In OpenCode, run the following command to choose your provider and sign in with your API key:
+
+```bash
+/connect
+```
+
+Select **AI Foundation Services** from the provider list, then provide your API key when prompted.
+
+You can now start a chat and use OpenCode.
