@@ -1,0 +1,34 @@
+# LLM Hub (T-Systems AI Foundation Services)
+
+> Sovereign, GDPR-compliant LLM inference API. OpenAI-compatible. Hosted in Germany and the EU. 30+ open-source and proprietary models on a single endpoint.
+
+## Docs
+
+- [Overview](https://docs.llmhub.t-systems.net/): Product overview, available models, compliance posture.
+- [Quickstart](https://docs.llmhub.t-systems.net/getting-started/quickstart): Install the OpenAI SDK and send your first request in under 5 minutes.
+- [Authentication](https://docs.llmhub.t-systems.net/getting-started/authentication): API key acquisition and bearer-token request flow.
+- [Models](https://docs.llmhub.t-systems.net/getting-started/models): Catalog of available LLMs, embedding, vision, and audio models.
+- [Chat Completions](https://docs.llmhub.t-systems.net/guides/chat-completions): OpenAI-compatible chat API — system/user messages, response structure.
+- [Streaming](https://docs.llmhub.t-systems.net/guides/streaming): Token-by-token responses via Server-Sent Events.
+- [Embeddings](https://docs.llmhub.t-systems.net/guides/embeddings): Text embeddings for semantic search and RAG.
+- [Function Calling](https://docs.llmhub.t-systems.net/guides/function-calling): Tool definitions and structured JSON outputs.
+- [Fine-Tuning](https://docs.llmhub.t-systems.net/guides/fine-tuning): Fine-tune Mistral and Llama via LoRA or DPO.
+- [API Endpoints](https://docs.llmhub.t-systems.net/reference/api-endpoints): Complete REST API reference.
+- [Error Codes](https://docs.llmhub.t-systems.net/reference/error-codes): HTTP error codes with causes and resolutions.
+- [Rate Limits](https://docs.llmhub.t-systems.net/reference/rate-limits): Per-plan token and request rate limits.
+- [Plans & Pricing](https://docs.llmhub.t-systems.net/plans): Subscription tiers, model availability, pricing.
+
+## Integrations
+
+- [LangChain](https://docs.llmhub.t-systems.net/integrations/langchain): Use langchain-openai against AI Foundation Services.
+- [LlamaIndex](https://docs.llmhub.t-systems.net/integrations/llama-index): Point the OpenAI-compatible client at the LLM Hub endpoint.
+
+## SmartChat (RAG product)
+
+- [SmartChat Overview](https://docs.llmhub.t-systems.net/smartchat/overview): Hosted RAG over your documents — browser UI and API.
+- [RAG API Reference](https://docs.llmhub.t-systems.net/smartchat/api-reference): HTTP gateway, authentication, service routing.
+
+## Optional
+
+- [FAQ](https://docs.llmhub.t-systems.net/faq): Compliance, pricing, rate limits, ordering.
+- [German docs](https://docs.llmhub.t-systems.net/de/): Full documentation in German.
