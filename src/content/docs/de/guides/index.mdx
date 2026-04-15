@@ -1,0 +1,80 @@
+---
+title: "Anleitungen"
+description: "Aufgabenorientierte Anleitungen für das Entwickeln mit AI Foundation Services — Chat-Vervollständigungen, Streaming, Embeddings, Multimodal, Feinabstimmung und mehr."
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Der Abschnitt „Anleitungen" beantwortet „Wie mache ich…"-Fragen. Jede Seite konzentriert sich auf eine einzelne Funktion: Sie zeigt den minimalen funktionsfähigen Code, erläutert die wichtigsten Parameter und weist auf plattformspezifisches Verhalten hin. Alle Beispiele verwenden die OpenAI-kompatible API, sodass vorhandener OpenAI-SDK-Code in der Regel mit einer einzeiligen Anpassung der Basis-URL funktioniert.
+
+Wählen Sie unten ein Thema aus oder arbeiten Sie die Anleitungen der Reihe nach durch, wenn Sie neu bei AI Foundation Services sind.
+
+## Kern-API
+
+<CardGrid>
+  <LinkCard
+    title="Chat-Vervollständigungen"
+    href="/de/guides/chat-completions/"
+    description="Chat-Anfragen mit System- und Benutzernachrichten über die OpenAI-kompatible Chat-API von AI Foundation Services senden."
+  />
+  <LinkCard
+    title="Streaming"
+    href="/de/guides/streaming/"
+    description="LLM-Antworten token-weise über Server-Sent Events streamen — für geringere Latenz und bessere Nutzererfahrung."
+  />
+  <LinkCard
+    title="Embeddings"
+    href="/de/guides/embeddings/"
+    description="Texteinbettungen für semantische Suche, Clustering und RAG-Anwendungen über die Embedding-API von AI Foundation Services generieren."
+  />
+  <LinkCard
+    title="Funktionsaufrufe"
+    href="/de/guides/function-calling/"
+    description="Werkzeuge definieren und LLM-Hub-Modelle strukturierte JSON-Argumente zurückgeben lassen, um externe APIs und Datenquellen anzubinden."
+  />
+</CardGrid>
+
+## Multimodal & Medien
+
+<CardGrid>
+  <LinkCard
+    title="Multimodal (Vision)"
+    href="/de/guides/multimodal/"
+    description="Bilder zusammen mit Text über visionsfähige Modelle von AI Foundation Services mit der standardmäßigen Chat-Completions-API analysieren."
+  />
+  <LinkCard
+    title="Audio (Sprache-zu-Text)"
+    href="/de/guides/audio/"
+    description="Audiodateien mit Whisper-basierten Modellen von AI Foundation Services transkribieren und übersetzen, kompatibel mit der OpenAI Audio API."
+  />
+  <LinkCard
+    title="Bildgenerierung"
+    href="/de/guides/image-generation/"
+    description="Bilder aus Textprompts über die OpenAI-kompatible Images-API von AI Foundation Services mit verfügbaren Bildmodellen generieren."
+  />
+</CardGrid>
+
+## Erweitert
+
+<CardGrid>
+  <LinkCard
+    title="Reasoning-Steuerung"
+    href="/de/guides/reasoning/"
+    description="Tiefe des Chain-of-Thought mit dem Parameter reasoning_effort bei unterstützten Modellen wie o1, Gemini 2.5 und Claude 4 steuern."
+  />
+  <LinkCard
+    title="Feinabstimmung"
+    href="/de/guides/fine-tuning/"
+    description="Mistral- und Llama-Modelle mit eigenen Daten per LoRA oder DPO über die Fine-Tuning-API von AI Foundation Services anpassen."
+  />
+  <LinkCard
+    title="Visual RAG"
+    href="/de/guides/visual-rag/"
+    description="Dokumente mit kombinierter Text- und Bildindizierung bei AI Foundation Services aufnehmen, um Daten aus Diagrammen, Tabellen und Grafiken zu extrahieren."
+  />
+  <LinkCard
+    title="Asynchrone Anfragen (Queue API)"
+    href="/de/guides/asynchronous-requests/"
+    description="Lang laufende oder Batch-Inferenzaufträge an die Queue API von AI Foundation Services übergeben und die Ergebnisse asynchron abfragen."
+  />
+</CardGrid>
