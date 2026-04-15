@@ -5,7 +5,7 @@ import starlightVersions from 'starlight-versions';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://telekom.github.io',
+	site: 'https://docs.llmhub.t-systems.net',
 	base: '/',
 	integrations: [
 		starlight({
