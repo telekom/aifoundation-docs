@@ -7,6 +7,12 @@ import starlightVersions from 'starlight-versions';
 export default defineConfig({
 	site: 'https://docs.llmhub.t-systems.net',
 	base: '/',
+	redirects: {
+		'/Quickstart': '/getting-started/quickstart',
+		'/Introduction': '/',
+		'/Model Serving/langchain': '/integrations/langchain',
+		'/Services and Pricing': '/plans',
+	},
 	integrations: [
 		starlight({
 			title: 'AI Foundation Services',
