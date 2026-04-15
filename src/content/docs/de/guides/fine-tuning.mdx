@@ -1,29 +1,29 @@
 ---
-title: "Feinabstimmung"
-description: "Mistral- und Llama-Modelle mit eigenen Daten via LoRA oder DPO über die AI Foundation Services Fine-Tuning API feinabstimmen."
+title: "Fine-Tuning"
+description: "Mistral- und Llama-Modelle mit eigenen Daten via LoRA oder DPO über die AI Foundation Services Fine-Tuning API anpassen."
 ---
 
-# Feinabstimmungs-API
+# Fine-Tuning API
 
-Stimmen Sie Modelle mit Ihren eigenen Daten unter Verwendung von Techniken wie LoRA und DPO mit RLHF fein ab. Die Feinabstimmungs-API ist kompatibel mit der OpenAI-Feinabstimmungsschnittstelle.
+Passen Sie Modelle mit Ihren eigenen Daten unter Verwendung von Techniken wie LoRA und DPO mit RLHF an. Die Fine-Tuning API ist kompatibel mit der OpenAI Fine-Tuning-Schnittstelle.
 
 :::note[Voraussetzungen]
-- Ein API-Schlüssel mit aktivierter Feinabstimmung (kontaktieren Sie **AlFoundation@t-systems.com**)
-- OpenAI SDK installiert ([Schnellstart](/de/getting-started/quickstart))
+- Ein API-Schlüssel mit aktiviertem Fine-Tuning (kontaktieren Sie **AlFoundation@t-systems.com**)
+- OpenAI SDK installiert ([Quickstart](/de/getting-started/quickstart))
 - Trainingsdaten im JSONL-Format oder Dokumentdateien (PDF, TXT, DOCX, CSV, JSON)
 :::
 
 **Was Sie lernen werden:**
 - Wie Sie Trainingsdatensätze hochladen und validieren
-- Wie Sie Feinabstimmungsaufträge erstellen und verwalten
+- Wie Sie Fine-Tuning-Aufträge erstellen und verwalten
 - Wie Sie den Trainingsfortschritt mit MLflow überwachen
 
 
 ## Überblick
 
-Die Feinabstimmungs-API umfasst zwei Komponenten:
+Die Fine-Tuning API umfasst zwei Komponenten:
 - **Upload-API** — Trainingsdaten hochladen
-- **Feinabstimmungsserver** — Feinabstimmungsaufträge erstellen und verwalten
+- **Fine-Tuning-Server** — Fine-Tuning-Aufträge erstellen und verwalten
 
 **Unterstützte Modelle:** Mistral-Nemo-Instruct-2407, Llama-3.1-70B-Instruct
 
@@ -81,7 +81,7 @@ client.files.delete("file-abc123")
 
 ## Datensatz validieren
 
-Stellen Sie sicher, dass Ihr JSONL das korrekte Format hat, bevor Sie die Feinabstimmung starten:
+Stellen Sie sicher, dass Ihr JSONL das korrekte Format hat, bevor Sie das Fine-Tuning starten:
 
 ```python
 import httpx
@@ -111,7 +111,7 @@ with httpx.Client() as http_client:
 ```
 
 
-## Feinabstimmungsauftrag erstellen
+## Fine-Tuning-Auftrag erstellen
 
 ```python
 job = client.fine_tuning.jobs.create(
@@ -122,7 +122,7 @@ job = client.fine_tuning.jobs.create(
 print(f"Job ID: {job.id}, Status: {job.status}")
 ```
 
-### Feinabstimmungsaufträge auflisten
+### Fine-Tuning-Aufträge auflisten
 
 ```python
 jobs = client.fine_tuning.jobs.list(limit=10)
@@ -152,7 +152,7 @@ client.fine_tuning.jobs.cancel("ftjob-abc123")
 
 ### LM Evaluation Harness
 
-Feinabgestimmte Modelle werden mit Standard-Benchmarks evaluiert:
+Fine-tuned-Modelle werden mit Standard-Benchmarks evaluiert:
 - **MMLU** — Wissen in MINT, Geisteswissenschaften, Sozialwissenschaften
 - **HellaSwag** — Alltagsverständnis und logisches Schlussfolgern
 - **ARC Challenge** — Naturwissenschaftliches Denken und Logik
@@ -166,13 +166,13 @@ Testet die Fähigkeit des Modells, relevante Informationen in großen Kontexten 
 
 Überwachen Sie Training und Benchmarking unter: [MLflow Dashboard](https://mlflow.llm-serving.llmhub.t-systems.net)
 
-Jeder Feinabstimmungsauftrag erstellt ein MLflow-Experiment mit:
+Jeder Fine-Tuning-Auftrag erstellt ein MLflow-Experiment mit:
 1. **Trainingsmetriken** — Verlustkurven, Trainingsfortschritt
 2. **Benchmark-Ergebnisse** — LM Evaluation Harness und Needle in a Haystack Ergebnisse
 
 
 ## Nächste Schritte
 
-- [Chat Completions](/de/guides/chat-completions) — Ihr feinabgestimmtes Modell verwenden
+- [Chat Completions](/de/guides/chat-completions) — Ihr fine-tuned Modell verwenden
 - [Verfügbare Modelle](/de/getting-started/models) — Alle verfügbaren Modelle durchsuchen
 - [API-Endpunkte](/de/reference/api-endpoints) — Vollständige Endpunkt-Referenz

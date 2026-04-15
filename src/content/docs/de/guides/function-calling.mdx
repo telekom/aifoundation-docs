@@ -1,22 +1,22 @@
 ---
-title: "Funktionsaufrufe"
+title: "Function Calling"
 description: "Tools definieren und LLM-Hub-Modelle strukturierte JSON-Argumente zurückgeben lassen, um externe APIs und Datenquellen einzubinden."
 ---
 
 
 import { TabItem, Tabs } from '@astrojs/starlight/components';
 
-Funktionsaufrufe ermöglichen es Modellen, strukturierte JSON-Argumente für von Ihnen definierte Funktionen zu generieren und so die Integration mit externen Tools und APIs zu ermöglichen.
+Function Calling ermöglicht es Modellen, strukturierte JSON-Argumente für von Ihnen definierte Funktionen zu generieren und so die Integration mit externen Tools und APIs zu ermöglichen.
 
 :::note[Voraussetzungen]
 - Ein API-Schlüssel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
-- OpenAI SDK installiert ([Schnellstart](/de/getting-started/quickstart))
-- Ein Modell, das Funktionsaufrufe unterstützt (OpenAI-, Google- oder Anthropic-Modelle)
+- OpenAI SDK installiert ([Quickstart](/de/getting-started/quickstart))
+- Ein Modell, das Function Calling unterstützt (OpenAI-, Google- oder Anthropic-Modelle)
 :::
 
 **Was Sie lernen werden:**
 - Wie Sie Tools/Funktionen definieren, die das Modell aufrufen kann
-- Wie Sie Funktionsaufrufe mit der Responses API verwenden
+- Wie Sie Function Calling mit der Responses API verwenden
 - Wie Sie strukturierte Daten mithilfe von JSON Schema extrahieren
 
 
@@ -89,7 +89,7 @@ ChatCompletionMessage(
 ```
 
 
-## Funktionsaufrufe mit der Responses API
+## Function Calling mit der Responses API
 
 ```python showLineNumbers
 from openai import OpenAI
@@ -180,7 +180,7 @@ print(json.dumps(json.loads(response.output[0].content[0].text), indent=2))
 ## Kompatibilität
 
 :::note
-Funktionsaufrufe werden von OpenAI-, Google- und Anthropic-Modellen unterstützt. Nicht alle auf T-Cloud gehosteten Open-Source-Modelle unterstützen diese Funktion bereits. Für die beste Erfahrung auf T-Cloud empfehlen wir die Verwendung von Modellen mit vollständiger Funktionsaufruf-Kompatibilität.
+Function Calling wird von OpenAI-, Google- und Anthropic-Modellen unterstützt. Nicht alle auf T-Cloud gehosteten Open-Source-Modelle unterstützen diese Funktion bereits. Für die beste Erfahrung auf T-Cloud empfehlen wir die Verwendung von Modellen mit vollständiger Function-Calling-Kompatibilität.
 
 Die Responses API wird derzeit nur für OpenAI-Modelle vollständig unterstützt.
 :::

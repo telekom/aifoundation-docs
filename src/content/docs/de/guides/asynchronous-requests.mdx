@@ -1,5 +1,5 @@
 ---
-title: "Asynchrone Anfragen (Queue API)"
+title: "Asynchronous Requests (Queue API)"
 description: "Lang laufende oder Batch-Inferenzaufträge an die Queue API auf AI Foundation Services senden und Ergebnisse asynchron abfragen."
 ---
 
@@ -10,7 +10,7 @@ Senden Sie lang laufende API-Anfragen an eine Warteschlange zur asynchronen Vera
 
 :::note[Voraussetzungen]
 - Ein API-Schluessel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
-- OpenAI SDK oder HTTP-Client installiert ([Schnellstart](/de/getting-started/quickstart))
+- OpenAI SDK oder HTTP-Client installiert ([Quickstart](/de/getting-started/quickstart))
 :::
 
 **Was Sie lernen werden:**
@@ -40,10 +40,10 @@ Jeder Standard-Endpunkt hat ein `/queue`-Aequivalent:
 | `POST /v2/chat/completions` | `POST /queue/chat/completions` | Chat Completion |
 | `POST /v2/completions` | `POST /queue/completions` | Text Completion |
 | `POST /v2/embeddings` | `POST /queue/embeddings` | Embeddings |
-| `POST /v2/audio/transcriptions` | `POST /queue/audio/transcriptions` | Audio-Transkription |
-| `POST /v2/audio/translations` | `POST /queue/audio/translations` | Audio-Uebersetzung |
-| `POST /v2/images/generations` | `POST /queue/images/generations` | Bilderzeugung |
-| `POST /v2/images/edits` | `POST /queue/images/edits` | Bildbearbeitung |
+| `POST /v2/audio/transcriptions` | `POST /queue/audio/transcriptions` | Audio Transcription |
+| `POST /v2/audio/translations` | `POST /queue/audio/translations` | Audio Translation |
+| `POST /v2/images/generations` | `POST /queue/images/generations` | Image Generation |
+| `POST /v2/images/edits` | `POST /queue/images/edits` | Image Edit |
 | `GET /v2/models` | `GET /queue/models` | Modelle auflisten |
 
 Der Request-Body fuer jeden Queue-Endpunkt ist **identisch** mit seinem Standard-Gegenstueck — aendern Sie einfach den Basispfad von `/v2` zu `/queue`.
@@ -213,7 +213,7 @@ response = client.embeddings.create(
 print(f"Embedding dimension: {len(response.data[0].embedding)}")
 ```
 
-### Audio-Transkription
+### Audio Transcription
 
 ```python
 from openai import OpenAI
@@ -231,7 +231,7 @@ with open("meeting_recording.mp3", "rb") as audio_file:
 print(transcript.text)
 ```
 
-### Bilderzeugung
+### Image Generation
 
 ```python
 from openai import OpenAI

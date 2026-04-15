@@ -1,5 +1,5 @@
 ---
-title: "Reasoning-Steuerung"
+title: "Reasoning"
 description: "Tiefe des Chain-of-Thought-Prozesses mit dem Parameter `reasoning_effort` auf unterstützten Modellen wie o1, Gemini 2.5 und Claude 4 steuern."
 ---
 
@@ -10,19 +10,19 @@ Für Modelle, die Reasoning (Chain-of-Thought) unterstützen, können Sie die Ti
 
 :::note[Voraussetzungen]
 - Ein API-Schlüssel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
-- OpenAI SDK installiert ([Schnellstart](/de/getting-started/quickstart))
+- OpenAI SDK installiert ([Quickstart](/de/getting-started/quickstart))
 - Ein Reasoning-fähiges Modell (siehe Tabelle unten)
 :::
 
 **Was Sie lernen werden:**
-- Welche Modelle Reasoning-Steuerung unterstützen
+- Welche Modelle Reasoning unterstützen
 - Wie Sie den Parameter `reasoning_effort` verwenden
 - Wie Sie Reasoning für Qwen3-Modelle deaktivieren
 
 
 ## Unterstützte Modelle
 
-| Modell | Reasoning-Steuerung |
+| Modell | Reasoning |
 |---|---|
 | o1, o1-mini, o3, o3-mini, o4-mini | Parameter `reasoning_effort` |
 | Gemini 2.5 | Parameter `reasoning_effort` |
@@ -83,5 +83,5 @@ print(response.choices[0].message.content)
 ## Nächste Schritte
 
 - [Chat Completions](/de/guides/chat-completions) — Standard-Chat-API-Nutzung
-- [Funktionsaufrufe](/de/guides/function-calling) — Reasoning-Modelle mit externen Tools verbinden
+- [Function Calling](/de/guides/function-calling) — Reasoning-Modelle mit externen Tools verbinden
 - [Streaming](/de/guides/streaming) — Antworten von Reasoning-Modellen streamen
