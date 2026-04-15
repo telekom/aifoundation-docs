@@ -95,7 +95,7 @@ const sortedModels = [...modelMap.values()].sort((a, b) => {
   return a.name.localeCompare(b.name);
 });
 
-const INITIAL_COUNT = 3;
+const INITIAL_COUNT = 6;
 ---
 
 <div class="available-models">
@@ -135,9 +135,21 @@ const INITIAL_COUNT = 3;
 
   .models-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
+    grid-template-columns: 1fr;
     align-items: stretch;
+  }
+
+  @media (min-width: 640px) {
+    .models-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .models-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   .model-card {
