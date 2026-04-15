@@ -24,7 +24,7 @@ const links = isDE
 
 <Default {...Astro.props}><slot /></Default>
 
-<footer class="site-footer">
+<footer class="site-footer" aria-label={isDE ? 'Website' : 'Site'}>
   <div class="site-footer-inner">
     <span class="site-footer-notice">&copy; Deutsche Telekom AG</span>
     <nav class="site-footer-nav" aria-label={isDE ? 'Rechtliche Hinweise' : 'Legal'}>

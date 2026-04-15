@@ -11,6 +11,7 @@ const t = {
   dataProcessing: isDE ? 'Datenverarbeitung' : 'Data Processing',
   showMoreTemplate: isDE ? '{count} weitere anzeigen' : 'Show More ({count} more)',
   showLess: isDE ? 'Weniger anzeigen' : 'Show Less',
+  sectionHeading: isDE ? 'Verfügbare Modelle' : 'Available Models',
 };
 
 const OFFLINE_MODELS = new Set([
@@ -111,6 +112,8 @@ const INITIAL_COUNT = 6;
 ---
 
 <div class="available-models">
+  <h2 class="models-heading">{t.sectionHeading} <span class="models-count">({sortedModels.length})</span></h2>
+  <span id="copy-status" class="copy-status" aria-live="polite" aria-atomic="true"></span>
   <div class="models-grid" id="models-grid">
     {sortedModels.map((model, index) => (
       <div class:list={['model-card', { 'model-card--hidden': index >= INITIAL_COUNT }]} data-index={index}>
@@ -119,8 +122,8 @@ const INITIAL_COUNT = 6;
           data-model-id={model.modelId}
           title={`Copy model ID: ${model.modelId}`}
           aria-label={`Copy model ID ${model.modelId}`}
-        ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-        <h4 class="model-card__name">{model.name}</h4>
+        ><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></button>
+        <h3 class="model-card__name">{model.name}</h3>
         <div class="model-card__details">
           <span>{t.cloud}: <strong>{model.provider}</strong></span>
           <span>{t.serverLocation}: <strong>{model.hosted}</strong> {model.countryCode && <span class={`fi fi-${model.countryCode}`} style="margin-left: 4px;" />}</span>
@@ -146,6 +149,17 @@ const INITIAL_COUNT = 6;
 <style>
   .available-models {
     margin: 1.5rem 0;
+  }
+
+  .models-heading {
+    margin-bottom: 1rem;
+  }
+
+  .models-count {
+    font-size: 0.75em;
+    font-weight: 400;
+    color: var(--sl-color-gray-3);
+    vertical-align: middle;
   }
 
   .models-grid > .model-card {
@@ -213,6 +227,33 @@ const INITIAL_COUNT = 6;
     color: var(--sl-color-white);
   }
 
+  .model-card__copy .icon-check {
+    display: none;
+    color: #4ade80;
+  }
+
+  .model-card__copy[data-copied] .icon-copy {
+    display: none;
+  }
+
+  .model-card__copy[data-copied] .icon-check {
+    display: inline;
+  }
+
+  .model-card__copy[data-copied] {
+    opacity: 1;
+    color: #4ade80;
+  }
+
+  .copy-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
   .model-card__details {
     display: flex;
     flex-direction: column;
@@ -270,13 +311,24 @@ const INITIAL_COUNT = 6;
         : showMoreTemplate.replace('{count}', String(total - initial));
     });
 
-    // Copy model ID to clipboard
+    // Copy model ID to clipboard with visual + accessible feedback
+    const copyStatus = document.getElementById('copy-status');
     document.querySelectorAll<HTMLButtonElement>('.model-card__copy').forEach((btn) => {
       btn.addEventListener('click', async () => {
         const modelId = btn.dataset.modelId;
         if (!modelId) return;
         try {
           await navigator.clipboard.writeText(modelId);
+          // Visual feedback: swap icon for 1500ms
+          btn.setAttribute('data-copied', '');
+          const originalLabel = btn.getAttribute('aria-label') ?? '';
+          btn.setAttribute('aria-label', `Copied ${modelId}`);
+          if (copyStatus) copyStatus.textContent = `Copied ${modelId}`;
+          setTimeout(() => {
+            btn.removeAttribute('data-copied');
+            btn.setAttribute('aria-label', originalLabel);
+            if (copyStatus) copyStatus.textContent = '';
+          }, 1500);
         } catch {
           // Fallback: do nothing silently
         }
