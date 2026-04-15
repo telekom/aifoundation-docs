@@ -23,7 +23,7 @@ export default defineConfig({
 				src: './src/assets/favicon_180x180.png',
 			},
 			favicon: '/img/favicon_180x180.png',
-			customCss: ['flag-icons/css/flag-icons.min.css', './src/styles/custom.css'],
+			customCss: ['./src/styles/custom.css'],
 			expressiveCode: {
 				themes: ['dracula'],
 			},
