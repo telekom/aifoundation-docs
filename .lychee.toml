@@ -6,8 +6,10 @@ exclude = [
   "linkedin.com",
   "twitter.com",
   "x.com",
-  # Production domain — not reachable from CI
+  # Internal domains — not reachable from CI
   "docs\\.llmhub\\.t-systems\\.net",
+  "llmhub\\.t-systems\\.net",
+  "llm-serving\\.llmhub\\.t-systems\\.net",
 ]
 
 # Don't check mailto links
