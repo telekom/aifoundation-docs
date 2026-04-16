@@ -1,0 +1,59 @@
+---
+title: "Service-Level"
+description: "Verfügbarkeitsziele, Support-Reaktionszeiten und Wartungsrichtlinien für AI Foundation Services nach Tarifstufe."
+---
+
+Die Service-Level-Zusagen variieren je nach Tarifstufe. Diese Seite fasst Verfügbarkeitsziele, Support-Reaktionszeiten und betriebliche Richtlinien zusammen.
+
+## Verfügbarkeit
+
+{/* TODO: genaue SLA-Prozentsätze mit dem Team bestätigen */}
+
+| Tarifstufe | Verfügbarkeitsziel | Monatliches Ausfallbudget |
+|---|---|---|
+| Basic | Best-Effort | — |
+| Standard 1000 | 99,5% | ~3h 39min |
+| Standard 2000 | 99,5% | ~3h 39min |
+| Standard 3000 | 99,9% | ~43min |
+| Standard 4000 | 99,9% | ~43min |
+
+:::note
+Die Verfügbarkeitsziele für Azure-gehostete Modelle (GPT, o-Serie) unterliegen den SLAs des Upstream-Anbieters. Die oben genannten Ziele gelten für Open-Source-Modelle auf der T-Cloud.
+:::
+
+
+## Support-Reaktionszeiten
+
+{/* TODO: Reaktionszeiten mit dem Team bestätigen */}
+
+Die Reaktionszeiten werden ab Ticketerstellung bis zur ersten qualifizierten Antwort während der Geschäftszeiten (Mo–Fr, 08:00–18:00 MEZ) gemessen.
+
+| Schweregrad | Beschreibung | Basic | Standard 1000–2000 | Standard 3000–4000 |
+|---|---|---|---|---|
+| **P1 — Kritisch** | Service vollständig nicht verfügbar | Best-Effort | 4 Stunden | 1 Stunde |
+| **P2 — Hoch** | Hauptfunktion beeinträchtigt | Best-Effort | 8 Stunden | 4 Stunden |
+| **P3 — Mittel** | Geringfügiges Problem, Workaround verfügbar | Best-Effort | 2 Werktage | 1 Werktag |
+| **P4 — Niedrig** | Allgemeine Frage oder Anfrage | Best-Effort | 5 Werktage | 3 Werktage |
+
+
+## Geplante Wartung
+
+- **Wartungsfenster** — Geplante Wartungsarbeiten können an Wochenenden zwischen 22:00–06:00 MEZ stattfinden. Kunden mit Standard-Tarifen werden mindestens 5 Werktage im Voraus benachrichtigt.
+- **Notfallwartung** — Kritische Sicherheitspatches oder dringende Fehlerbehebungen können außerhalb geplanter Fenster mit bestmöglicher Vorankündigung durchgeführt werden.
+- **Auswirkung** — Wartungsarbeiten können kurze Serviceunterbrechungen verursachen. Wir streben eine Ausfallzeit von unter 30 Minuten pro Wartungsfenster an.
+
+
+## Störungskommunikation
+
+- **Statusseite** — Der aktuelle Servicestatus ist auf der [Model-Status](https://uptime.llmhub.t-systems.net/status/health)-Seite verfügbar.
+- **Benachrichtigungen** — Kunden mit Standard-Tarifen erhalten E-Mail-Benachrichtigungen bei P1/P2-Störungen und geplanter Wartung.
+- **Nachberichte** — Ursachenanalysen werden für P1-Störungen an Kunden mit Standard 3000+ geteilt.
+
+
+## Eskalation
+
+Für dringende Anliegen oder unternehmensspezifische SLA-Anforderungen:
+
+- **Support-Portal** — Erstellen Sie ein Support-Ticket über den [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/)
+- **Direktkontakt** — Erreichen Sie das AIFS-Team unter [ai@t-systems.com](mailto:ai@t-systems.com)
+- **Individuelle SLAs** — Unternehmenskunden mit dedizierten GPU-Ressourcen können individuelle Verfügbarkeitsziele und Supportbedingungen vereinbaren
