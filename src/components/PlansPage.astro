@@ -22,10 +22,12 @@ const t = {
   thMinConsumption: isDE ? 'Mindestverbrauch' : 'Min. Consumption',
   thTokenPrice: isDE ? 'Beispiel Token Preis *' : 'Token Price *',
   thTokenPriceUnit: '€/Mil. Tokens',
-  thRPM: isDE ? 'Beispiel RPM *' : 'RPM *',
-  thRPMUnit: isDE ? 'Anfragen/Minute' : 'Req/Min',
+  thRPM: isDE ? 'Beispiel RPM\u2020' : 'RPM\u2020',
+  thRPMUnit: isDE ? 'Anfragen/Min' : 'Req/Min',
   thCloud: isDE ? 'Cloud Anbieter' : 'Cloud',
-  footnote: '* T-Cloud-Hosted Large Language Models',
+  footnote: isDE
+    ? '* Beispielpreise für T-Cloud-gehostete Large Language Models · † Beispiel-RPM für ein repräsentatives T-Cloud-Modell — genaue Limits variieren je Modell'
+    : '* Example pricing for T-Cloud-hosted Large Language Models · † Example RPM for a representative T-Cloud model — exact limits vary by model',
   modelsTitle: isDE ? 'Modelle & Preise' : 'Models & Pricing',
   modelsSubtitle: isDE
     ? 'Wählen Sie das richtige Modell für Ihren Anwendungsfall – von schnellen Antworten bis hin zu tiefgreifenden Analysen.'
@@ -48,7 +50,7 @@ const t = {
   thServerLocation: 'Server Location',
   thInputTokenLimit: 'Input Token Limit',
   thOutputTokenLimit: 'Output Token Limit',
-  thRPMLimit: 'RPM Limit',
+  thRPMLimit: isDE ? 'RPM-Limit' : 'RPM Limit',
   noModels: isDE ? 'Keine Modelle gefunden.' : 'No models found.',
   euWorldwide: isDE ? 'EU & Weltweit' : 'EU & Worldwide',
 };
@@ -181,6 +183,12 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
           </tbody>
         </table>
         <small>{t.footnote}</small>
+        <br/>
+        <small>
+          <a href={isDE ? '/de/reference/rate-limits' : '/reference/rate-limits'}>
+            {isDE ? 'Mehr zu Rate-Limits →' : 'Learn more about rate limits →'}
+          </a>
+        </small>
       </div>
     </section>
   )}
@@ -241,7 +249,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
             <th data-sort="serverLocation">{t.thServerLocation} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
             <th data-sort="inputTokenMin">{t.thInputTokenLimit} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
             <th data-sort="outputTokenMin">{t.thOutputTokenLimit} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="rpm">{t.thRPMLimit}<br/><small>Request/Min</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
+            <th data-sort="rpm">{t.thRPMLimit} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
           </tr>
         </thead>
         <tbody id="models-tbody">
