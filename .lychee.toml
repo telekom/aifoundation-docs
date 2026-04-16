@@ -1,0 +1,26 @@
+# Link checker configuration
+# https://lychee.cli.rs/usage/config/
+
+# Exclude external domains that block automated requests
+exclude = [
+  "linkedin.com",
+  "twitter.com",
+  "x.com",
+  # Production domain — not reachable from CI
+  "docs\\.llmhub\\.t-systems\\.net",
+]
+
+# Skip mailto links
+exclude_mail = true
+
+# Accept common success codes
+accept = [200, 204, 301, 302, 307, 308]
+
+# Timeout per request
+timeout = 30
+
+# Max concurrent requests
+max_concurrency = 16
+
+# Don't fail on rate-limited responses (429)
+exclude_status = [429]
