@@ -1,5 +1,6 @@
 ---
 title: "API-Endpunkte"
+description: "Vollständige Referenz aller REST-Endpunkte der LLM Hub API — Chat-Completions, Embeddings, Audio, Bilder, Fine-Tuning und mehr."
 ---
 
 AI Foundation Services bietet eine OpenAI-kompatible REST-API. Alle Endpunkte verwenden die Basis-URL:
@@ -17,8 +18,8 @@ Die vollständige OpenAPI-Spezifikation finden Sie in der [interaktiven API-Doku
 |---|---|---|
 | `GET` | `/models` | Alle verfügbaren Modelle auflisten |
 | `GET` | `/models/{model_id}` | Modelldetails und Metadaten abrufen |
-| `POST` | `/chat/completions` | Eine Chat-Vervollständigung erstellen |
-| `POST` | `/completions` | Eine Text-Vervollständigung erstellen |
+| `POST` | `/chat/completions` | Eine Chat Completion erstellen |
+| `POST` | `/completions` | Eine Text Completion erstellen |
 | `POST` | `/embeddings` | Embeddings erstellen |
 | `POST` | `/audio/transcriptions` | Audio in Text transkribieren |
 | `POST` | `/audio/translations` | Audio ins Englische übersetzen |
@@ -35,17 +36,17 @@ Die vollständige OpenAPI-Spezifikation finden Sie in der [interaktiven API-Doku
 
 ### Queue-Endpunkte (Asynchron)
 
-Alle wichtigen Endpunkte haben `/queue`-Varianten für asynchrone Verarbeitung. Weitere Details finden Sie im [Leitfaden für asynchrone Anfragen](/guides/asynchronous-requests).
+Alle wichtigen Endpunkte haben `/queue`-Varianten für asynchrone Verarbeitung. Weitere Details finden Sie im [Leitfaden für asynchrone Anfragen](/de/guides/asynchronous-requests).
 
 | Methode | Endpunkt | Beschreibung |
 |---|---|---|
-| `POST` | `/queue/chat/completions` | Asynchrone Chat-Vervollständigung |
-| `POST` | `/queue/completions` | Asynchrone Text-Vervollständigung |
-| `POST` | `/queue/embeddings` | Asynchrone Embeddings |
-| `POST` | `/queue/audio/transcriptions` | Asynchrone Audio-Transkription |
-| `POST` | `/queue/audio/translations` | Asynchrone Audio-Übersetzung |
-| `POST` | `/queue/images/generations` | Asynchrone Bildgenerierung |
-| `POST` | `/queue/images/edits` | Asynchrone Bildbearbeitung |
+| `POST` | `/queue/chat/completions` | Asynchronous Chat Completion |
+| `POST` | `/queue/completions` | Asynchronous Text Completion |
+| `POST` | `/queue/embeddings` | Asynchronous Embeddings |
+| `POST` | `/queue/audio/transcriptions` | Asynchronous Audio Transcription |
+| `POST` | `/queue/audio/translations` | Asynchronous Audio Translation |
+| `POST` | `/queue/images/generations` | Asynchronous Image Generation |
+| `POST` | `/queue/images/edits` | Asynchronous Image Edit |
 | `GET` | `/queue/models` | Modelle auflisten (Queue) |
 
 
@@ -72,7 +73,7 @@ Alle Anfragen erfordern einen API-Schlüssel im `Authorization`-Header:
 Authorization: Bearer YOUR_API_KEY
 ```
 
-Weitere Details zur Einrichtung finden Sie unter [Authentifizierung](/getting-started/authentication).
+Weitere Details zur Einrichtung finden Sie unter [Authentifizierung](/de/getting-started/authentication).
 
 
 ## Anfrageformat
@@ -89,7 +90,7 @@ curl -X POST "https://llm-server.llmhub.t-systems.net/v2/chat/completions" \
 
 ## Antwortformat
 
-Antworten folgen dem OpenAI-Antwortformat. Für Chat-Vervollständigungen:
+Antworten folgen dem OpenAI-Antwortformat. Für Chat Completions:
 
 ```json
 {

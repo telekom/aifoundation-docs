@@ -1,0 +1,32 @@
+# Link checker configuration
+# https://lychee.cli.rs/usage/config/
+
+# Exclude external domains that block automated requests
+exclude = [
+  "linkedin.com",
+  "twitter.com",
+  "x.com",
+  # Internal domains — not reachable from CI
+  "docs\\.llmhub\\.t-systems\\.net",
+  "llmhub\\.t-systems\\.net",
+  "llm-serving\\.llmhub\\.t-systems\\.net",
+]
+
+# Don't check mailto links
+include_mail = false
+
+# Accept common success codes
+accept = [200, 204, 301, 302, 307, 308]
+
+# Timeout per request
+timeout = 30
+
+# Max concurrent requests
+max_concurrency = 16
+
+# Resolve root-relative links (e.g. /getting-started/) against the build output
+root_dir = "dist"
+
+# Cache results to speed up repeated runs
+cache = true
+max_cache_age = "1d"

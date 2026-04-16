@@ -1,5 +1,6 @@
 ---
 title: "Fehlercodes"
+description: "Referenz der HTTP-Fehlercodes der AI Foundation Services API mit Ursachen und empfohlenen Lösungsschritten."
 ---
 
 Wenn eine API-Anfrage fehlschlägt, enthält die Antwort einen HTTP-Statuscode und eine Fehlermeldung. Hier finden Sie die häufigsten Fehler und deren Behebung.
@@ -69,7 +70,7 @@ def call_with_retry(messages, max_retries=3):
 
 ### "Model not found"
 - Überprüfen Sie, ob der Modellname exakt übereinstimmt (Groß-/Kleinschreibung beachten)
-- Verwenden Sie die [Modelle-API](/reference/api-endpoints), um verfügbare Modelle zu prüfen
+- Verwenden Sie die [Modelle-API](/de/reference/api-endpoints), um verfügbare Modelle zu prüfen
 - Einige Modelle sind möglicherweise nur in bestimmten Tarifstufen verfügbar
 
 ### "Invalid API key"
@@ -79,4 +80,4 @@ def call_with_retry(messages, max_retries=3):
 
 ### "Context length exceeded"
 - Reduzieren Sie die Eingabelänge oder setzen Sie einen niedrigeren Wert für `max_tokens`
-- Überprüfen Sie die `max_sequence_length` des Modells in den [Modell-Metadaten](/getting-started/models)
+- Überprüfen Sie die `max_sequence_length` des Modells in den [Modell-Metadaten](/de/getting-started/models)

@@ -97,9 +97,9 @@
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-.hover-card-1 { background-color: #E6EAF0; }
-.hover-card-2 { background-color: #D8E2F1; }
-.hover-card-3 { background-color: #EFE7DD; }
+.hover-card-1,
+.hover-card-2,
+.hover-card-3 { background-color: var(--sl-color-gray-6); }
 
 /* Flex & Layout Utilities */
 .my-row { display: flex; flex-direction: row; }
@@ -223,29 +223,6 @@
 	color: #e20074;
 }
 
-.plans-filter {
-	margin-bottom: 16px;
-}
-
-.plans-filter input,
-.plans-filter select {
-	padding: 6px 10px;
-	border: 1px solid var(--sl-color-gray-5);
-	border-radius: 6px;
-	background: var(--sl-color-gray-6);
-	color: var(--sl-color-white);
-	font-size: 0.9em;
-}
-
-.plans-filter button {
-	padding: 6px 12px;
-	border: 1px solid var(--sl-color-gray-5);
-	border-radius: 6px;
-	background: var(--sl-color-gray-6);
-	color: var(--sl-color-white);
-	cursor: pointer;
-}
-
 /* Pricing Tooltip */
 .pricing-tooltip {
 	position: relative;
@@ -274,6 +251,8 @@
 	border: none;
 	border-radius: 12px;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	background: var(--sl-color-bg);
+	color: var(--sl-color-text);
 }
 
 .plans-dialog::backdrop {
