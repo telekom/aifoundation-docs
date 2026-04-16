@@ -22,6 +22,9 @@ timeout = 30
 # Max concurrent requests
 max_concurrency = 16
 
+# Resolve root-relative links (e.g. /getting-started/) against the build output
+root_dir = "dist"
+
 # Cache results to speed up repeated runs
 cache = true
 max_cache_age = "1d"
