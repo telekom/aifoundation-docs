@@ -11,12 +11,42 @@ Rate limits protect the service and ensure fair usage. Limits are defined per pl
 
 ## Limits by Plan Tier
 
-| Metric | Basic | Standard4000 |
-|---|---|---|
-| **Tokens per Minute (TPM)** | 18,750 input | Up to 150,000 input |
-| **Requests per Minute (RPM)** | 20 | Up to 600 |
+Limits vary by both plan tier and model. The table below shows representative ranges across all five tiers:
 
-Exact limits vary by model. See the [Plans & Pricing](/plans) page for per-model details, or download the [Service Description PDF](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf).
+| Metric | Basic | Standard 1000 | Standard 2000 | Standard 3000 | Standard 4000 |
+|---|---|---|---|---|---|
+| **Models available** | 15 | 38 | 38 | 38 | 38 |
+| **RPM** | 20–120 | 60–5,000 | 60–5,000 | 20–5,000 | 60–5,000 |
+| **Input TPM** | 109–87,500 | 218–5,000,000 | 435–5,000,000 | 653–5,000,000 | 870–5,000,000 |
+
+### Example: Per-model limits across tiers
+
+To illustrate how limits scale, here are the limits for two representative models:
+
+**Llama 3.3 70B** (T-Cloud, Germany):
+
+| Tier | RPM | Input TPM | Output TPM |
+|---|---|---|---|
+| Basic | 20 | 13,800 | 5,000 |
+| Standard 1000 | 150 | 34,500 | 12,500 |
+| Standard 2000 | 300 | 69,000 | 25,000 |
+| Standard 3000 | 450 | 103,500 | 37,500 |
+| Standard 4000 | 600 | 138,000 | 50,000 |
+
+**GPT-4.1** (Azure, EU — Standard tiers only):
+
+| Tier | RPM | Input TPM | Output TPM |
+|---|---|---|---|
+| Standard 1000 | 5,000 | 5,000,000 | 5,000,000 |
+| Standard 2000 | 5,000 | 5,000,000 | 5,000,000 |
+| Standard 3000 | 5,000 | 5,000,000 | 5,000,000 |
+| Standard 4000 | 5,000 | 5,000,000 | 5,000,000 |
+
+:::note
+Azure-hosted models (GPT, o-series) generally have higher absolute limits set by the upstream provider. T-Cloud models scale proportionally with each tier upgrade.
+:::
+
+For the full per-model breakdown for your plan, see the [Plans & Pricing](/plans) page or download the [Service Description PDF](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf).
 
 
 ## How Rate Limits Work
