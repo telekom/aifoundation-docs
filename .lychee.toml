@@ -10,8 +10,8 @@ exclude = [
   "docs\\.llmhub\\.t-systems\\.net",
 ]
 
-# Skip mailto links
-exclude_mail = true
+# Don't check mailto links
+include_mail = false
 
 # Accept common success codes
 accept = [200, 204, 301, 302, 307, 308]
@@ -22,5 +22,6 @@ timeout = 30
 # Max concurrent requests
 max_concurrency = 16
 
-# Don't fail on rate-limited responses (429)
-exclude_status = [429]
+# Cache results to speed up repeated runs
+cache = true
+max_cache_age = "1d"
