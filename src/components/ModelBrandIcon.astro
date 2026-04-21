@@ -1,0 +1,35 @@
+---
+import { getModelBrandIcon } from '../shared/lib/modelBrandIcons';
+
+interface Props {
+  name: string;
+  size?: number;
+  title?: string;
+}
+
+const { name, size = 18, title = name } = Astro.props;
+const src = getModelBrandIcon(name);
+---
+
+<img
+  class="model-brand-icon"
+  src={src}
+  alt={name}
+  title={title}
+  width={size}
+  height={size}
+  loading="lazy"
+  decoding="async"
+/>
+
+<style>
+  .model-brand-icon {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    vertical-align: middle;
+  }
+</style>
