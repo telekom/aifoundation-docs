@@ -1,6 +1,5 @@
 ---
 import 'flag-icons/css/flag-icons.min.css';
-import sortIcon from '../assets/icons/common/sort.svg?url';
 
 interface Props {
   plansData: any[];
@@ -12,15 +11,21 @@ interface Props {
   tierTooltips: Record<string, string>;
 }
 
-const {
-  plansData,
-  effectiveIndex,
-  locked,
-  translations,
-  modelBrandIcons,
-  hostTooltips,
-  tierTooltips,
-} = Astro.props;
+const { plansData, effectiveIndex, locked, translations, modelBrandIcons, hostTooltips, tierTooltips } = Astro.props;
+
+const sortableHeaders = [
+  { key: 'modelHost', label: translations.thModelHost },
+  { key: 'cloudProvider', label: translations.thCloudProvider },
+  { key: 'modelTier', label: translations.thModelTier },
+  { key: 'creator', label: translations.thCreator },
+  { key: 'displayName', label: translations.thModelName },
+  { key: 'inputPrice', label: translations.thInputPrice, unit: 'M Tokens' },
+  { key: 'outputPrice', label: translations.thOutputPrice, unit: 'M Tokens' },
+  { key: 'serverLocation', label: translations.thServerLocation },
+  { key: 'rpm', label: translations.thRPMLimit, unit: translations.thRPMUnitShort },
+  { key: 'tpm', label: translations.thTPM, unit: translations.thTPMUnit },
+  { key: 'contextWindow', label: translations.thContextWindow, unit: translations.thContextWindowUnit },
+];
 ---
 
 <section
@@ -31,24 +36,25 @@ const {
   data-tier-tooltips={JSON.stringify(tierTooltips)}
   data-initial-index={effectiveIndex}
   data-locked={locked ? 'true' : 'false'}
-  data-t={JSON.stringify(translations)}
->
+  data-t={JSON.stringify(translations)}>
   <h2>{translations.modelsTitle}</h2>
   <p class="par-description">{translations.modelsSubtitle}</p>
 
   <div class="models-controls">
-    {!locked && (
-      <div class="control-group">
-        <label for="plan-selector">{translations.labelRatePlan}</label>
-        <select id="plan-selector">
-          {plansData.map((plan: any, index: number) => (
-            <option value={index} selected={index === effectiveIndex}>
-              {plan.label}
-            </option>
-          ))}
-        </select>
-      </div>
-    )}
+    {
+      !locked && (
+        <div class="control-group">
+          <label for="plan-selector">{translations.labelRatePlan}</label>
+          <select id="plan-selector">
+            {plansData.map((plan: any, index: number) => (
+              <option value={index} selected={index === effectiveIndex}>
+                {plan.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )
+    }
     <div class="control-group">
       <label for="model-search">{translations.labelSearch}</label>
       <input type="text" id="model-search" placeholder={translations.placeholderSearch} />
@@ -80,17 +86,21 @@ const {
     <table class="plans-table" id="models-table">
       <thead>
         <tr>
-          <th data-sort="modelHost"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thModelHost}</span></span></th>
-          <th data-sort="cloudProvider"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thCloudProvider}</span></span></th>
-          <th data-sort="modelTier"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thModelTier}</span></span></th>
-          <th data-sort="creator"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thCreator}</span></span></th>
-          <th data-sort="displayName"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thModelName}</span></span></th>
-          <th data-sort="inputPrice"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thInputPrice}<div class="plans-table__small-text">M Tokens</div></span></span></th>
-          <th data-sort="outputPrice"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thOutputPrice}<div class="plans-table__small-text">M Tokens</div></span></span></th>
-          <th data-sort="serverLocation"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thServerLocation}</span></span></th>
-          <th data-sort="rpm"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thRPMLimit}<div class="plans-table__small-text">{translations.thRPMUnitShort}</div></span></span></th>
-          <th data-sort="tpm"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thTPM}<div class="plans-table__small-text">{translations.thTPMUnit}</div></span></span></th>
-          <th data-sort="contextWindow"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thContextWindow}<div class="plans-table__small-text">{translations.thContextWindowUnit}</div></span></span></th>
+          {
+            sortableHeaders.map((header) => (
+              <th data-sort={header.key}>
+                <span class="sort-header">
+                  <svg class="sort-icon" viewBox="0 0 7 5" fill="none" aria-hidden="true">
+                    <path d="M3.46411 4.5L8.97647e-06 -1.75695e-07L6.92821 4.29987e-07L3.46411 4.5Z" />
+                  </svg>
+                  <span>
+                    {header.label}
+                    {header.unit && <div class="plans-table__small-text">{header.unit}</div>}
+                  </span>
+                </span>
+              </th>
+            ))
+          }
           <th>{translations.thLinks}</th>
         </tr>
       </thead>
@@ -137,7 +147,7 @@ const {
       if (locationFilter) {
         const current = locationFilter.value;
         locationFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
-        [...locations].sort().forEach(location => {
+        [...locations].sort().forEach((location) => {
           const option = document.createElement('option');
           option.value = location;
           option.textContent = location;
@@ -149,7 +159,7 @@ const {
       if (cloudFilter) {
         const current = cloudFilter.value;
         cloudFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
-        [...clouds].sort().forEach(cloud => {
+        [...clouds].sort().forEach((cloud) => {
           const option = document.createElement('option');
           option.value = cloud;
           option.textContent = cloud;
@@ -166,32 +176,33 @@ const {
 
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
-        models = models.filter(model =>
-          model.displayName.toLowerCase().includes(term) ||
-          model.subName.toLowerCase().includes(term) ||
-          model.modelHost.toLowerCase().includes(term) ||
-          model.cloudProvider.toLowerCase().includes(term) ||
-          model.modelTier.toLowerCase().includes(term) ||
-          model.creator.toLowerCase().includes(term) ||
-          model.serverLocation.toLowerCase().includes(term)
+        models = models.filter(
+          (model) =>
+            model.displayName.toLowerCase().includes(term) ||
+            model.subName.toLowerCase().includes(term) ||
+            model.modelHost.toLowerCase().includes(term) ||
+            model.cloudProvider.toLowerCase().includes(term) ||
+            model.modelTier.toLowerCase().includes(term) ||
+            model.creator.toLowerCase().includes(term) ||
+            model.serverLocation.toLowerCase().includes(term),
         );
       }
 
       if (locationFilter && locationFilter.value) {
-        models = models.filter(model => model.serverLocation === locationFilter.value);
+        models = models.filter((model) => model.serverLocation === locationFilter.value);
       }
 
       if (cloudFilter && cloudFilter.value) {
-        models = models.filter(model => model.cloudProvider === cloudFilter.value);
+        models = models.filter((model) => model.cloudProvider === cloudFilter.value);
       }
 
       if (priceFilter && priceFilter.value) {
         if (priceFilter.value === '0-2') {
-          models = models.filter(model => model.inputPrice >= 0 && model.inputPrice < 2);
+          models = models.filter((model) => model.inputPrice >= 0 && model.inputPrice < 2);
         } else if (priceFilter.value === '2-5') {
-          models = models.filter(model => model.inputPrice >= 2 && model.inputPrice < 5);
+          models = models.filter((model) => model.inputPrice >= 2 && model.inputPrice < 5);
         } else if (priceFilter.value === '5+') {
-          models = models.filter(model => model.inputPrice >= 5);
+          models = models.filter((model) => model.inputPrice >= 5);
         }
       }
 
@@ -230,6 +241,14 @@ const {
         .replace(/'/g, '&#39;');
     }
 
+    function getCloudProviderTagClass(value: string) {
+      return normalizeCloudProvider(value) === 'Telekom' ? 'tag-tcloud' : 'tag-external-cloud';
+    }
+
+    function normalizeCloudProvider(value: string) {
+      return value === 'Open Telekom Cloud' || value === 'OTC' ? 'Telekom' : value;
+    }
+
     function render() {
       if (!tbody) return;
       const models = getModels();
@@ -241,12 +260,14 @@ const {
 
         const hostClass = model.modelHost === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
         const tierClass = model.modelTier === 'Premium' ? 'tag-premium' : 'tag-tier';
+        const cloudProvider = normalizeCloudProvider(model.cloudProvider);
+        const cloudProviderClass = getCloudProviderTagClass(model.cloudProvider);
         const hostTooltip = hostTooltips[model.modelHost] || '';
         const tierTooltip = tierTooltips[model.modelTier] || '';
         const creatorIcon = brandIcons[model.creator] || '';
         row.innerHTML = `
           <td>${hostTooltip ? `<span class="ui-tooltip" style="--ui-tooltip-max-width: 26rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(hostTooltip)}</span></span>` : `<span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span>`}</td>
-          <td>${escapeHtml(model.cloudProvider)}</td>
+          <td><span class="plans-tag ${cloudProviderClass}">${escapeHtml(cloudProvider)}</span></td>
           <td>${tierTooltip ? `<span class="ui-tooltip" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span>`}</td>
           <td>
             <span class="creator-brand ${creatorIcon ? 'creator-brand--icon' : 'creator-brand--text'}" title="${escapeHtml(model.creator)}" aria-label="${escapeHtml(model.creator)}">
@@ -254,12 +275,15 @@ const {
             </span>
           </td>
           <td>
+            <div>
             <strong>${escapeHtml(model.displayName)}</strong>
-            ${model.subName && model.subName !== model.displayName ? `<br><small>${escapeHtml(model.subName)}</small>` : ''}
+            ${model.subName && model.subName !== model.displayName ? `<small>${escapeHtml(model.subName)}</small>` : ''}
+            ${`<div class="model-id-label">${escapeHtml(model.exactModelName)}</div>`}
+            </div>
           </td>
           <td><strong>&euro; ${formatPrice(model.inputPrice)}</strong></td>
           <td><strong>&euro; ${formatPrice(model.outputPrice)}</strong></td>
-          <td>${model.locationCode ? `<span class="fi fi-${escapeHtml(model.locationCode)}"></span> ` : ''}${escapeHtml(model.serverLocation)}</td>
+          <td><div class="loc-wrapper">${model.locationCode ? `<span class="fi fi-${escapeHtml(model.locationCode)}"></span> ` : ''}${escapeHtml(model.serverLocation)}</div></td>
           <td>${formatNumber(model.rpm)}</td>
           <td>${formatNumber(model.tpm)}</td>
           <td>${model.contextWindow != null ? formatNumber(model.contextWindow) : '-'}</td>
@@ -282,7 +306,7 @@ const {
 
       if (table) {
         table.querySelectorAll<HTMLElement>('th[data-sort]').forEach((header: HTMLElement) => {
-          const icon = header.querySelector<HTMLImageElement>('.sort-icon');
+          const icon = header.querySelector<SVGElement>('.sort-icon');
           if (!icon) return;
           const key = header.dataset.sort || '';
           const isActive = key === sortKey;
@@ -341,7 +365,9 @@ const {
   }
 
   function initAllModelsTables() {
-    document.querySelectorAll<HTMLElement>('.models-table-section').forEach((section: HTMLElement) => initModelsTable(section));
+    document
+      .querySelectorAll<HTMLElement>('.models-table-section')
+      .forEach((section: HTMLElement) => initModelsTable(section));
   }
 
   document.addEventListener('astro:page-load', initAllModelsTables);
@@ -357,11 +383,13 @@ const {
     margin-bottom: 2rem;
     --model-link-color: #4f5cff;
     --model-link-icon-color: #000000;
+    --models-sort-active-color: var(--sl-color-accent);
   }
 
   :root[data-theme='dark'] .models-table-section {
     --model-link-color: #7d87ff;
     --model-link-icon-color: #7d87ff;
+    --models-sort-active-color: var(--sl-color-accent-high);
   }
 
   .models-controls {
@@ -411,21 +439,28 @@ const {
   }
 
   th.sort-active .sort-header {
-    color: var(--sl-color-accent);
+    color: var(--models-sort-active-color);
   }
 
   .sort-icon {
     width: 0.6rem;
-    height: auto;
+    height: 0.45rem;
     flex: 0 0 auto;
+    display: inline-block;
     opacity: 0.85;
+    color: currentColor;
     transform: rotate(0deg);
-    transition: transform 160ms ease, opacity 160ms ease, filter 160ms ease;
+    transition:
+      transform 160ms ease,
+      opacity 160ms ease;
+  }
+
+  .sort-icon path {
+    fill: currentColor;
   }
 
   .sort-icon--active {
     opacity: 1;
-    filter: saturate(1.15);
   }
 
   .sort-icon--asc {
@@ -434,6 +469,11 @@ const {
 
   .sort-icon--desc {
     transform: rotate(0deg);
+  }
+
+  .tag-external-cloud {
+    background: color-mix(in srgb, var(--sl-color-gray-5) 72%, white 28%);
+    color: var(--sl-color-text);
   }
 
   .ui-tooltip {
@@ -468,7 +508,10 @@ const {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease,
+      visibility 160ms ease;
     z-index: 30;
   }
 
@@ -505,6 +548,7 @@ const {
     border: 1px solid var(--sl-color-gray-5);
     border-radius: var(--sl-border-sm);
     padding: 4px;
+    background-color: white;
   }
 
   .creator-brand--text {
@@ -526,6 +570,13 @@ const {
     font-weight: 600;
     white-space: nowrap;
     font-style: normal;
+  }
+
+  .loc-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .model-links {
@@ -565,5 +616,19 @@ const {
 
   .model-links__empty {
     color: var(--sl-color-text-accent);
+  }
+
+  .models-table-section .fi {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    vertical-align: -0.12em;
+  }
+
+  .model-id-label {
+    font-weight: normal;
+    text-decoration: underline;
   }
 </style>

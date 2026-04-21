@@ -94,10 +94,46 @@ const tierTooltips: Record<string, string> = {
 
 // Plan display config
 const planConfigs = [
-  { packageName: 'Tarif Basic Template',         label: 'Essential',    color: '#4de0af', basePrice: '1,000 \u20AC', tokenPrice: '0.20 / 0.65', rpm: '300',    modelHost: ['T-Cloud', 'External'], modelTier: ['Standard'] },
-  { packageName: 'Tarif Standard1000 Template',  label: 'Professional', color: '#4ad9cd', basePrice: '3,000 \u20AC', tokenPrice: '0.20 / 0.65', rpm: '1000',   modelHost: ['T-Cloud', 'External'], modelTier: ['Standard', 'Premium'] },
-  { packageName: 'Tarif Standard2000 Template',  label: 'Agentic',      color: '#4dd1e0', basePrice: '5,000 \u20AC', tokenPrice: '0.20 / 0.65', rpm: '3000',   modelHost: ['T-Cloud', 'External'], modelTier: ['Standard', 'Premium'] },
-  { packageName: 'Tarif Standard3000 Template',  label: 'Enterprise',   color: '#5ec2ed', basePrice: 'Custom',      tokenPrice: '0.20 / 0.65', rpm: 'Custom', modelHost: ['T-Cloud', 'External'], modelTier: ['Standard', 'Premium'] },
+  {
+    packageName: 'Tarif Basic Template',
+    label: 'Essential',
+    color: '#4de0af',
+    basePrice: '1,000 \u20AC',
+    tokenPrice: '0.20 / 0.65',
+    rpm: '300',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+  },
+  {
+    packageName: 'Tarif Standard1000 Template',
+    label: 'Professional',
+    color: '#4ad9cd',
+    basePrice: '3,000 \u20AC',
+    tokenPrice: '0.20 / 0.65',
+    rpm: '1000',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard', 'Premium'],
+  },
+  {
+    packageName: 'Tarif Standard2000 Template',
+    label: 'Agentic',
+    color: '#4dd1e0',
+    basePrice: '5,000 \u20AC',
+    tokenPrice: '0.20 / 0.65',
+    rpm: '3000',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard', 'Premium'],
+  },
+  {
+    packageName: 'Tarif Standard3000 Template',
+    label: 'Enterprise',
+    color: '#5ec2ed',
+    basePrice: 'Custom',
+    tokenPrice: '0.20 / 0.65',
+    rpm: 'Custom',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard', 'Premium'],
+  },
 ];
 
 // Helper: parse deployment region
@@ -129,7 +165,8 @@ function parseModelCreator(exactModelName: string | undefined, displayModelName:
 
   if (source.includes('claude')) return 'Anthropic';
   if (source.includes('gemini')) return 'Google';
-  if (source.includes('gpt') || isOpenAIOSeries || source.includes('codex') || source.includes('whisper')) return 'OpenAI';
+  if (source.includes('gpt') || isOpenAIOSeries || source.includes('codex') || source.includes('whisper'))
+    return 'OpenAI';
   if (source.includes('llama') || source.includes('meta')) return 'Meta';
   if (source.includes('mistral')) return 'Mistral';
   if (source.includes('qwen')) return 'Alibaba Cloud';
@@ -168,7 +205,10 @@ function parseModelTier(
 
   const standardExclusions = ['mini', 'nano', 'flash', 'embedding', 'embeddings', 'whisper'];
 
-  if (premiumPatterns.some(pattern => source.includes(pattern)) && !standardExclusions.some(pattern => source.includes(pattern))) {
+  if (
+    premiumPatterns.some((pattern) => source.includes(pattern)) &&
+    !standardExclusions.some((pattern) => source.includes(pattern))
+  ) {
     return 'Premium';
   }
 
@@ -180,7 +220,11 @@ function parseModelTier(
 }
 
 const COUNTRY_CODES: Record<string, string> = {
-  germany: 'de', sweden: 'se', france: 'fr', europe: 'eu', us: 'us',
+  germany: 'de',
+  sweden: 'se',
+  france: 'fr',
+  europe: 'eu',
+  us: 'us',
 };
 
 function parseLocation(deploymentRegion: string): { name: string; code: string } {
@@ -208,6 +252,7 @@ function mapModelRow(
     modelHost,
     cloudProvider,
     creator: parseModelCreator(exactModelName, displayName),
+    exactModelName: model.exactModelName,
     modelTier: parseModelTier(
       exactModelName,
       displayName,
@@ -233,19 +278,21 @@ function mapModelRow(
 
 // Build plan data for client-side use
 const plansData = allPricing.map((plan: any) => {
-  const config = planConfigs.find(c => c.packageName === plan.packageName);
-  const models = (plan.modelQuotaConfigs || []).map((m: any) => {
-    const modelHost = parseModelHost(m.deploymentRegion);
-    const cloudProvider = parseCloudProvider(m.deploymentRegion);
-    const { name: locName, code: locCode } = parseLocation(m.deploymentRegion);
-    const rows: any[] = [mapModelRow(m, m, modelHost, cloudProvider, locName, locCode, false)];
-    if (m.modelQuotaMetadata?.data) {
-      for (const sub of m.modelQuotaMetadata.data) {
-        rows.push(mapModelRow(sub, m, modelHost, cloudProvider, locName, locCode, true));
+  const config = planConfigs.find((c) => c.packageName === plan.packageName);
+  const models = (plan.modelQuotaConfigs || [])
+    .map((m: any) => {
+      const modelHost = parseModelHost(m.deploymentRegion);
+      const cloudProvider = parseCloudProvider(m.deploymentRegion);
+      const { name: locName, code: locCode } = parseLocation(m.deploymentRegion);
+      const rows: any[] = [mapModelRow(m, m, modelHost, cloudProvider, locName, locCode, false)];
+      if (m.modelQuotaMetadata?.data) {
+        for (const sub of m.modelQuotaMetadata.data) {
+          rows.push(mapModelRow(sub, m, modelHost, cloudProvider, locName, locCode, true));
+        }
       }
-    }
-    return rows;
-  }).flat();
+      return rows;
+    })
+    .flat();
   return {
     packageName: plan.packageName,
     label: config?.label || plan.packageName,
@@ -254,80 +301,83 @@ const plansData = allPricing.map((plan: any) => {
 });
 
 const showRatePlans = !selectedPlanId;
-const initialPlanIndex = selectedPlanId
-  ? plansData.findIndex((p: any) => p.packageName === selectedPlanId)
-  : 0;
+const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.packageName === selectedPlanId) : 0;
 const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 ---
 
 <div class="plans-page">
-
-  {showRatePlans && (
-    <section class="rate-plans-section">
-      <h2>{t.ratePlansTitle}</h2>
-      <p class="par-description">{t.subtitle}</p>
-      {/* <p>{t.subtitle2}</p> */}
-      <div class="table-wrapper">
-        <table class="plans-table">
-          <thead>
-            <tr>
-              <th>{t.thPlan}</th>
-              <th>{t.thBasePrice}</th>
-              <th>{t.thTokenPrice}<div class="plans-table__small-text">{t.thTokenPriceUnit}</div></th>
-              <th>{t.thRPM}<div class="plans-table__small-text">{t.thRPMUnit}</div></th>
-              <th>{t.thModelHost}</th>
-              <th>{t.thModelTier}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {planConfigs.map(plan => (
+  {
+    showRatePlans && (
+      <section class="rate-plans-section">
+        <h2>{t.ratePlansTitle}</h2>
+        <p class="par-description">{t.subtitle}</p>
+        {/* <p>{t.subtitle2}</p> */}
+        <div class="table-wrapper">
+          <table class="plans-table">
+            <thead>
               <tr>
-                <td>
-                  <span class="plans-tag" style={`background:${plan.color};color:#000`}>
-                    {plan.label}
-                  </span>
-                </td>
-                <td><span class="plans-table__main-text">{plan.basePrice}</span></td>
-                <td>{plan.tokenPrice}</td>
-                <td>{plan.rpm}</td>
-                <td>
-                  {plan.modelHost.map((cloud, i) => (
-                    <>
-                      {i > 0 && ' '}
-                      <Tooltip text={hostTooltips[cloud] || cloud} maxWidth="26rem">
-                        <span class={`plans-tag ${cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud'}`}>
-                          {cloud}
-                        </span>
-                      </Tooltip>
-                    </>
-                  ))}
-                </td>
-                <td>
-                  {plan.modelTier.map((tier, i) => (
-                    <>
-                      {i > 0 && ' '}
-                      <Tooltip text={tierTooltips[tier] || tier} maxWidth="24rem">
-                        <span class={`plans-tag ${tier === 'Premium' ? 'tag-premium' : 'tag-tier'}`}>
-                          {tier}
-                        </span>
-                      </Tooltip>
-                    </>
-                  ))}
-                </td>
+                <th>{t.thPlan}</th>
+                <th>{t.thBasePrice}</th>
+                <th>
+                  {t.thTokenPrice}
+                  <div class="plans-table__small-text">{t.thTokenPriceUnit}</div>
+                </th>
+                <th>
+                  {t.thRPM}
+                  <div class="plans-table__small-text">{t.thRPMUnit}</div>
+                </th>
+                <th>{t.thModelHost}</th>
+                <th>{t.thModelTier}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <small>{t.footnote}</small>
-        <br/>
-        <small>
-          <a href={isDE ? '/de/reference/rate-limits' : '/reference/rate-limits'}>
-            {isDE ? 'Mehr zu Rate-Limits →' : 'Learn more about rate limits →'}
-          </a>
-        </small>
-      </div>
-    </section>
-  )}
+            </thead>
+            <tbody>
+              {planConfigs.map((plan) => (
+                <tr>
+                  <td>
+                    <span class="plans-tag" style={`background:${plan.color};color:#000`}>
+                      {plan.label}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="plans-table__main-text">{plan.basePrice}</span>
+                  </td>
+                  <td>{plan.tokenPrice}</td>
+                  <td>{plan.rpm}</td>
+                  <td>
+                    {plan.modelHost.map((cloud, i) => (
+                      <>
+                        {i > 0 && ' '}
+                        <Tooltip text={hostTooltips[cloud] || cloud} maxWidth="26rem">
+                          <span class={`plans-tag ${cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud'}`}>{cloud}</span>
+                        </Tooltip>
+                      </>
+                    ))}
+                  </td>
+                  <td>
+                    {plan.modelTier.map((tier, i) => (
+                      <>
+                        {i > 0 && ' '}
+                        <Tooltip text={tierTooltips[tier] || tier} maxWidth="24rem">
+                          <span class={`plans-tag ${tier === 'Premium' ? 'tag-premium' : 'tag-tier'}`}>{tier}</span>
+                        </Tooltip>
+                      </>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <small>{t.footnote}</small>
+          <br />
+          <small>
+            <a href={isDE ? '/de/reference/rate-limits' : '/reference/rate-limits'}>
+              {isDE ? 'Mehr zu Rate-Limits →' : 'Learn more about rate limits →'}
+            </a>
+          </small>
+        </div>
+      </section>
+    )
+  }
 
   <ModelsTable
     plansData={plansData}
@@ -415,7 +465,6 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     vertical-align: middle;
   }
 
-  
   .plans-table__small-text {
     font-weight: normal;
     font-size: var(--sl-text-2xs);
@@ -424,7 +473,6 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
   .plans-table__main-text {
     font-weight: 650;
   }
-
 
   .plans-table tbody tr:hover {
     background: var(--sl-color-gray-6);
