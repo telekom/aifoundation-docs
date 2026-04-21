@@ -30,6 +30,7 @@ const t = {
   thTokenPriceUnit: '€ / M Tokens',
   thRPM: isDE ? 'Beispiel RPM' : 'RPM',
   thRPMUnit: isDE ? 'Anfragen/Minute' : 'Requests/Minute',
+  thRPMUnitShort: isDE ? 'Anfragen/Min' : 'Requests/Min',
   thCloud: isDE ? 'Cloud Anbieter' : 'Cloud',
   footnote: isDE
     ? '* Beispielpreise für T-Cloud-gehostete Large Language Models · † Beispiel-RPM für ein repräsentatives T-Cloud-Modell — genaue Limits variieren je Modell'
@@ -54,6 +55,13 @@ const t = {
   thModelName: isDE ? 'Modellname' : 'Model Name',
   thInputPrice: 'Input Token Price',
   thOutputPrice: 'Output Token Price',
+  thTPM: 'TPM',
+  thTPMUnit: 'Tokens/Min',
+  thContextWindow: 'Context Window',
+  thContextWindowUnit: 'Tokens',
+  thLinks: 'Links',
+  linkTermsOfUse: isDE ? 'Nutzungsbedingungen' : 'Terms of Use',
+  linkDataProtection: isDE ? 'Datenschutz' : 'Data Protection',
   thHostingPlatform: 'Hosting Platform',
   thServerLocation: 'Server Location',
   thInputTokenLimit: 'Input Token Limit',
@@ -184,6 +192,45 @@ function parseLocation(deploymentRegion: string): { name: string; code: string }
   return { name, code };
 }
 
+function mapModelRow(
+  model: any,
+  fallbackModel: any,
+  modelHost: string,
+  cloudProvider: string,
+  serverLocation: string,
+  locationCode: string,
+  isSubRow: boolean,
+) {
+  const exactModelName = model.exactModelName ?? fallbackModel.exactModelName;
+  const displayName = model.displayModelName || fallbackModel.displayModelName;
+
+  return {
+    modelHost,
+    cloudProvider,
+    creator: parseModelCreator(exactModelName, displayName),
+    modelTier: parseModelTier(
+      exactModelName,
+      displayName,
+      model.inputPricePerMillionTokens ?? fallbackModel.inputPricePerMillionTokens,
+      model.outputPricePerMillionTokens ?? fallbackModel.outputPricePerMillionTokens,
+    ),
+    displayName,
+    subName: model.modelLabel || '',
+    inputPrice: model.inputPricePerMillionTokens ?? fallbackModel.inputPricePerMillionTokens,
+    outputPrice: model.outputPricePerMillionTokens ?? fallbackModel.outputPricePerMillionTokens,
+    tpm: model.inputTokenPerMinuteLimit ?? fallbackModel.inputTokenPerMinuteLimit,
+    contextWindow: model.contextWindow ?? fallbackModel.contextWindow ?? null,
+    termsOfUseUrl: model.termsOfUseUrl ?? fallbackModel.termsOfUseUrl ?? '',
+    dataProtectionUrl: model.dataProtectionUrl ?? fallbackModel.dataProtectionUrl ?? '',
+    serverLocation,
+    locationCode,
+    inputTokenMin: model.inputTokenPerMinuteLimit ?? fallbackModel.inputTokenPerMinuteLimit,
+    outputTokenMin: model.outputTokenPerMinuteLimit ?? fallbackModel.outputTokenPerMinuteLimit,
+    rpm: model.requestPerMinuteLimit ?? fallbackModel.requestPerMinuteLimit,
+    isSubRow,
+  };
+}
+
 // Build plan data for client-side use
 const plansData = allPricing.map((plan: any) => {
   const config = planConfigs.find(c => c.packageName === plan.packageName);
@@ -191,52 +238,10 @@ const plansData = allPricing.map((plan: any) => {
     const modelHost = parseModelHost(m.deploymentRegion);
     const cloudProvider = parseCloudProvider(m.deploymentRegion);
     const { name: locName, code: locCode } = parseLocation(m.deploymentRegion);
-    const creator = parseModelCreator(m.exactModelName, m.displayModelName);
-    const modelTier = parseModelTier(
-      m.exactModelName,
-      m.displayModelName,
-      m.inputPricePerMillionTokens,
-      m.outputPricePerMillionTokens,
-    );
-    const rows: any[] = [{
-      modelHost,
-      cloudProvider,
-      creator,
-      modelTier,
-      displayName: m.displayModelName,
-      subName: m.modelLabel || '',
-      inputPrice: m.inputPricePerMillionTokens,
-      outputPrice: m.outputPricePerMillionTokens,
-      serverLocation: locName,
-      locationCode: locCode,
-      inputTokenMin: m.inputTokenPerMinuteLimit,
-      outputTokenMin: m.outputTokenPerMinuteLimit,
-      rpm: m.requestPerMinuteLimit,
-      isSubRow: false,
-    }];
+    const rows: any[] = [mapModelRow(m, m, modelHost, cloudProvider, locName, locCode, false)];
     if (m.modelQuotaMetadata?.data) {
       for (const sub of m.modelQuotaMetadata.data) {
-        rows.push({
-          modelHost,
-          cloudProvider,
-          creator: parseModelCreator(sub.exactModelName ?? m.exactModelName, sub.displayModelName || m.displayModelName),
-          modelTier: parseModelTier(
-            sub.exactModelName ?? m.exactModelName,
-            sub.displayModelName || m.displayModelName,
-            sub.inputPricePerMillionTokens ?? m.inputPricePerMillionTokens,
-            sub.outputPricePerMillionTokens ?? m.outputPricePerMillionTokens,
-          ),
-          displayName: sub.displayModelName || m.displayModelName,
-          subName: sub.modelLabel || '',
-          inputPrice: sub.inputPricePerMillionTokens ?? m.inputPricePerMillionTokens,
-          outputPrice: sub.outputPricePerMillionTokens ?? m.outputPricePerMillionTokens,
-          serverLocation: locName,
-          locationCode: locCode,
-          inputTokenMin: sub.inputTokenPerMinuteLimit ?? m.inputTokenPerMinuteLimit,
-          outputTokenMin: sub.outputTokenPerMinuteLimit ?? m.outputTokenPerMinuteLimit,
-          rpm: sub.requestPerMinuteLimit ?? m.requestPerMinuteLimit,
-          isSubRow: true,
-        });
+        rows.push(mapModelRow(sub, m, modelHost, cloudProvider, locName, locCode, true));
       }
     }
     return rows;
@@ -255,7 +260,7 @@ const initialPlanIndex = selectedPlanId
 const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 ---
 
-<div class="plans-page" data-plans={JSON.stringify(plansData)} data-brand-icons={JSON.stringify(modelBrandIcons)} data-initial-index={effectiveIndex} data-locked={selectedPlanId ? 'true' : 'false'} data-t={JSON.stringify(t)}>
+<div class="plans-page" data-plans={JSON.stringify(plansData)} data-brand-icons={JSON.stringify(modelBrandIcons)} data-host-tooltips={JSON.stringify(hostTooltips)} data-tier-tooltips={JSON.stringify(tierTooltips)} data-initial-index={effectiveIndex} data-locked={selectedPlanId ? 'true' : 'false'} data-t={JSON.stringify(t)}>
 
   {showRatePlans && (
     <section class="rate-plans-section">
@@ -380,7 +385,10 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
             <th data-sort="inputPrice">{t.thInputPrice}<div class="plans-table__small-text">M Tokens</div></th>
             <th data-sort="outputPrice">{t.thOutputPrice}<div class="plans-table__small-text">M Tokens</div></th>
             <th data-sort="serverLocation">{t.thServerLocation}</th>
-            <th data-sort="rpm">{t.thRPMLimit}<div class="plans-table__small-text">{t.thRPMUnit}</div></th>
+            <th data-sort="rpm">{t.thRPMLimit}<div class="plans-table__small-text">{t.thRPMUnitShort}</div></th>
+            <th data-sort="tpm">{t.thTPM}<div class="plans-table__small-text">{t.thTPMUnit}</div></th>
+            <th data-sort="contextWindow">{t.thContextWindow}<div class="plans-table__small-text">{t.thContextWindowUnit}</div></th>
+            <th>{t.thLinks}</th>
           </tr>
         </thead>
         <tbody id="models-tbody">
@@ -409,6 +417,8 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
     const plansData = JSON.parse(container.dataset.plans || '[]');
     const brandIcons = JSON.parse(container.dataset.brandIcons || '{}');
+    const hostTooltips = JSON.parse(container.dataset.hostTooltips || '{}');
+    const tierTooltips = JSON.parse(container.dataset.tierTooltips || '{}');
     const translations = JSON.parse(container.dataset.t || '{}');
     let currentIndex = parseInt(container.dataset.initialIndex || '0', 10);
     const locked = container.dataset.locked === 'true';
@@ -537,11 +547,13 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
         const hostClass = m.modelHost === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
         const tierClass = m.modelTier === 'Premium' ? 'tag-premium' : 'tag-tier';
+        const hostTooltip = hostTooltips[m.modelHost] || '';
+        const tierTooltip = tierTooltips[m.modelTier] || '';
         const creatorIcon = brandIcons[m.creator] || '';
         tr.innerHTML = `
-          <td><span class="plans-tag ${hostClass}">${m.modelHost}</span></td>
+          <td>${hostTooltip ? `<span class="ui-tooltip" style="--ui-tooltip-max-width: 26rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${hostClass}">${m.modelHost}</span></span><span class="ui-tooltip__content" role="tooltip">${hostTooltip}</span></span>` : `<span class="plans-tag ${hostClass}">${m.modelHost}</span>`}</td>
           <td>${m.cloudProvider}</td>
-          <td><span class="plans-tag ${tierClass}">${m.modelTier}</span></td>
+          <td>${tierTooltip ? `<span class="ui-tooltip" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${m.modelTier}</span></span><span class="ui-tooltip__content" role="tooltip">${tierTooltip}</span></span>` : `<span class="plans-tag ${tierClass}">${m.modelTier}</span>`}</td>
           <td>
             <span class="creator-brand ${creatorIcon ? 'creator-brand--icon' : 'creator-brand--text'}" title="${m.creator}" aria-label="${m.creator}">
               ${creatorIcon ? `<img class="creator-brand__icon" src="${creatorIcon}" alt="${m.creator}" />` : `<span class="creator-brand__label">${m.creator}</span>`}
@@ -555,13 +567,22 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
           <td><strong>&euro; ${formatPrice(m.outputPrice)}</strong></td>
           <td>${m.locationCode ? `<span class="fi fi-${m.locationCode}"></span> ` : ''}${m.serverLocation}</td>
           <td>${formatNumber(m.rpm)}</td>
+          <td>${formatNumber(m.tpm)}</td>
+          <td>${m.contextWindow != null ? formatNumber(m.contextWindow) : '-'}</td>
+          <td>
+            <span class="model-links">
+              ${m.termsOfUseUrl ? `<a href="${m.termsOfUseUrl}" class="model-links__item" target="_blank" rel="noreferrer noopener">${translations.linkTermsOfUse || 'Terms of Use'}<svg class="model-links__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H21V10"/><path d="M21 3L10 14"/><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13"/></svg></a>` : ''}
+              ${m.dataProtectionUrl ? `<a href="${m.dataProtectionUrl}" class="model-links__item" target="_blank" rel="noreferrer noopener">${translations.linkDataProtection || 'Data Protection'}<svg class="model-links__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H21V10"/><path d="M21 3L10 14"/><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13"/></svg></a>` : ''}
+              ${!m.termsOfUseUrl && !m.dataProtectionUrl ? '<span class="model-links__empty">-</span>' : ''}
+            </span>
+          </td>
         `;
         tbody.appendChild(tr);
       }
 
       if (models.length === 0) {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td colspan="9" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
+        tr.innerHTML = `<td colspan="12" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
         tbody.appendChild(tr);
       }
 
@@ -646,6 +667,13 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 <style is:global>
   .plans-page {
     width: 100%;
+    --model-link-color: #4f5cff;
+    --model-link-icon-color: #000000;
+  }
+
+  :root[data-theme='dark'] .plans-page {
+    --model-link-color: #7d87ff;
+    --model-link-icon-color: #7d87ff;
   }
 
   .rate-plans-section {
@@ -734,6 +762,60 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     cursor: pointer;
   }
 
+  .ui-tooltip {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    vertical-align: middle;
+    outline: none;
+  }
+
+  .ui-tooltip__trigger {
+    display: inline-flex;
+  }
+
+  .ui-tooltip__content {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.85rem);
+    transform: translateX(-50%) translateY(0.35rem);
+    width: max-content;
+    max-width: min(var(--ui-tooltip-max-width, 24rem), calc(100vw - 2rem));
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: #232326;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.35;
+    white-space: normal;
+    text-align: left;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+    z-index: 30;
+  }
+
+  .ui-tooltip__content::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -0.45rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    background: #232326;
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 0.1rem;
+  }
+
+  .ui-tooltip:hover .ui-tooltip__content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
   .creator-brand {
     display: inline-flex;
     align-items: center;
@@ -772,6 +854,45 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     font-style: normal;
   }
 
+  .model-links {
+    display: inline-flex;
+    gap: 1rem;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .model-links__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--model-link-color);
+    text-decoration-color: currentColor;
+  }
+
+  .model-links__item:visited,
+  .model-links__item:hover,
+  .model-links__item:focus-visible {
+    color: var(--model-link-color);
+  }
+
+  .model-links__icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    display: inline-block;
+    flex: 0 0 auto;
+  }
+
+  .model-links__icon path {
+    stroke: var(--model-link-icon-color);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .model-links__empty {
+    color: var(--sl-color-text-accent);
+  }
+
   .tag-tcloud {
     background: #e20074 !important;
     color: white !important;
@@ -783,7 +904,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
   }
 
   .tag-tier {
-    background: var(--sl-color-gray-6);
+    background: color-mix(in srgb, var(--sl-color-gray-5) 72%, white 28%);
     color: var(--sl-color-text);
   }
 
