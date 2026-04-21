@@ -1,0 +1,569 @@
+---
+import 'flag-icons/css/flag-icons.min.css';
+import sortIcon from '../assets/icons/common/sort.svg?url';
+
+interface Props {
+  plansData: any[];
+  effectiveIndex: number;
+  locked: boolean;
+  translations: Record<string, string>;
+  modelBrandIcons: Record<string, string>;
+  hostTooltips: Record<string, string>;
+  tierTooltips: Record<string, string>;
+}
+
+const {
+  plansData,
+  effectiveIndex,
+  locked,
+  translations,
+  modelBrandIcons,
+  hostTooltips,
+  tierTooltips,
+} = Astro.props;
+---
+
+<section
+  class="models-section models-table-section"
+  data-plans={JSON.stringify(plansData)}
+  data-brand-icons={JSON.stringify(modelBrandIcons)}
+  data-host-tooltips={JSON.stringify(hostTooltips)}
+  data-tier-tooltips={JSON.stringify(tierTooltips)}
+  data-initial-index={effectiveIndex}
+  data-locked={locked ? 'true' : 'false'}
+  data-t={JSON.stringify(translations)}
+>
+  <h2>{translations.modelsTitle}</h2>
+  <p class="par-description">{translations.modelsSubtitle}</p>
+
+  <div class="models-controls">
+    {!locked && (
+      <div class="control-group">
+        <label for="plan-selector">{translations.labelRatePlan}</label>
+        <select id="plan-selector">
+          {plansData.map((plan: any, index: number) => (
+            <option value={index} selected={index === effectiveIndex}>
+              {plan.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+    <div class="control-group">
+      <label for="model-search">{translations.labelSearch}</label>
+      <input type="text" id="model-search" placeholder={translations.placeholderSearch} />
+    </div>
+    <div class="control-group">
+      <label for="location-filter">{translations.labelServerLocation}</label>
+      <select id="location-filter">
+        <option value="">{translations.optionAll}</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="cloud-filter">{translations.labelCloud}</label>
+      <select id="cloud-filter">
+        <option value="">{translations.optionAll}</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="price-filter">{translations.labelPriceRange}</label>
+      <select id="price-filter">
+        <option value="">{translations.optionAll}</option>
+        <option value="0-2">{translations.priceUnder2}</option>
+        <option value="2-5">{translations.price2to5}</option>
+        <option value="5+">{translations.priceOver5}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="plans-table" id="models-table">
+      <thead>
+        <tr>
+          <th data-sort="modelHost"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thModelHost}</span></span></th>
+          <th data-sort="cloudProvider"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thCloudProvider}</span></span></th>
+          <th data-sort="modelTier"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thModelTier}</span></span></th>
+          <th data-sort="creator"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thCreator}</span></span></th>
+          <th data-sort="displayName"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thModelName}</span></span></th>
+          <th data-sort="inputPrice"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thInputPrice}<div class="plans-table__small-text">M Tokens</div></span></span></th>
+          <th data-sort="outputPrice"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thOutputPrice}<div class="plans-table__small-text">M Tokens</div></span></span></th>
+          <th data-sort="serverLocation"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thServerLocation}</span></span></th>
+          <th data-sort="rpm"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thRPMLimit}<div class="plans-table__small-text">{translations.thRPMUnitShort}</div></span></span></th>
+          <th data-sort="tpm"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thTPM}<div class="plans-table__small-text">{translations.thTPMUnit}</div></span></span></th>
+          <th data-sort="contextWindow"><span class="sort-header"><img class="sort-icon" src={sortIcon} alt="" aria-hidden="true" /><span>{translations.thContextWindow}<div class="plans-table__small-text">{translations.thContextWindowUnit}</div></span></span></th>
+          <th>{translations.thLinks}</th>
+        </tr>
+      </thead>
+      <tbody id="models-tbody">
+        <!-- Populated by client-side script -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  function initModelsTable(section: HTMLElement) {
+    const plansData = JSON.parse(section.dataset.plans || '[]');
+    const brandIcons = JSON.parse(section.dataset.brandIcons || '{}');
+    const hostTooltips = JSON.parse(section.dataset.hostTooltips || '{}');
+    const tierTooltips = JSON.parse(section.dataset.tierTooltips || '{}');
+    const translations = JSON.parse(section.dataset.t || '{}');
+    let currentIndex = parseInt(section.dataset.initialIndex || '0', 10);
+    const locked = section.dataset.locked === 'true';
+
+    const selector = section.querySelector<HTMLSelectElement>('#plan-selector');
+    const searchInput = section.querySelector<HTMLInputElement>('#model-search');
+    const locationFilter = section.querySelector<HTMLSelectElement>('#location-filter');
+    const cloudFilter = section.querySelector<HTMLSelectElement>('#cloud-filter');
+    const priceFilter = section.querySelector<HTMLSelectElement>('#price-filter');
+    const tbody = section.querySelector<HTMLTableSectionElement>('#models-tbody');
+    const table = section.querySelector<HTMLTableElement>('#models-table');
+
+    let sortKey = '';
+    let sortAsc = true;
+    let searchTerm = '';
+
+    function populateFilterDropdowns() {
+      const plan = plansData[currentIndex];
+      if (!plan) return;
+
+      const locations = new Set<string>();
+      const clouds = new Set<string>();
+      for (const model of plan.models) {
+        if (model.serverLocation) locations.add(model.serverLocation);
+        if (model.cloudProvider) clouds.add(model.cloudProvider);
+      }
+
+      if (locationFilter) {
+        const current = locationFilter.value;
+        locationFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
+        [...locations].sort().forEach(location => {
+          const option = document.createElement('option');
+          option.value = location;
+          option.textContent = location;
+          if (location === current) option.selected = true;
+          locationFilter.appendChild(option);
+        });
+      }
+
+      if (cloudFilter) {
+        const current = cloudFilter.value;
+        cloudFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
+        [...clouds].sort().forEach(cloud => {
+          const option = document.createElement('option');
+          option.value = cloud;
+          option.textContent = cloud;
+          if (cloud === current) option.selected = true;
+          cloudFilter.appendChild(option);
+        });
+      }
+    }
+
+    function getModels() {
+      const plan = plansData[currentIndex];
+      if (!plan) return [];
+      let models = [...plan.models];
+
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        models = models.filter(model =>
+          model.displayName.toLowerCase().includes(term) ||
+          model.subName.toLowerCase().includes(term) ||
+          model.modelHost.toLowerCase().includes(term) ||
+          model.cloudProvider.toLowerCase().includes(term) ||
+          model.modelTier.toLowerCase().includes(term) ||
+          model.creator.toLowerCase().includes(term) ||
+          model.serverLocation.toLowerCase().includes(term)
+        );
+      }
+
+      if (locationFilter && locationFilter.value) {
+        models = models.filter(model => model.serverLocation === locationFilter.value);
+      }
+
+      if (cloudFilter && cloudFilter.value) {
+        models = models.filter(model => model.cloudProvider === cloudFilter.value);
+      }
+
+      if (priceFilter && priceFilter.value) {
+        if (priceFilter.value === '0-2') {
+          models = models.filter(model => model.inputPrice >= 0 && model.inputPrice < 2);
+        } else if (priceFilter.value === '2-5') {
+          models = models.filter(model => model.inputPrice >= 2 && model.inputPrice < 5);
+        } else if (priceFilter.value === '5+') {
+          models = models.filter(model => model.inputPrice >= 5);
+        }
+      }
+
+      if (sortKey) {
+        models.sort((left, right) => {
+          let leftValue = left[sortKey];
+          let rightValue = right[sortKey];
+          if (typeof leftValue === 'number' && typeof rightValue === 'number') {
+            return sortAsc ? leftValue - rightValue : rightValue - leftValue;
+          }
+          leftValue = String(leftValue).toLowerCase();
+          rightValue = String(rightValue).toLowerCase();
+          if (leftValue < rightValue) return sortAsc ? -1 : 1;
+          if (leftValue > rightValue) return sortAsc ? 1 : -1;
+          return 0;
+        });
+      }
+
+      return models;
+    }
+
+    function formatNumber(value: number | null | undefined) {
+      return value != null ? value.toLocaleString('en-US') : '-';
+    }
+
+    function formatPrice(value: number | null | undefined) {
+      return value != null ? value.toFixed(2) : '-';
+    }
+
+    function escapeHtml(value: string | number) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function render() {
+      if (!tbody) return;
+      const models = getModels();
+      tbody.innerHTML = '';
+
+      for (const model of models) {
+        const row = document.createElement('tr');
+        if (model.isSubRow) row.classList.add('sub-row');
+
+        const hostClass = model.modelHost === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
+        const tierClass = model.modelTier === 'Premium' ? 'tag-premium' : 'tag-tier';
+        const hostTooltip = hostTooltips[model.modelHost] || '';
+        const tierTooltip = tierTooltips[model.modelTier] || '';
+        const creatorIcon = brandIcons[model.creator] || '';
+        row.innerHTML = `
+          <td>${hostTooltip ? `<span class="ui-tooltip" style="--ui-tooltip-max-width: 26rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(hostTooltip)}</span></span>` : `<span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span>`}</td>
+          <td>${escapeHtml(model.cloudProvider)}</td>
+          <td>${tierTooltip ? `<span class="ui-tooltip" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span>`}</td>
+          <td>
+            <span class="creator-brand ${creatorIcon ? 'creator-brand--icon' : 'creator-brand--text'}" title="${escapeHtml(model.creator)}" aria-label="${escapeHtml(model.creator)}">
+              ${creatorIcon ? `<img class="creator-brand__icon" src="${escapeHtml(creatorIcon)}" alt="${escapeHtml(model.creator)}" />` : `<span class="creator-brand__label">${escapeHtml(model.creator)}</span>`}
+            </span>
+          </td>
+          <td>
+            <strong>${escapeHtml(model.displayName)}</strong>
+            ${model.subName && model.subName !== model.displayName ? `<br><small>${escapeHtml(model.subName)}</small>` : ''}
+          </td>
+          <td><strong>&euro; ${formatPrice(model.inputPrice)}</strong></td>
+          <td><strong>&euro; ${formatPrice(model.outputPrice)}</strong></td>
+          <td>${model.locationCode ? `<span class="fi fi-${escapeHtml(model.locationCode)}"></span> ` : ''}${escapeHtml(model.serverLocation)}</td>
+          <td>${formatNumber(model.rpm)}</td>
+          <td>${formatNumber(model.tpm)}</td>
+          <td>${model.contextWindow != null ? formatNumber(model.contextWindow) : '-'}</td>
+          <td>
+            <span class="model-links">
+              ${model.termsOfUseUrl ? `<a href="${escapeHtml(model.termsOfUseUrl)}" class="model-links__item" target="_blank" rel="noreferrer noopener">${translations.linkTermsOfUse || 'Terms of Use'}<svg class="model-links__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H21V10"/><path d="M21 3L10 14"/><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13"/></svg></a>` : ''}
+              ${model.dataProtectionUrl ? `<a href="${escapeHtml(model.dataProtectionUrl)}" class="model-links__item" target="_blank" rel="noreferrer noopener">${translations.linkDataProtection || 'Data Protection'}<svg class="model-links__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H21V10"/><path d="M21 3L10 14"/><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13"/></svg></a>` : ''}
+              ${!model.termsOfUseUrl && !model.dataProtectionUrl ? '<span class="model-links__empty">-</span>' : ''}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(row);
+      }
+
+      if (models.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="12" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
+        tbody.appendChild(row);
+      }
+
+      if (table) {
+        table.querySelectorAll<HTMLElement>('th[data-sort]').forEach((header: HTMLElement) => {
+          const icon = header.querySelector<HTMLImageElement>('.sort-icon');
+          if (!icon) return;
+          const key = header.dataset.sort || '';
+          const isActive = key === sortKey;
+          header.classList.toggle('sort-active', isActive);
+          icon.classList.toggle('sort-icon--active', isActive);
+          icon.classList.toggle('sort-icon--asc', isActive && sortAsc);
+          icon.classList.toggle('sort-icon--desc', isActive && !sortAsc);
+        });
+      }
+    }
+
+    if (selector && !locked) {
+      selector.addEventListener('change', () => {
+        currentIndex = parseInt(selector.value, 10);
+        populateFilterDropdowns();
+        render();
+      });
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        searchTerm = searchInput.value;
+        render();
+      });
+    }
+
+    if (locationFilter) {
+      locationFilter.addEventListener('change', render);
+    }
+
+    if (cloudFilter) {
+      cloudFilter.addEventListener('change', render);
+    }
+
+    if (priceFilter) {
+      priceFilter.addEventListener('change', render);
+    }
+
+    if (table) {
+      table.querySelectorAll<HTMLElement>('th[data-sort]').forEach((header: HTMLElement) => {
+        header.addEventListener('click', () => {
+          const key = header.dataset.sort || '';
+          if (sortKey === key) {
+            sortAsc = !sortAsc;
+          } else {
+            sortKey = key;
+            sortAsc = true;
+          }
+          render();
+        });
+      });
+    }
+
+    populateFilterDropdowns();
+    render();
+  }
+
+  function initAllModelsTables() {
+    document.querySelectorAll<HTMLElement>('.models-table-section').forEach((section: HTMLElement) => initModelsTable(section));
+  }
+
+  document.addEventListener('astro:page-load', initAllModelsTables);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllModelsTables);
+  } else {
+    initAllModelsTables();
+  }
+</script>
+
+<style is:global>
+  .models-table-section {
+    margin-bottom: 2rem;
+    --model-link-color: #4f5cff;
+    --model-link-icon-color: #000000;
+  }
+
+  :root[data-theme='dark'] .models-table-section {
+    --model-link-color: #7d87ff;
+    --model-link-icon-color: #7d87ff;
+  }
+
+  .models-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .control-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0 0 0.2rem 0;
+    line-height: 1;
+  }
+
+  .control-group select,
+  .control-group input {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 4px;
+    background: var(--sl-color-gray-6);
+    color: inherit;
+    font-size: 0.9rem;
+    height: 2rem;
+    min-width: 200px;
+    box-sizing: border-box;
+  }
+
+  .control-group select:focus,
+  .control-group input:focus {
+    outline: 2px solid #e20074;
+    outline-offset: -1px;
+  }
+
+  .sort-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: inherit;
+  }
+
+  th.sort-active .sort-header {
+    color: var(--sl-color-accent);
+  }
+
+  .sort-icon {
+    width: 0.6rem;
+    height: auto;
+    flex: 0 0 auto;
+    opacity: 0.85;
+    transform: rotate(0deg);
+    transition: transform 160ms ease, opacity 160ms ease, filter 160ms ease;
+  }
+
+  .sort-icon--active {
+    opacity: 1;
+    filter: saturate(1.15);
+  }
+
+  .sort-icon--asc {
+    transform: rotate(180deg);
+  }
+
+  .sort-icon--desc {
+    transform: rotate(0deg);
+  }
+
+  .ui-tooltip {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    vertical-align: middle;
+    outline: none;
+  }
+
+  .ui-tooltip__trigger {
+    display: inline-flex;
+  }
+
+  .ui-tooltip__content {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.85rem);
+    transform: translateX(-50%) translateY(0.35rem);
+    width: max-content;
+    max-width: min(var(--ui-tooltip-max-width, 24rem), calc(100vw - 2rem));
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: #232326;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.35;
+    white-space: normal;
+    text-align: left;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+    z-index: 30;
+  }
+
+  .ui-tooltip__content::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -0.45rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    background: #232326;
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 0.1rem;
+  }
+
+  .ui-tooltip:hover .ui-tooltip__content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .creator-brand {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  .creator-brand--icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: var(--sl-border-sm);
+    padding: 4px;
+  }
+
+  .creator-brand--text {
+    width: auto;
+    height: auto;
+    justify-content: flex-start;
+  }
+
+  .creator-brand__icon {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .creator-brand__label {
+    font-weight: 600;
+    white-space: nowrap;
+    font-style: normal;
+  }
+
+  .model-links {
+    display: inline-flex;
+    gap: 1rem;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .model-links__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--model-link-color);
+    text-decoration-color: currentColor;
+  }
+
+  .model-links__item:visited,
+  .model-links__item:hover,
+  .model-links__item:focus-visible {
+    color: var(--model-link-color);
+  }
+
+  .model-links__icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    display: inline-block;
+    flex: 0 0 auto;
+  }
+
+  .model-links__icon path {
+    stroke: var(--model-link-icon-color);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .model-links__empty {
+    color: var(--sl-color-text-accent);
+  }
+</style>
