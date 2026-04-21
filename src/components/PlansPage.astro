@@ -2,6 +2,7 @@
 import 'flag-icons/css/flag-icons.min.css';
 import allPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
 import countryData from '../shared/lib/countryCodeWithFlags.json';
+import Tooltip from './Tooltip.astro';
 
 interface Props {
   selectedPlanId?: string;
@@ -57,6 +58,28 @@ const t = {
   thRPMLimit: isDE ? 'RPM-Limit' : 'RPM Limit',
   noModels: isDE ? 'Keine Modelle gefunden.' : 'No models found.',
   euWorldwide: isDE ? 'EU & Weltweit' : 'EU & Worldwide',
+  tooltipTCloud: isDE
+    ? 'Gehostet auf der souveränen Infrastruktur der Telekom.'
+    : "Hosted on Telekom's sovereign infrastructure.",
+  tooltipExternal: isDE
+    ? 'Gehostet bei Drittanbietern wie Microsoft Azure oder Google Cloud Platform.'
+    : 'Hosted by third-party providers like Microsoft Azure or Google Cloud Platform.',
+  tooltipStandard: isDE
+    ? 'Leistungsfähige, schnelle und zuverlässige Modelle für die meisten Aufgaben.'
+    : 'Capable, fast, and reliable models for most tasks.',
+  tooltipPremium: isDE
+    ? 'Leistungsstarke Modelle mit hoher Qualität für komplexe und kritische Anwendungsfälle.'
+    : 'Powerful, high-capability models for complex and quality-critical work.',
+};
+
+const hostTooltips: Record<string, string> = {
+  'T-Cloud': t.tooltipTCloud,
+  External: t.tooltipExternal,
+};
+
+const tierTooltips: Record<string, string> = {
+  Standard: t.tooltipStandard,
+  Premium: t.tooltipPremium,
 };
 
 // Plan display config
@@ -176,9 +199,11 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
                   {plan.modelHost.map((cloud, i) => (
                     <>
                       {i > 0 && ' '}
-                      <span class={`plans-tag ${cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud'}`}>
-                        {cloud}
-                      </span>
+                      <Tooltip text={hostTooltips[cloud] || cloud} maxWidth="26rem">
+                        <span class={`plans-tag ${cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud'}`}>
+                          {cloud}
+                        </span>
+                      </Tooltip>
                     </>
                   ))}
                 </td>
@@ -186,9 +211,11 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
                   {plan.modelTier.map((tier, i) => (
                     <>
                       {i > 0 && ' '}
-                      <span class={`plans-tag ${tier === 'Premium' ? 'tag-premium' : 'tag-tier'}`}>
-                        {tier}
-                      </span>
+                      <Tooltip text={tierTooltips[tier] || tier} maxWidth="24rem">
+                        <span class={`plans-tag ${tier === 'Premium' ? 'tag-premium' : 'tag-tier'}`}>
+                          {tier}
+                        </span>
+                      </Tooltip>
                     </>
                   ))}
                 </td>
@@ -537,6 +564,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
   .table-wrapper > table {
     border-radius: var(--sl-border-md);
+    overflow: visible;
   }
 
   .par-description {
