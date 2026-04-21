@@ -7,7 +7,7 @@ interface Props {
 const { text, maxWidth = '24rem' } = Astro.props;
 ---
 
-<span class="ui-tooltip" tabindex="0" style={`--ui-tooltip-max-width: ${maxWidth};`}>
+<span class="ui-tooltip" style={`--ui-tooltip-max-width: ${maxWidth};`}>
   <span class="ui-tooltip__trigger">
     <slot />
   </span>
@@ -64,9 +64,7 @@ const { text, maxWidth = '24rem' } = Astro.props;
     border-radius: 0.1rem;
   }
 
-  .ui-tooltip:hover .ui-tooltip__content,
-  .ui-tooltip:focus-visible .ui-tooltip__content,
-  .ui-tooltip:focus-within .ui-tooltip__content {
+  .ui-tooltip:hover .ui-tooltip__content {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
