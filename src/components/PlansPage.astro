@@ -12,19 +12,22 @@ const { selectedPlanId = '' } = Astro.props;
 const isDE = Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/de';
 
 const t = {
-  ratePlansTitle: isDE ? 'Tarife' : 'Rate Plans',
+  ratePlansTitle: isDE ? 'Tarife' : 'Our Rate Plans',
   subtitle: isDE
     ? 'Die AI Foundation Services Plattform bietet eine nutzungsabhängige Preisgestaltung. Die Preise variieren je nach Modell, Vereinbarung und Tarif.'
-    : 'AI Foundation Services offers pay-as-you-go pricing. Prices vary by model, agreement, and rate plan.',
-  subtitle2: isDE
-    ? 'Bitte kontaktieren Sie uns für weitere Informationen zu den dedizierten und on-premises Hosting-Optionen.'
-    : 'Please contact us for more information on the dedicated and on-premises hosting options.',
-  thPlan: isDE ? 'Tarif' : 'Plan',
+    : 'Choose the commitment level that fits your workload. Your monthly base unlocks higher request limits and access to more powerful models. Need a custom setup or on-premises hosting?',
+  // subtitle2: isDE
+  //   ? 'Bitte kontaktieren Sie uns für weitere Informationen zu den dedizierten und on-premises Hosting-Optionen.'
+  //   : 'Please contact us for more information on the dedicated and on-premises hosting options.',
+  thPlan: isDE ? 'Tarif' : 'Rate Plan',
+  thBasePrice: isDE ? 'Grundpreis' : 'Base Price',
+  thModelHost: isDE ? 'Modell-Hosting' : 'Model Host',
+  thModelTier: isDE ? 'Modell-Tier' : 'Model Tier',
   thMinConsumption: isDE ? 'Mindestverbrauch' : 'Min. Consumption',
-  thTokenPrice: isDE ? 'Beispiel Token Preis *' : 'Token Price *',
-  thTokenPriceUnit: '€/Mil. Tokens',
-  thRPM: isDE ? 'Beispiel RPM\u2020' : 'RPM\u2020',
-  thRPMUnit: isDE ? 'Anfragen/Min' : 'Req/Min',
+  thTokenPrice: isDE ? 'Input- / Output-Token-Preis' : 'Input / Output Token Price',
+  thTokenPriceUnit: '€ / M Tokens',
+  thRPM: isDE ? 'Beispiel RPM' : 'RPM',
+  thRPMUnit: isDE ? 'Anfragen/Minute' : 'Requests/Minute',
   thCloud: isDE ? 'Cloud Anbieter' : 'Cloud',
   footnote: isDE
     ? '* Beispielpreise für T-Cloud-gehostete Large Language Models · † Beispiel-RPM für ein repräsentatives T-Cloud-Modell — genaue Limits variieren je Modell'
@@ -58,11 +61,10 @@ const t = {
 
 // Plan display config
 const planConfigs = [
-  { packageName: 'Tarif Basic Template',         label: 'Basic',         color: '#4de0af', minConsumption: '-',      tokenPrice: '3.53', rpm: '20',  clouds: ['T-Cloud'] },
-  { packageName: 'Tarif Standard1000 Template',   label: 'Standard 1000', color: '#4ad9cd', minConsumption: '\u20AC1,000', tokenPrice: '3.53', rpm: '150', clouds: ['T-Cloud', 'Azure', 'GCP'] },
-  { packageName: 'Tarif Standard2000 Template',   label: 'Standard 2000', color: '#4dd1e0', minConsumption: '\u20AC2,000', tokenPrice: '2.89', rpm: '300', clouds: ['T-Cloud', 'Azure', 'GCP'] },
-  { packageName: 'Tarif Standard3000 Template',   label: 'Standard 3000', color: '#5ec2ed', minConsumption: '\u20AC3,000', tokenPrice: '2.23', rpm: '450', clouds: ['T-Cloud', 'Azure', 'GCP'] },
-  { packageName: 'Tarif Standard4000 Template',   label: 'Standard 4000', color: '#84b0f5', minConsumption: '\u20AC4,000', tokenPrice: '1.75', rpm: '600', clouds: ['T-Cloud', 'Azure', 'GCP'] },
+  { packageName: 'Tarif Basic Template',         label: 'Essential',    color: '#4de0af', basePrice: '1,000 \u20AC', tokenPrice: '0.20 / 0.65', rpm: '300',    modelHost: ['T-Cloud', 'External'], modelTier: ['Standard'] },
+  { packageName: 'Tarif Standard1000 Template',  label: 'Professional', color: '#4ad9cd', basePrice: '3,000 \u20AC', tokenPrice: '0.20 / 0.65', rpm: '1000',   modelHost: ['T-Cloud', 'External'], modelTier: ['Standard', 'Premium'] },
+  { packageName: 'Tarif Standard2000 Template',  label: 'Agentic',      color: '#4dd1e0', basePrice: '5,000 \u20AC', tokenPrice: '0.20 / 0.65', rpm: '3000',   modelHost: ['T-Cloud', 'External'], modelTier: ['Standard', 'Premium'] },
+  { packageName: 'Tarif Standard3000 Template',  label: 'Enterprise',   color: '#5ec2ed', basePrice: 'Custom',      tokenPrice: '0.20 / 0.65', rpm: 'Custom', modelHost: ['T-Cloud', 'External'], modelTier: ['Standard', 'Premium'] },
 ];
 
 // Helper: parse deployment region
@@ -145,17 +147,18 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
   {showRatePlans && (
     <section class="rate-plans-section">
       <h2>{t.ratePlansTitle}</h2>
-      <p>{t.subtitle}</p>
-      <p>{t.subtitle2}</p>
+      <p class="par-description">{t.subtitle}</p>
+      {/* <p>{t.subtitle2}</p> */}
       <div class="table-wrapper">
         <table class="plans-table">
           <thead>
             <tr>
               <th>{t.thPlan}</th>
-              <th>{t.thMinConsumption}</th>
-              <th>{t.thTokenPrice}<br/><small>{t.thTokenPriceUnit}</small></th>
-              <th>{t.thRPM}<br/><small>{t.thRPMUnit}</small></th>
-              <th>{t.thCloud}</th>
+              <th>{t.thBasePrice}</th>
+              <th>{t.thTokenPrice}<div class="plans-table__small-text">{t.thTokenPriceUnit}</div></th>
+              <th>{t.thRPM}<div class="plans-table__small-text">{t.thRPMUnit}</div></th>
+              <th>{t.thModelHost}</th>
+              <th>{t.thModelTier}</th>
             </tr>
           </thead>
           <tbody>
@@ -166,15 +169,25 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
                     {plan.label}
                   </span>
                 </td>
-                <td>{plan.minConsumption}</td>
+                <td><span class="plans-table__main-text">{plan.basePrice}</span></td>
                 <td>{plan.tokenPrice}</td>
                 <td>{plan.rpm}</td>
                 <td>
-                  {plan.clouds.map((cloud, i) => (
+                  {plan.modelHost.map((cloud, i) => (
                     <>
                       {i > 0 && ' '}
                       <span class={`plans-tag ${cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud'}`}>
                         {cloud}
+                      </span>
+                    </>
+                  ))}
+                </td>
+                <td>
+                  {plan.modelTier.map((tier, i) => (
+                    <>
+                      {i > 0 && ' '}
+                      <span class={`plans-tag ${tier === 'Premium' ? 'tag-premium' : 'tag-tier'}`}>
+                        {tier}
                       </span>
                     </>
                   ))}
@@ -522,6 +535,14 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     width: fit-content;
   }
 
+  .table-wrapper > table {
+    border-radius: var(--sl-border-md);
+  }
+
+  .par-description {
+    width: min(100%, 54rem);
+  }
+
   .plans-table {
     border-collapse: collapse;
     font-size: 0.8rem;
@@ -530,8 +551,8 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
   .plans-table th,
   .plans-table td {
-    border: 1px solid var(--sl-color-gray-5);
-    padding: 0.35rem 0.4rem;
+    border: 0;
+    padding: 0.85rem 1.35rem;
     text-align: left;
   }
 
@@ -542,8 +563,31 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     vertical-align: middle;
   }
 
+  
+  .plans-table__small-text {
+    font-weight: normal;
+    font-size: var(--sl-text-2xs);
+  }
+
+  .plans-table__main-text {
+    font-weight: 650;
+  }
+
+
   .plans-table tbody tr:hover {
     background: var(--sl-color-gray-6);
+  }
+
+  .plans-table thead tr {
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .plans-table tbody tr {
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .plans-table tbody tr:last-child {
+    border-bottom: 0;
   }
 
   .plans-table tbody tr.sub-row {
@@ -562,12 +606,22 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
   .tag-tcloud {
     background: #e20074 !important;
-    color: var(--sl-color-white) !important;
+    color: white !important;
   }
 
   .tag-cloud {
     background: var(--sl-color-gray-5);
     color: var(--sl-color-white);
+  }
+
+  .tag-tier {
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-text);
+  }
+
+  .tag-premium {
+    background: rgba(78, 201, 223, 0.18);
+    color: #35a8be;
   }
 
   .sort-icon {
@@ -618,5 +672,17 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
   .control-group input:focus {
     outline: 2px solid #e20074;
     outline-offset: -1px;
+  }
+
+  @media (max-width: 1200px) {
+    .par-description {
+      width: min(100%, 46rem);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .par-description {
+      width: 100%;
+    }
   }
 </style>
