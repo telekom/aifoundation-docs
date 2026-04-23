@@ -95,7 +95,7 @@ const tierTooltips: Record<string, string> = {
 // Plan display config
 const planConfigs = [
   {
-    packageName: 'Tarif Basic Template',
+    packageName: 'Essential',
     label: 'Essential',
     color: '#4de0af',
     basePrice: '1,000 \u20AC',
@@ -105,7 +105,7 @@ const planConfigs = [
     modelTier: ['Standard'],
   },
   {
-    packageName: 'Tarif Standard1000 Template',
+    packageName: 'Professional',
     label: 'Professional',
     color: '#4ad9cd',
     basePrice: '3,000 \u20AC',
@@ -115,7 +115,7 @@ const planConfigs = [
     modelTier: ['Standard', 'Premium'],
   },
   {
-    packageName: 'Tarif Standard2000 Template',
+    packageName: 'Agentic',
     label: 'Agentic',
     color: '#4dd1e0',
     basePrice: '5,000 \u20AC',
@@ -162,10 +162,17 @@ function parseCloudProvider(deploymentRegion: string): string {
 function parseModelCreator(exactModelName: string | undefined, displayModelName: string): string {
   const source = `${exactModelName || ''} ${displayModelName}`.toLowerCase();
   const isOpenAIOSeries = /\bo\d+(?:[.-]|\b)/.test(source);
+  const isOpenAIAdaSeries = /\b(?:embedding\s+ada|text-embedding-ada|ada(?:[-\s]?\d+)?)\b/.test(source);
 
   if (source.includes('claude')) return 'Anthropic';
   if (source.includes('gemini')) return 'Google';
-  if (source.includes('gpt') || isOpenAIOSeries || source.includes('codex') || source.includes('whisper'))
+  if (
+    source.includes('gpt') ||
+    isOpenAIOSeries ||
+    isOpenAIAdaSeries ||
+    source.includes('codex') ||
+    source.includes('whisper')
+  )
     return 'OpenAI';
   if (source.includes('llama') || source.includes('meta')) return 'Meta';
   if (source.includes('mistral')) return 'Mistral';
@@ -277,28 +284,35 @@ function mapModelRow(
 }
 
 // Build plan data for client-side use
-const plansData = allPricing.map((plan: any) => {
-  const config = planConfigs.find((c) => c.packageName === plan.packageName);
-  const models = (plan.modelQuotaConfigs || [])
-    .map((m: any) => {
-      const modelHost = parseModelHost(m.deploymentRegion);
-      const cloudProvider = parseCloudProvider(m.deploymentRegion);
-      const { name: locName, code: locCode } = parseLocation(m.deploymentRegion);
-      const rows: any[] = [mapModelRow(m, m, modelHost, cloudProvider, locName, locCode, false)];
-      if (m.modelQuotaMetadata?.data) {
-        for (const sub of m.modelQuotaMetadata.data) {
-          rows.push(mapModelRow(sub, m, modelHost, cloudProvider, locName, locCode, true));
+const plansData = planConfigs
+  .map((config) => {
+    const plan = allPricing.find(
+      (item: any) => item.packageName === config.packageName || item.packageName === config.label,
+    );
+    if (!plan) return null;
+
+    const models = (plan.modelQuotaConfigs || [])
+      .map((m: any) => {
+        const modelHost = parseModelHost(m.deploymentRegion);
+        const cloudProvider = parseCloudProvider(m.deploymentRegion);
+        const { name: locName, code: locCode } = parseLocation(m.deploymentRegion);
+        const rows: any[] = [mapModelRow(m, m, modelHost, cloudProvider, locName, locCode, false)];
+        if (m.modelQuotaMetadata?.data) {
+          for (const sub of m.modelQuotaMetadata.data) {
+            rows.push(mapModelRow(sub, m, modelHost, cloudProvider, locName, locCode, true));
+          }
         }
-      }
-      return rows;
-    })
-    .flat();
-  return {
-    packageName: plan.packageName,
-    label: config?.label || plan.packageName,
-    models,
-  };
-});
+        return rows;
+      })
+      .flat();
+
+    return {
+      packageName: plan.packageName,
+      label: config.label,
+      models,
+    };
+  })
+  .filter(Boolean);
 
 const showRatePlans = !selectedPlanId;
 const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.packageName === selectedPlanId) : 0;
@@ -434,6 +448,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
   .table-wrapper {
     width: fit-content;
+    overflow: visible;
   }
 
   .table-wrapper > table {

@@ -109,6 +109,7 @@ const sortableHeaders = [
       </tbody>
     </table>
   </div>
+  <small>* EU/EEA includes countries with an adequacy decision by the EU Commission.</small>
 </section>
 
 <script>
@@ -128,6 +129,8 @@ const sortableHeaders = [
     const priceFilter = section.querySelector<HTMLSelectElement>('#price-filter');
     const tbody = section.querySelector<HTMLTableSectionElement>('#models-tbody');
     const table = section.querySelector<HTMLTableElement>('#models-table');
+    const tableWrapper = section.querySelector<HTMLElement>('.table-wrapper');
+    const maxHeightRowThreshold = 12;
 
     let sortKey = '';
     let sortAsc = true;
@@ -249,6 +252,14 @@ const sortableHeaders = [
       return value === 'Open Telekom Cloud' || value === 'OTC' ? 'Telekom' : value;
     }
 
+    function getCloudProviderFullName(value: string) {
+      const normalized = normalizeCloudProvider(value);
+      if (normalized === 'Telekom') return 'Open Telekom Cloud';
+      if (normalized === 'Azure') return 'Microsoft Azure';
+      if (normalized === 'GCP') return 'Google Cloud Platform';
+      return normalized;
+    }
+
     function render() {
       if (!tbody) return;
       const models = getModels();
@@ -261,14 +272,15 @@ const sortableHeaders = [
         const hostClass = model.modelHost === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
         const tierClass = model.modelTier === 'Premium' ? 'tag-premium' : 'tag-tier';
         const cloudProvider = normalizeCloudProvider(model.cloudProvider);
+        const cloudProviderFullName = getCloudProviderFullName(model.cloudProvider);
         const cloudProviderClass = getCloudProviderTagClass(model.cloudProvider);
         const hostTooltip = hostTooltips[model.modelHost] || '';
         const tierTooltip = tierTooltips[model.modelTier] || '';
         const creatorIcon = brandIcons[model.creator] || '';
         row.innerHTML = `
-          <td>${hostTooltip ? `<span class="ui-tooltip" style="--ui-tooltip-max-width: 26rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(hostTooltip)}</span></span>` : `<span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span>`}</td>
-          <td><span class="plans-tag ${cloudProviderClass}">${escapeHtml(cloudProvider)}</span></td>
-          <td>${tierTooltip ? `<span class="ui-tooltip" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span>`}</td>
+          <td>${hostTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 26rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(hostTooltip)}</span></span>` : `<span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span>`}</td>
+          <td><span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${cloudProviderClass}">${escapeHtml(cloudProvider)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(cloudProviderFullName)}</span></span></td>
+          <td>${tierTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span>`}</td>
           <td>
             <span class="creator-brand ${creatorIcon ? 'creator-brand--icon' : 'creator-brand--text'}" title="${escapeHtml(model.creator)}" aria-label="${escapeHtml(model.creator)}">
               ${creatorIcon ? `<img class="creator-brand__icon" src="${escapeHtml(creatorIcon)}" alt="${escapeHtml(model.creator)}" />` : `<span class="creator-brand__label">${escapeHtml(model.creator)}</span>`}
@@ -300,6 +312,10 @@ const sortableHeaders = [
         const row = document.createElement('tr');
         row.innerHTML = `<td colspan="12" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
         tbody.appendChild(row);
+      }
+
+      if (tableWrapper) {
+        tableWrapper.classList.toggle('table-wrapper--auto-height', models.length < maxHeightRowThreshold);
       }
 
       if (table) {
@@ -388,6 +404,13 @@ const sortableHeaders = [
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 42rem;
+  }
+
+  .models-table-section .table-wrapper.table-wrapper--auto-height {
+    max-height: none;
+    overflow: visible;
   }
 
   .models-table-section .plans-table {
@@ -408,6 +431,10 @@ const sortableHeaders = [
   }
 
   .models-table-section .plans-table th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--sl-color-gray-6);
     padding-top: 0.65rem;
     padding-bottom: 0.65rem;
     white-space: wrap;
@@ -421,9 +448,11 @@ const sortableHeaders = [
   }
 
   .models-table-section .plans-tag {
-    padding: 0.1rem 0.4rem;
-    font-size: 0.72rem;
-    border-radius: 999px;
+    padding: 0.14rem 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 4px;
   }
 
   :root[data-theme='dark'] .models-table-section {
@@ -571,6 +600,24 @@ const sortableHeaders = [
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
+  }
+
+  .ui-tooltip--right-center .ui-tooltip__content {
+    left: calc(100% + 0.85rem);
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) translateX(-0.35rem);
+  }
+
+  .ui-tooltip--right-center .ui-tooltip__content::after {
+    left: -0.45rem;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .ui-tooltip--right-center:hover .ui-tooltip__content {
+    transform: translateY(-50%) translateX(0);
   }
 
   .creator-brand {
