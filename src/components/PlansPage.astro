@@ -153,9 +153,9 @@ function parseModelHost(deploymentRegion: string): string {
 function parseCloudProvider(deploymentRegion: string): string {
   const lower = deploymentRegion.toLowerCase();
   const provider = lower.split('-')[0];
-  if (provider === 'otc') return 'Open Telekom Cloud';
-  if (provider === 'azure') return 'Microsoft Azure';
-  if (provider === 'gcp') return 'Google Cloud Platform';
+  if (provider === 'otc') return 'Telekom';
+  if (provider === 'azure') return 'Azure';
+  if (provider === 'gcp') return 'GCP';
   return deploymentRegion;
 }
 
