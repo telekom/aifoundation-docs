@@ -113,6 +113,8 @@ const sortableHeaders = [
 </section>
 
 <script>
+  import { areModelPricesInRange } from '../shared/lib/priceRangeHelper';
+
   function initModelsTable(section: HTMLElement) {
     const plansData = JSON.parse(section.dataset.plans || '[]');
     const brandIcons = JSON.parse(section.dataset.brandIcons || '{}');
@@ -201,11 +203,11 @@ const sortableHeaders = [
 
       if (priceFilter && priceFilter.value) {
         if (priceFilter.value === '0-2') {
-          models = models.filter((model) => model.inputPrice >= 0 && model.inputPrice < 2);
+          models = models.filter((model) => areModelPricesInRange(model, 0, 2));
         } else if (priceFilter.value === '2-5') {
-          models = models.filter((model) => model.inputPrice >= 2 && model.inputPrice < 5);
+          models = models.filter((model) => areModelPricesInRange(model, 2, 5));
         } else if (priceFilter.value === '5+') {
-          models = models.filter((model) => model.inputPrice >= 5);
+          models = models.filter((model) => areModelPricesInRange(model, 5));
         }
       }
 
