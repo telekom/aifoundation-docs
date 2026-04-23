@@ -2,12 +2,13 @@
 interface Props {
   text: string;
   maxWidth?: string;
+  position?: 'top' | 'right-center';
 }
 
-const { text, maxWidth = '24rem' } = Astro.props;
+const { text, maxWidth = '24rem', position = 'top' } = Astro.props;
 ---
 
-<span class="ui-tooltip" style={`--ui-tooltip-max-width: ${maxWidth};`}>
+<span class={`ui-tooltip ui-tooltip--${position}`} style={`--ui-tooltip-max-width: ${maxWidth};`}>
   <span class="ui-tooltip__trigger">
     <slot />
   </span>
@@ -48,7 +49,10 @@ const { text, maxWidth = '24rem' } = Astro.props;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease,
+      visibility 160ms ease;
     z-index: 30;
   }
 
@@ -68,6 +72,24 @@ const { text, maxWidth = '24rem' } = Astro.props;
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
+  }
+
+  .ui-tooltip--right-center .ui-tooltip__content {
+    left: calc(100% + 0.85rem);
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) translateX(-0.35rem);
+  }
+
+  .ui-tooltip--right-center .ui-tooltip__content::after {
+    left: -0.45rem;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .ui-tooltip--right-center:hover .ui-tooltip__content {
+    transform: translateY(-50%) translateX(0);
   }
 
   @media (max-width: 900px) {
