@@ -1,4 +1,7 @@
 ---
+import Selector from './Selector.astro';
+import TextField from './TextField.astro';
+
 import 'flag-icons/css/flag-icons.min.css';
 
 interface Props {
@@ -43,43 +46,34 @@ const sortableHeaders = [
   <div class="models-controls">
     {
       !locked && (
-        <div class="control-group">
-          <label for="plan-selector">{translations.labelRatePlan}</label>
-          <select id="plan-selector">
-            {plansData.map((plan: any, index: number) => (
-              <option value={index} selected={index === effectiveIndex}>
-                {plan.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Selector id="plan-selector" label={translations.labelRatePlan}>
+          {plansData.map((plan: any, index: number) => (
+            <option value={index} selected={index === effectiveIndex}>
+              {plan.label}
+            </option>
+          ))}
+        </Selector>
       )
     }
-    <div class="control-group">
-      <label for="model-search">{translations.labelSearch}</label>
-      <input type="text" id="model-search" placeholder={translations.placeholderSearch} />
-    </div>
-    <div class="control-group">
-      <label for="location-filter">{translations.labelServerLocation}</label>
-      <select id="location-filter">
-        <option value="">{translations.optionAll}</option>
-      </select>
-    </div>
-    <div class="control-group">
-      <label for="cloud-filter">{translations.labelCloud}</label>
-      <select id="cloud-filter">
-        <option value="">{translations.optionAll}</option>
-      </select>
-    </div>
-    <div class="control-group">
-      <label for="price-filter">{translations.labelPriceRange}</label>
-      <select id="price-filter">
-        <option value="">{translations.optionAll}</option>
-        <option value="0-2">{translations.priceUnder2}</option>
-        <option value="2-5">{translations.price2to5}</option>
-        <option value="5+">{translations.priceOver5}</option>
-      </select>
-    </div>
+    <TextField id="model-search" label={translations.labelSearch} placeholder={translations.placeholderSearch} />
+    <Selector id="location-filter" label={translations.labelServerLocation}>
+      <option value="">{translations.optionAll}</option>
+    </Selector>
+    <Selector id="cloud-filter" label={translations.labelCloud}>
+      <option value="">{translations.optionAll}</option>
+    </Selector>
+    <Selector id="input-price-filter" label={translations.labelInputPriceRange || translations.thInputPrice}>
+      <option value="">{translations.optionAll}</option>
+      <option value="0-2">{translations.priceUnder2}</option>
+      <option value="2-5">{translations.price2to5}</option>
+      <option value="5+">{translations.priceOver5}</option>
+    </Selector>
+    <Selector id="output-price-filter" label={translations.labelOutputPriceRange || translations.thOutputPrice}>
+      <option value="">{translations.optionAll}</option>
+      <option value="0-2">{translations.priceUnder2}</option>
+      <option value="2-5">{translations.price2to5}</option>
+      <option value="5+">{translations.priceOver5}</option>
+    </Selector>
   </div>
 
   <div class="table-wrapper">
@@ -113,7 +107,7 @@ const sortableHeaders = [
 </section>
 
 <script>
-  import { areModelPricesInRange } from '../shared/lib/priceRangeHelper';
+  import { isPriceInRange } from '../shared/lib/priceRangeHelper';
 
   function initModelsTable(section: HTMLElement) {
     const plansData = JSON.parse(section.dataset.plans || '[]');
@@ -128,7 +122,8 @@ const sortableHeaders = [
     const searchInput = section.querySelector<HTMLInputElement>('#model-search');
     const locationFilter = section.querySelector<HTMLSelectElement>('#location-filter');
     const cloudFilter = section.querySelector<HTMLSelectElement>('#cloud-filter');
-    const priceFilter = section.querySelector<HTMLSelectElement>('#price-filter');
+    const inputPriceFilter = section.querySelector<HTMLSelectElement>('#input-price-filter');
+    const outputPriceFilter = section.querySelector<HTMLSelectElement>('#output-price-filter');
     const tbody = section.querySelector<HTMLTableSectionElement>('#models-tbody');
     const table = section.querySelector<HTMLTableElement>('#models-table');
     const tableWrapper = section.querySelector<HTMLElement>('.table-wrapper');
@@ -174,6 +169,24 @@ const sortableHeaders = [
       }
     }
 
+    function applyPriceFilter(models: any[], filterValue: string, getPrice: (model: any) => number | null | undefined) {
+      if (!filterValue) return models;
+
+      if (filterValue === '0-2') {
+        return models.filter((model) => isPriceInRange(getPrice(model), 0, 2));
+      }
+
+      if (filterValue === '2-5') {
+        return models.filter((model) => isPriceInRange(getPrice(model), 2, 5));
+      }
+
+      if (filterValue === '5+') {
+        return models.filter((model) => isPriceInRange(getPrice(model), 5));
+      }
+
+      return models;
+    }
+
     function getModels() {
       const plan = plansData[currentIndex];
       if (!plan) return [];
@@ -201,14 +214,12 @@ const sortableHeaders = [
         models = models.filter((model) => model.cloudProvider === cloudFilter.value);
       }
 
-      if (priceFilter && priceFilter.value) {
-        if (priceFilter.value === '0-2') {
-          models = models.filter((model) => areModelPricesInRange(model, 0, 2));
-        } else if (priceFilter.value === '2-5') {
-          models = models.filter((model) => areModelPricesInRange(model, 2, 5));
-        } else if (priceFilter.value === '5+') {
-          models = models.filter((model) => areModelPricesInRange(model, 5));
-        }
+      if (inputPriceFilter) {
+        models = applyPriceFilter(models, inputPriceFilter.value, (model) => model.inputPrice);
+      }
+
+      if (outputPriceFilter) {
+        models = applyPriceFilter(models, outputPriceFilter.value, (model) => model.outputPrice);
       }
 
       if (sortKey) {
@@ -357,8 +368,12 @@ const sortableHeaders = [
       cloudFilter.addEventListener('change', render);
     }
 
-    if (priceFilter) {
-      priceFilter.addEventListener('change', render);
+    if (inputPriceFilter) {
+      inputPriceFilter.addEventListener('change', render);
+    }
+
+    if (outputPriceFilter) {
+      outputPriceFilter.addEventListener('change', render);
     }
 
     if (table) {
@@ -469,37 +484,6 @@ const sortableHeaders = [
     margin-bottom: 0.75rem;
     flex-wrap: wrap;
     align-items: flex-end;
-  }
-
-  .control-group {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .control-group label {
-    font-size: 0.74rem;
-    font-weight: 600;
-    margin: 0 0 0.15rem 0;
-    line-height: 1;
-  }
-
-  .control-group select,
-  .control-group input {
-    padding: 0.3rem 0.5rem;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 4px;
-    background: var(--sl-color-gray-6);
-    color: inherit;
-    font-size: 0.82rem;
-    height: 1.8rem;
-    min-width: 170px;
-    box-sizing: border-box;
-  }
-
-  .control-group select:focus,
-  .control-group input:focus {
-    outline: 2px solid #e20074;
-    outline-offset: -1px;
   }
 
   .sort-header {
