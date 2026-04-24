@@ -104,6 +104,7 @@ const planConfigs = [
     rpm: '300',
     modelHost: ['T-Cloud', 'External'],
     modelTier: ['Standard'],
+    isFilterAvailable: true,
   },
   {
     packageName: 'Professional',
@@ -114,6 +115,7 @@ const planConfigs = [
     rpm: '1000',
     modelHost: ['T-Cloud', 'External'],
     modelTier: ['Standard', 'Premium'],
+    isFilterAvailable: true,
   },
   {
     packageName: 'Agentic',
@@ -124,6 +126,7 @@ const planConfigs = [
     rpm: '3000',
     modelHost: ['T-Cloud', 'External'],
     modelTier: ['Standard', 'Premium'],
+    isFilterAvailable: true,
   },
   {
     packageName: 'Tarif Standard3000 Template',
@@ -134,6 +137,7 @@ const planConfigs = [
     rpm: 'Custom',
     modelHost: ['T-Cloud', 'External'],
     modelTier: ['Standard', 'Premium'],
+    isFilterAvailable: true,
   },
 ];
 
@@ -309,6 +313,7 @@ const plansData = planConfigs
 
     return {
       packageName: plan.packageName,
+      isFilterAvailable: config.isFilterAvailable,
       label: config.label,
       models,
     };

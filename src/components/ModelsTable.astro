@@ -47,11 +47,13 @@ const sortableHeaders = [
     {
       !locked && (
         <Selector id="plan-selector" label={translations.labelRatePlan}>
-          {plansData.map((plan: any, index: number) => (
-            <option value={index} selected={index === effectiveIndex}>
-              {plan.label}
-            </option>
-          ))}
+          {plansData
+            .filter((plan: any) => plan.isFilterAvailable)
+            .map((plan: any, index: number) => (
+              <option value={index} selected={index === effectiveIndex}>
+                {plan.label}
+              </option>
+            ))}
         </Selector>
       )
     }
@@ -503,6 +505,7 @@ const sortableHeaders = [
     flex: 0 0 auto;
     display: inline-block;
     opacity: 0.85;
+    margin-left: 0 !important;
     color: currentColor;
     transform: rotate(0deg);
     transition:
