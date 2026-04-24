@@ -1,5 +1,5 @@
 ---
-import allPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
+import allPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-04-24.json';
 import ModelsTable from './ModelsTable.astro';
 import Tooltip from './Tooltip.astro';
 import { modelBrandIcons } from '../shared/lib/modelBrandIcons';
@@ -17,9 +17,6 @@ const t = {
   subtitle: isDE
     ? 'Die AI Foundation Services Plattform bietet eine nutzungsabhängige Preisgestaltung. Die Preise variieren je nach Modell, Vereinbarung und Tarif.'
     : 'Choose the commitment level that fits your workload. Your monthly base unlocks higher request limits and access to more powerful models. Need a custom setup or on-premises hosting?',
-  // subtitle2: isDE
-  //   ? 'Bitte kontaktieren Sie uns für weitere Informationen zu den dedizierten und on-premises Hosting-Optionen.'
-  //   : 'Please contact us for more information on the dedicated and on-premises hosting options.',
   thPlan: isDE ? 'Tarif' : 'Rate Plan',
   thBasePrice: isDE ? 'Grundpreis' : 'Base Price',
   thModelHost: isDE ? 'Modell-Hosting' : 'Model Host',
@@ -137,7 +134,7 @@ const planConfigs = [
     rpm: 'Custom',
     modelHost: ['T-Cloud', 'External'],
     modelTier: ['Standard', 'Premium'],
-    isFilterAvailable: true,
+    isFilterAvailable: false,
   },
 ];
 
@@ -289,13 +286,14 @@ function mapModelRow(
 }
 
 // Build plan data for client-side use
-const plansData = planConfigs
-  .map((config) => {
-    const plan = allPricing.find(
-      (item: any) => item.packageName === config.packageName || item.packageName === config.label,
-    );
-    if (!plan) return null;
-
+const plansData = allPricing
+  .map((plan: any) => {
+    const config = planConfigs.find((c) => c.packageName === plan.packageName);
+    // On the index page, where no specific plan is selected, ignore packages that are not present
+    // in planConfigs. This keeps the page scoped to filterable plans only, so the initial filter
+    // state and selected plan index are derived from the same plan set.
+    if (!selectedPlanId && (!config || !config.isFilterAvailable)) return null;
+    if (selectedPlanId && plan.packageName !== selectedPlanId) return null;
     const models = (plan.modelQuotaConfigs || [])
       .map((m: any) => {
         const modelHost = parseModelHost(m.deploymentRegion);
@@ -310,11 +308,10 @@ const plansData = planConfigs
         return rows;
       })
       .flat();
-
     return {
       packageName: plan.packageName,
-      isFilterAvailable: config.isFilterAvailable,
-      label: config.label,
+      isFilterAvailable: config?.isFilterAvailable,
+      label: config?.label || plan.packageName,
       models,
     };
   })
@@ -322,7 +319,6 @@ const plansData = planConfigs
 
 const showRatePlans = !selectedPlanId;
 const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.packageName === selectedPlanId) : 0;
-const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 ---
 
 <div class="plans-page">
@@ -331,7 +327,6 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
       <section class="rate-plans-section">
         <h2>{t.ratePlansTitle}</h2>
         <p class="par-description">{t.subtitle}</p>
-        {/* <p>{t.subtitle2}</p> */}
         <div class="table-wrapper">
           <table class="plans-table">
             <thead>
@@ -401,7 +396,7 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
   <ModelsTable
     plansData={plansData}
-    effectiveIndex={effectiveIndex}
+    effectiveIndex={initialPlanIndex}
     locked={Boolean(selectedPlanId)}
     translations={t}
     modelBrandIcons={modelBrandIcons}

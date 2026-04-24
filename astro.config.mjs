@@ -102,6 +102,7 @@ export default defineConfig({
 						{ label: 'Essential', translations: { de: 'Essential' }, slug: 'plans/essential' },
 						{ label: 'Professional', translations: { de: 'Professional' }, slug: 'plans/professional' },
 						{ label: 'Agentic', translations: { de: 'Agentic' }, slug: 'plans/agentic' },
+						{ label: 'Test', translations: { de: 'Test' }, slug: 'plans/test' },
 						// { label: 'Basic', translations: { de: 'Basic' }, slug: 'plans/basic' },
 						// { label: 'Standard 1000', translations: { de: 'Standard 1000' }, slug: 'plans/standard-1000' },
 						// { label: 'Standard 2000', translations: { de: 'Standard 2000' }, slug: 'plans/standard-2000' },
