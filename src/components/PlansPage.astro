@@ -186,48 +186,6 @@ function parseModelCreator(exactModelName: string | undefined, displayModelName:
   return 'Other';
 }
 
-function parseModelTier(
-  exactModelName: string | undefined,
-  displayModelName: string,
-  inputPrice: number,
-  outputPrice: number,
-): string {
-  const source = `${exactModelName || ''} ${displayModelName}`.toLowerCase();
-
-  const premiumPatterns = [
-    'claude',
-    'sonnet',
-    'opus',
-    'gpt 5',
-    'gpt-5',
-    'gpt 4.1',
-    'gpt-4.1',
-    'gpt 4o',
-    'gpt-4o',
-    'o1',
-    'o3',
-    'gemini 2.5 pro',
-    'gemini 3 pro',
-    'mistral large',
-    'mistral medium',
-  ];
-
-  const standardExclusions = ['mini', 'nano', 'flash', 'embedding', 'embeddings', 'whisper'];
-
-  if (
-    premiumPatterns.some((pattern) => source.includes(pattern)) &&
-    !standardExclusions.some((pattern) => source.includes(pattern))
-  ) {
-    return 'Premium';
-  }
-
-  if (inputPrice >= 5 || outputPrice >= 10) {
-    return 'Premium';
-  }
-
-  return 'Standard';
-}
-
 const COUNTRY_CODES: Record<string, string> = {
   germany: 'de',
   sweden: 'se',
@@ -262,12 +220,7 @@ function mapModelRow(
     cloudProvider,
     creator: parseModelCreator(exactModelName, displayName),
     exactModelName: model.exactModelName,
-    modelTier: parseModelTier(
-      exactModelName,
-      displayName,
-      model.inputPricePerMillionTokens ?? fallbackModel.inputPricePerMillionTokens,
-      model.outputPricePerMillionTokens ?? fallbackModel.outputPricePerMillionTokens,
-    ),
+    modelTier: model.modelTier || 'Standard',
     displayName,
     subName: model.modelLabel || '',
     inputPrice: model.inputPricePerMillionTokens ?? fallbackModel.inputPricePerMillionTokens,
