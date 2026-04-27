@@ -7,8 +7,9 @@ import { modelBrandIcons } from '../shared/lib/modelBrandIcons';
 interface Props {
   selectedPlanId?: string;
   sectionTitle?: string;
+  modelsSectionTitle?: string;
 }
-const { selectedPlanId = '', sectionTitle = '' } = Astro.props;
+const { selectedPlanId = '', sectionTitle = '', modelsSectionTitle = '' } = Astro.props;
 
 // Detect locale from URL path
 const isDE = Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/de';
@@ -34,6 +35,9 @@ const t = {
     : '* Example pricing for T-Cloud-hosted Large Language Models · † Example RPM for a representative T-Cloud model — exact limits vary by model',
   modelsTitle: isDE ? 'Vorschau Modelle' : 'Preview Models',
   modelsSubtitle: isDE
+    ? 'Alle Tarife nutzen eine nutzungsbasierte Token-Abrechnung. Standard-Modelle sind leistungsfähig und auf Geschwindigkeit ausgelegt – zuverlässig für die meisten Anwendungsfälle, ohne Kompromisse bei der Qualität. Premium-Modelle gehen darüber hinaus: für komplexes Reasoning, lange Kontexte und Aufgaben, bei denen die Ausgabequalität im Vordergrund steht.'
+    : 'All plans use pay-as-you-go token pricing. Standard models are capable and built for speed - reliable across most use cases, without cutting corners. Premium models go further: complex reasoning, long contexts, and tasks where output quality is the priority.',
+  testModelsSubtitle: isDE
     ? 'Die Nutzung der Testmodelle ist kostenfrei, setzt jedoch das Abschließen eines Tarifes (Essential / Professional / Agentic) voraus. Die Telekom ist berechtigt, die Nutzung der Testmodelle jederzeit zu limitieren, insbesondere hinsichtlich der verfügbaren Tokens, Rate-Limits (TPM/RPM) und der Nutzungsdauer. Die Telekom ist berechtigt, die Testmodelle jederzeit und ohne vorherige Ankündigung abzuschalten oder den Zugang des Kunden zu diesen einzuschränken. Der Kunde hat keinen Rechtsanspruch auf die fortlaufende Bereitstellung der Testmodelle.'
     : "The use of the test models is free of charge but requires the conclusion of a plan (Essential / Professional / Agentic). Telekom is entitled to limit the use of the test models at any time, in particular with regard to available tokens, rate limits (TPM/RPM), and duration of use. Telekom is entitled to deactivate the test models or restrict the customer's access to them at any time and without prior notice. The customer has no legal entitlement to the continued provision of the test models.",
   labelRatePlan: isDE ? 'Gewählter Tarif' : 'Rate Plan',
@@ -357,6 +361,7 @@ const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.pack
     modelBrandIcons={modelBrandIcons}
     hostTooltips={hostTooltips}
     tierTooltips={tierTooltips}
+    testModelsSectionTitle={modelsSectionTitle}
   />
 </div>
 

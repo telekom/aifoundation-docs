@@ -12,9 +12,19 @@ interface Props {
   modelBrandIcons: Record<string, string>;
   hostTooltips: Record<string, string>;
   tierTooltips: Record<string, string>;
+  testModelsSectionTitle?: string;
 }
 
-const { plansData, effectiveIndex, locked, translations, modelBrandIcons, hostTooltips, tierTooltips } = Astro.props;
+const {
+  plansData,
+  effectiveIndex,
+  locked,
+  translations,
+  modelBrandIcons,
+  hostTooltips,
+  tierTooltips,
+  testModelsSectionTitle,
+} = Astro.props;
 
 const sortableHeaders = [
   { key: 'modelHost', label: translations.thModelHost },
@@ -40,8 +50,10 @@ const sortableHeaders = [
   data-initial-index={effectiveIndex}
   data-locked={locked ? 'true' : 'false'}
   data-t={JSON.stringify(translations)}>
-  <h2>{translations.modelsTitle}</h2>
-  <p class="par-description">{translations.modelsSubtitle}</p>
+  <h2>{testModelsSectionTitle || translations.modelsTitle}</h2>
+  <p class="par-description">
+    {testModelsSectionTitle ? translations.testModelsSubtitle : translations.modelsSubtitle}
+  </p>
 
   <div class="models-controls">
     {
@@ -273,7 +285,7 @@ const sortableHeaders = [
 
     function getCloudProviderFullName(value: string) {
       const normalized = normalizeCloudProvider(value);
-      if (normalized === 'Telekom') return 'Open Telekom Cloud';
+      if (normalized === 'Telekom') return 'T-Cloud Public';
       if (normalized === 'Azure') return 'Microsoft Azure';
       if (normalized === 'GCP') return 'Google Cloud Platform';
       return normalized;
