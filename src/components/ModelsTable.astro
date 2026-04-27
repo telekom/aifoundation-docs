@@ -8,7 +8,7 @@ interface Props {
   plansData: any[];
   effectiveIndex: number;
   locked: boolean;
-  translations: Record<string, string>;
+  translations: Record<string, string> & { modelsSubtitleList?: string[] };
   modelBrandIcons: Record<string, string>;
   hostTooltips: Record<string, string>;
   tierTooltips: Record<string, string>;
@@ -52,8 +52,17 @@ const sortableHeaders = [
   data-t={JSON.stringify(translations)}>
   <h2>{testModelsSectionTitle || translations.modelsTitle}</h2>
   <p class="par-description">
-    {testModelsSectionTitle ? translations.testModelsSubtitle : translations.modelsSubtitle}
+    {!testModelsSectionTitle && translations.modelsSubtitle}
   </p>
+  <div>
+    {
+      testModelsSectionTitle &&
+        translations.modelsSubtitleList &&
+        translations.modelsSubtitleList.map((item) => (
+          <div style={`margin-top: 0;${item[0] === '\n' ? 'margin-top: 1em;font-weight: bold;' : ''}`}>{item}</div>
+        ))
+    }
+  </div>
 
   <div class="models-controls">
     {

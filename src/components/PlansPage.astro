@@ -17,8 +17,8 @@ const isDE = Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/d
 const t = {
   ratePlansTitle: isDE ? 'Tarife' : 'Our Rate Plans',
   subtitle: isDE
-    ? 'Die AI Foundation Services Plattform bietet eine nutzungsabhängige Preisgestaltung. Die Preise variieren je nach Modell, Vereinbarung und Tarif.'
-    : 'Choose the commitment level that fits your workload. Your monthly base unlocks higher request limits and access to more powerful models. Need a custom setup or on-premises hosting?',
+    ? 'Wählen Sie den Tarif, der zu Ihren Anforderungen passt. Ein höherer Grundpreis bedeutet höhere Anfragelimits und Zugriff auf leistungsstärkere Modelle. Sie benötigen eine individuelle Lösung oder ein On-Premises-Hosting? Schreiben Sie uns gerne!'
+    : 'Choose the plan that matches your workload. Higher base prices unlock higher rate limits and more powerful models. Need a custom setup or on-premises hosting? Contact us!',
   thPlan: isDE ? 'Tarif' : 'Rate Plan',
   thBasePrice: isDE ? 'Grundpreis' : 'Base Price',
   thModelHost: isDE ? 'Modell-Hosting' : 'Model Host',
@@ -33,13 +33,23 @@ const t = {
   footnote: isDE
     ? '* Beispielpreise für T-Cloud-gehostete Large Language Models · † Beispiel-RPM für ein repräsentatives T-Cloud-Modell — genaue Limits variieren je Modell'
     : '* Example pricing for T-Cloud-hosted Large Language Models · † Example RPM for a representative T-Cloud model — exact limits vary by model',
-  modelsTitle: isDE ? 'Vorschau Modelle' : 'Preview Models',
+  modelsTitle: isDE ? 'Unsere Modelle' : 'Our Models',
   modelsSubtitle: isDE
-    ? 'Alle Tarife nutzen eine nutzungsbasierte Token-Abrechnung. Standard-Modelle sind leistungsfähig und auf Geschwindigkeit ausgelegt – zuverlässig für die meisten Anwendungsfälle, ohne Kompromisse bei der Qualität. Premium-Modelle gehen darüber hinaus: für komplexes Reasoning, lange Kontexte und Aufgaben, bei denen die Ausgabequalität im Vordergrund steht.'
-    : 'All plans use pay-as-you-go token pricing. Standard models are capable and built for speed - reliable across most use cases, without cutting corners. Premium models go further: complex reasoning, long contexts, and tasks where output quality is the priority.',
-  testModelsSubtitle: isDE
-    ? 'Die Nutzung der Testmodelle ist kostenfrei, setzt jedoch das Abschließen eines Tarifes (Essential / Professional / Agentic) voraus. Die Telekom ist berechtigt, die Nutzung der Testmodelle jederzeit zu limitieren, insbesondere hinsichtlich der verfügbaren Tokens, Rate-Limits (TPM/RPM) und der Nutzungsdauer. Die Telekom ist berechtigt, die Testmodelle jederzeit und ohne vorherige Ankündigung abzuschalten oder den Zugang des Kunden zu diesen einzuschränken. Der Kunde hat keinen Rechtsanspruch auf die fortlaufende Bereitstellung der Testmodelle.'
-    : "The use of the test models is free of charge but requires the conclusion of a plan (Essential / Professional / Agentic). Telekom is entitled to limit the use of the test models at any time, in particular with regard to available tokens, rate limits (TPM/RPM), and duration of use. Telekom is entitled to deactivate the test models or restrict the customer's access to them at any time and without prior notice. The customer has no legal entitlement to the continued provision of the test models.",
+    ? 'Standard-Modelle sind leistungsfähig und auf Geschwindigkeit ausgelegt – zuverlässig für die meisten Anwendungsfälle, ohne Kompromisse bei der Qualität. Premium-Modelle gehen darüber hinaus: für komplexes Reasoning, lange Kontexte und Aufgaben, bei denen die Ausgabequalität im Vordergrund steht.'
+    : 'Standard models are capable and built for speed - reliable across most use cases, without cutting corners. Premium models go further: complex reasoning, long contexts, and tasks where output quality is the priority.',
+  modelsSubtitleList: isDE
+    ? [
+        'Probieren Sie die neuesten KI-Modelle aus: kostenlos testen, sofort erkunden. Unser Preview-Katalog ist Ihre Testumgebung, in der Sie Funktionen bewerten, die Leistung vergleichen und Ideen prototypisieren können, bevor Sie sie in Produktionsumgebungen einsetzen. Sie benötigen lediglich einen aktiven Tarif (Essential, Professional oder Agentic), um loszulegen.',
+        'Wähle ein Modell aus, probiere es in deinem Arbeitsablauf aus und finde heraus, was am besten passt.',
+        '\nHinweis',
+        'Die Nutzung der Testmodelle ist kostenfrei, setzt jedoch das Abschließen eines Tarifes (Essential / Professional / Agentic) voraus. Die Telekom ist berechtigt, die Nutzung der Testmodelle jederzeit zu limitieren, insbesondere hinsichtlich der verfügbaren Tokens, Rate-Limits (TPM/RPM) und der Nutzungsdauer. Die Telekom ist berechtigt, die Testmodelle jederzeit und ohne vorherige Ankündigung abzuschalten oder den Zugang des Kunden zu diesen einzuschränken. Der Kunde hat keinen Rechtsanspruch auf die fortlaufende Bereitstellung der Testmodelle.',
+      ]
+    : [
+        'Get hands-on with the latest AI models: free to test, ready to explore. Our preview catalog is your sandbox to evaluate capabilities, benchmark performance, and prototype ideas before committing to production workloads. All you need is an active plan (Essential, Professional, or Agentic) to start.',
+        'Pick a model, try it in your workflow, and see what fits.',
+        '\nDisclaimer',
+        'Test models are provided free of charge with any active plan. Telekom may limit usage at any time — including available tokens, rate limits (TPM/RPM), and duration of use and may deactivate test models or restrict access without prior notice. Customers have no legal entitlement to the continued provision of test models.',
+      ],
   labelRatePlan: isDE ? 'Gewählter Tarif' : 'Rate Plan',
   labelSearch: isDE ? 'Suche' : 'Search',
   labelServerLocation: 'Server Location',
@@ -83,7 +93,7 @@ const t = {
   tooltipPremium: isDE
     ? 'Leistungsstarke Modelle mit hoher Qualität für komplexe und kritische Anwendungsfälle.'
     : 'Powerful, high-capability models for complex and quality-critical work.',
-};
+} as Record<string, any>;
 
 const hostTooltips: Record<string, string> = {
   'T-Cloud': t.tooltipTCloud,
