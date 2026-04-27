@@ -38,38 +38,52 @@ const EXTRA_MODELS = [
 ];
 
 const SORT_ORDER = [
-  'GPT OSS 120B',
-  'Qwen 3 Next 80B Instruct',
-  'Qwen 3 VL 30B Instruct',
-  'Qwen 3 30B',
-  'Meta LLama 3.3 70B',
-  'Mistral Small 24B Instruct 2501',
+  'Gemma 4',
+  'GPT-OSS 120B',
+  'Qwen3-Next 80B',
+  'Qwen3-VL 30B',
+  'Qwen3 Coder 30B',
   'Qwen 3 Coder 30B',
-  'Qwen2.5 Coder 32B Instruct',
+  'Llama 3.3 70B',
+  'Mistral Small 3',
+  'Mistral Medium 3',
+  'GPT-5.2',
   'GPT 5.2',
-  'GPT 5',
-  'GPT 5 Mini',
-  'o4 Mini',
+  'GPT-5',
+  'GPT-5 mini',
+  'GPT-5 nano',
+  'GPT-5 Codex',
+  'o4 mini',
   'o3',
-  'Claude 4.5 Sonnet',
+  'o3 mini',
+  'o1 mini',
+  'Claude 4.6 Opus',
+  'Claude 4.6 Sonnet',
+  'Claude 4.5 Opus',
+  'Claude 4.5 Sonnet (>200k)',
+  'Claude 4.5 Sonnet (≤200k)',
+  'Claude 4.5 Haiku',
   'Claude 4 Sonnet',
-  'Gemini 3 Pro',
-  'Gemini 2.5 Pro',
-  'Gemini 2.5 Flash',
-  'GPT 4.1',
-  'GPT 4.1 Mini',
-  'GPT 4o',
-  'GPT Image 1',
-  'o3 Mini',
-  'o1 Mini',
   'Claude 3.7 Sonnet',
-  'Embedding BGE M3',
-  'Jina Embeddings v2 Base De',
-  'Jina Embeddings v2 Base Code',
-  'TSI Col Qwen 2 2b v1.0',
+  'Gemini 3 Pro (>200k)',
+  'Gemini 3 Pro (≤200k)',
+  'Gemini 3 Flash',
+  'Gemini 2.5 Pro (>200k)',
+  'Gemini 2.5 Pro (≤200k)',
+  'Gemini 2.5 Flash',
+  'Gemini 2.5 Flash Image',
+  'GPT-4.1',
+  'GPT-4.1 mini',
+  'GPT-4.1 nano',
+  'GPT-4o',
+  'GPT-4o mini',
+  'GPT-Image-1 (Text→Image)',
+  'GPT-Image-1 (Image→Image)',
+  'BGE-M3',
+  'Ada Text Embedding',
+  'Jina Embeddings v2 Base DE',
   'Whisper Large v3',
   'Whisper Large v3 Turbo',
-  'Teuken 7B Instruct',
 ];
 
 // Map country names to ISO 3166-1 alpha-2 codes for flag icons
@@ -99,9 +113,12 @@ function parseRegion(region: string): { provider: string; hosted: string; countr
   return { provider, hosted: country, countryCode, dataProcessing };
 }
 
-// Get the second-to-last plan
-const plan = pricingData[pricingData.length - 2];
-const configs = plan.modelQuotaConfigs;
+// Pull from the Agentic and Test plans so preview-only models (e.g. Gemma 4) are included.
+// Tag Test-plan models so they can be marked as preview downstream.
+const exposedPlans = [pricingData[pricingData.length - 2], pricingData[pricingData.length - 1]];
+const configs = exposedPlans.flatMap((p) =>
+  p.modelQuotaConfigs.map((c) => ({ ...c, isPreview: p.packageName === 'Test' })),
+);
 
 interface ModelCard {
   modelId: string;
@@ -110,12 +127,13 @@ interface ModelCard {
   hosted: string;
   countryCode: string;
   dataProcessing: string;
+  preview?: boolean;
 }
 
 // Build model cards from pricing data (filtering out offline models)
 const pricingModels: ModelCard[] = configs
   .filter((c: { exactModelName: string }) => !OFFLINE_MODELS.has(c.exactModelName))
-  .map((c: { exactModelName: string; displayModelName: string; deploymentRegion: string }) => {
+  .map((c: { exactModelName: string; displayModelName: string; deploymentRegion: string; isPreview: boolean }) => {
     const { provider, hosted, countryCode, dataProcessing } = parseRegion(c.deploymentRegion);
     return {
       modelId: c.exactModelName,
@@ -124,6 +142,7 @@ const pricingModels: ModelCard[] = configs
       hosted,
       countryCode,
       dataProcessing,
+      preview: c.isPreview,
     };
   });
 
@@ -136,8 +155,9 @@ for (const m of allModels) {
   modelMap.set(m.name, m);
 }
 
-// Sort by priority list, then alphabetical for unlisted
+// Sort: preview (newest) first, then by priority list, then alphabetical for unlisted
 const sortedModels = [...modelMap.values()].sort((a, b) => {
+  if (a.preview !== b.preview) return a.preview ? -1 : 1;
   const ai = SORT_ORDER.indexOf(a.name);
   const bi = SORT_ORDER.indexOf(b.name);
   if (ai !== -1 && bi !== -1) return ai - bi;
@@ -195,7 +215,10 @@ const INITIAL_COUNT = 6;
               </svg>
             </>
           </button>
-          <h3 class="model-card__name">{model.name}</h3>
+          <h3 class="model-card__name">
+            {model.name}
+            {model.preview && <span class="model-card__preview-tag"> – Preview</span>}
+          </h3>
           <div class="model-card__details">
             <span>
               {t.cloud}: <strong>{model.provider}</strong>
@@ -288,6 +311,11 @@ const INITIAL_COUNT = 6;
     font-weight: 600;
     color: var(--sl-color-white);
     min-height: 2.5em;
+  }
+
+  .model-card__preview-tag {
+    font-weight: 500;
+    color: var(--sl-color-text-accent);
   }
 
   .model-card__copy {
