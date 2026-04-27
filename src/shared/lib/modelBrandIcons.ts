@@ -7,10 +7,13 @@ import AlibabaCloudIcon from '../../assets/icons/model-brand/qwen2.png?url';
 // import JinaAIIcon from '../../assets/icons/model-brand/other.svg?url';
 // import BAAIIcon from '../../assets/icons/model-brand/other.svg?url';
 import TSystemsIcon from '../../assets/icons/model-brand/t-systems.png?url';
+import GemmaIcon from '../../assets/icons/model-brand/gemma.png?url';
 import OtherIcon from '../../assets/icons/model-brand/other.svg?url';
 
 export const modelBrandIcons: Record<string, string> = {
   Anthropic: AnthropicIcon,
+  'Google Gemma': GemmaIcon,
+  'Google Gemini': GoogleIcon,
   Google: GoogleIcon,
   OpenAI: OpenAIIcon,
   Meta: MetaIcon,

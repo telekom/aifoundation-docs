@@ -250,6 +250,10 @@ const sortableHeaders = [
       return value != null ? value.toFixed(2) : '-';
     }
 
+    function capitalize(value: string = '') {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
     function escapeHtml(value: string | number) {
       return String(value)
         .replace(/&/g, '&amp;')
@@ -284,18 +288,20 @@ const sortableHeaders = [
         const row = document.createElement('tr');
         if (model.isSubRow) row.classList.add('sub-row');
 
-        const hostClass = model.modelHost === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
-        const tierClass = model.modelTier === 'Premium' ? 'tag-premium' : 'tag-tier';
+        const modelTier = capitalize(model.modelTier);
+
+        const hostClass = model.modelHost?.toLowerCase() === 't-cloud' ? 'tag-tcloud' : 'tag-cloud';
+        const tierClass = modelTier.toLowerCase() === 'premium' ? 'tag-premium' : 'tag-tier';
         const cloudProvider = normalizeCloudProvider(model.cloudProvider);
         const cloudProviderFullName = getCloudProviderFullName(model.cloudProvider);
         const cloudProviderClass = getCloudProviderTagClass(model.cloudProvider);
         const hostTooltip = hostTooltips[model.modelHost] || '';
-        const tierTooltip = tierTooltips[model.modelTier] || '';
+        const tierTooltip = tierTooltips[modelTier] || '';
         const creatorIcon = brandIcons[model.creator] || '';
         row.innerHTML = `
           <td>${hostTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 26rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(hostTooltip)}</span></span>` : `<span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span>`}</td>
           <td><span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${cloudProviderClass}">${escapeHtml(cloudProvider)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(cloudProviderFullName)}</span></span></td>
-          <td>${tierTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(model.modelTier)}</span>`}</td>
+          <td>${tierTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(modelTier)}</span>`}</td>
           <td>
             <span class="creator-brand ${creatorIcon ? 'creator-brand--icon' : 'creator-brand--text'}" title="${escapeHtml(model.creator)}" aria-label="${escapeHtml(model.creator)}">
               ${creatorIcon ? `<img class="creator-brand__icon" src="${escapeHtml(creatorIcon)}" alt="${escapeHtml(model.creator)}" />` : `<span class="creator-brand__label">${escapeHtml(model.creator)}</span>`}
