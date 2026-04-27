@@ -59,7 +59,11 @@ const sortableHeaders = [
       testModelsSectionTitle &&
         translations.modelsSubtitleList &&
         translations.modelsSubtitleList.map((item) => (
-          <div style={`margin-top: 0;${item[0] === '\n' ? 'margin-top: 1em;font-weight: bold;' : ''}`}>{item}</div>
+          <div
+            class="par-description"
+            style={`margin-top: 0;${item[0] === '\n' ? 'margin-top: 1em;font-weight: bold;' : ''}`}>
+            {item}
+          </div>
         ))
     }
   </div>
