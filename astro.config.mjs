@@ -76,6 +76,17 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Plugins',
+					translations: { de: 'Plugins' },
+					items: [
+						{ label: 'Cline', translations: { de: 'Cline' }, slug: 'plugins/cline' },
+						{ label: 'Continue for VS Code', translations: { de: 'Continue für VS Code' }, slug: 'plugins/continue-vscode' },
+						{ label: 'Continue for JetBrains', translations: { de: 'Continue für JetBrains' }, slug: 'plugins/continue-jetbrains' },
+						{ label: 'OpenCode', translations: { de: 'OpenCode' }, slug: 'plugins/opencode' },
+						{ label: 'Roo Code', translations: { de: 'Roo Code' }, slug: 'plugins/roo-code' },
+					],
+				},
+				{
 					label: 'Reference',
 					translations: { de: 'Referenz' },
 					items: [
