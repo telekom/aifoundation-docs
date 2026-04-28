@@ -325,8 +325,8 @@ const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.pack
                   <td>
                     <span class="plans-table__main-text">{plan.basePrice}</span>
                   </td>
-                  <td>{plan.tokenPrice}</td>
-                  <td>{plan.rpm}</td>
+                  <td>{plan.tokenPrice} *</td>
+                  <td>{plan.rpm} †</td>
                   <td>
                     {plan.modelHost.map((cloud, i) => (
                       <>
