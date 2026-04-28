@@ -35,7 +35,12 @@
       "LOADING": "Loading ...",
       "SELECTED_RATE_PLAN": "Gewählter Tarif",
       "SUBTITLE": "Wählen Sie das richtige Modell für Ihren Anwendungsfall – von schnellen Antworten bis hin zu tiefgreifenden Analysen.",
-      "TITLE": "Modelle"
+      "TITLE": "Modelle",
+      "CARD_CLOUD": "Cloud",
+      "CARD_SERVER_LOCATION": "Serverstandort",
+      "CARD_DATA_PROCESSING": "Datenverarbeitung",
+      "SHOW_MORE": "{count} weitere anzeigen",
+      "SHOW_LESS": "Weniger anzeigen"
     },
     "MODEL_NAME": "Modellname",
     "NO_PRICING_FOUND": "Für den ausgewählten Filter wurden keine Preise gefunden.",

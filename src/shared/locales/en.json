@@ -31,7 +31,12 @@
       "LOADING": "Loading ...",
       "SELECTED_RATE_PLAN": "Selected Rate Plan",
       "SUBTITLE": "Choose the right model for your use case - from fast responses to deep analysis",
-      "TITLE": "Models"
+      "TITLE": "Models",
+      "CARD_CLOUD": "Cloud",
+      "CARD_SERVER_LOCATION": "Server Location",
+      "CARD_DATA_PROCESSING": "Data Processing",
+      "SHOW_MORE": "Show More ({count} more)",
+      "SHOW_LESS": "Show Less"
     },
     "MODEL_NAME": "Model Name",
     "NO_PRICING_FOUND": "No pricing found for selected filter.",

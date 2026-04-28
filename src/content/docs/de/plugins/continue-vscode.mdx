@@ -1,0 +1,89 @@
+---
+title: "Continue for VS Code"
+description: "Continue-Plugin für Visual Studio Code mit Chat, Inline-Edits, Autocomplete und Coding-Agenten auf AI Foundation Services installieren und konfigurieren."
+---
+
+Continue für AI Engineer ist eine angepasste Version der Continue-Erweiterung für Visual Studio Code. Sie bringt Chat, Inline-Edits, Autocomplete und Coding-Agenten direkt in den Editor, sodass Sie ohne Workflow-Wechsel mit KI-Modellen arbeiten können.
+
+## Hauptfunktionen
+
+- Chat-Oberfläche für Fragen, Code-Erläuterungen und Entwicklungsunterstützung
+- Inline-Edits für gezielte Code-Änderungen, ohne die Datei zu verlassen
+- Autocomplete für latenzarme Code-Vorschläge während der Eingabe
+- Coding-Agenten für mehrstufige Aufgaben wie das Lesen von Dateien, Ausführen von Befehlen und Anwenden von Änderungen
+
+## Installation
+
+1. Laden Sie die VSIX-Datei von [Continue for VS Code](https://plugins.dev.aie.ai.t-systems.net/v1/registry/434192/packages/latest/download?package_name=continue-vscode) herunter.
+2. Öffnen Sie in VS Code **Extensions**, klicken Sie auf das Drei-Punkte-Menü und wählen Sie **Install from VSIX**.
+3. Wählen Sie die heruntergeladene Plugin-Datei aus und laden Sie VS Code neu.
+
+## Einrichtung der Konfigurationsdatei
+
+Öffnen Sie nach der ersten Installation das AI Engineer Continue-Plugin und wählen Sie **Local config**. Dadurch wird eine leere `config.yaml`-Datei geöffnet, die Sie mit Ihrem Modell, Ihrer Base URL und Ihrem API-Key aktualisieren können.
+
+1. Wählen Sie eine Model-ID aus [Verfügbare Modelle](/de/getting-started/models):
+
+```yaml
+model: gpt-oss-120b
+```
+
+2. Setzen Sie die Base URL:
+
+```yaml
+apiBase: https://llm-server.llmhub.t-systems.net/v2/coding
+```
+
+3. Erzeugen Sie einen API-Key in [LLM Serving API Keys](https://apikey.llmhub.t-systems.net/dashboard):
+
+```yaml
+apiKey: gen-************************************************
+```
+
+4. Weisen Sie dem Modell eine oder mehrere Rollen zu, etwa `chat`, `edit`, `apply`, `autocomplete` oder `embed`:
+
+```yaml
+roles:
+  - chat
+```
+
+### Beispiel-`config.yaml`
+
+```yaml
+name: Local Config
+version: 1.0.0
+schema: v1
+models:
+  - name: gpt-4.1
+    model: gpt-4.1
+    provider: openai
+    apiBase: https://llm-server.llmhub.t-systems.net/v2/coding
+    apiKey: gen-************************************************
+    roles:
+      - chat
+  - name: Qwen3-30B-A3B-FP8
+    model: Qwen3-30B-A3B-FP8
+    provider: openai
+    apiBase: https://llm-server.llmhub.t-systems.net/v2/coding
+    apiKey: gen-************************************************
+    roles:
+      - chat
+      - edit
+      - apply
+```
+
+Sobald die Konfiguration gespeichert ist, können Sie einen Chat starten und Continue in VS Code verwenden.
+
+## Aktualisierung
+
+Nach der Einrichtung kann das Plugin neu veröffentlichte Versionen automatisch herunterladen. Wenn Sie VS Code starten oder neu laden und ein Update verfügbar ist, erscheint ein Popup.
+
+1. Klicken Sie auf **Update Now**, um die neueste Version herunterzuladen.
+
+![Continue Update-Download-Hinweis](/img/continue_vscode_auto_update_1.png)
+
+2. Klicken Sie nach Abschluss des Downloads auf **Reload Window**.
+
+![Continue Update-Reload-Hinweis](/img/continue_vscode_auto_update_2.png)
+
+Nach dem Neustart von Visual Studio Code ist die neueste Continue-Version einsatzbereit.

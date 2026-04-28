@@ -7,26 +7,20 @@ const links = isDE
   ? [
       { label: 'Impressum', href: 'https://www.t-systems.com/de/de/impressum' },
       { label: 'Datenschutz', href: 'https://www.t-systems.com/de/de/datenschutz' },
-      { label: 'AGB', href: '#' },
-      { label: 'Verbraucherschutz', href: '#' },
-      { label: 'Produktinformationsblatt', href: '#' },
       { label: 'Jugendschutz', href: 'https://www.telekom.com/de/konzern/compliance/details/jugendschutz-702466' },
     ]
   : [
       { label: 'Imprint', href: 'https://www.t-systems.com/de/en/imprint' },
       { label: 'Data privacy', href: 'https://www.t-systems.com/de/en/data-privacy' },
-      { label: 'Terms and conditions', href: '#' },
-      { label: 'Consumer protection', href: '#' },
-      { label: 'Product information sheet', href: '#' },
       { label: 'Youth protection', href: 'https://www.telekom.com/en/corporate-responsibility/governance/protection-of-minors' },
     ];
 ---
 
 <Default {...Astro.props}><slot /></Default>
 
-<footer class="site-footer">
+<footer class="site-footer" aria-label={isDE ? 'Website' : 'Site'}>
   <div class="site-footer-inner">
-    <span class="site-footer-notice">&copy; Deutsche Telekom AG</span>
+    <span class="site-footer-notice">&copy; T-Systems International</span>
     <nav class="site-footer-nav" aria-label={isDE ? 'Rechtliche Hinweise' : 'Legal'}>
       <ul>
         {links.map(({ label, href }) => (

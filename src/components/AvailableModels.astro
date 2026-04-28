@@ -1,5 +1,18 @@
 ---
+import 'flag-icons/css/flag-icons.min.css';
 import pricingData from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
+
+// Locale detection (mirrors PlansPage.astro pattern)
+const isDE = Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/de';
+
+const t = {
+  cloud: isDE ? 'Cloud' : 'Cloud',
+  serverLocation: isDE ? 'Serverstandort' : 'Server Location',
+  dataProcessing: isDE ? 'Datenverarbeitung' : 'Data Processing',
+  showMoreTemplate: isDE ? '{count} weitere anzeigen' : 'Show More ({count} more)',
+  showLess: isDE ? 'Weniger anzeigen' : 'Show Less',
+  sectionHeading: isDE ? 'Verfügbare Modelle' : 'Available Models',
+};
 
 const OFFLINE_MODELS = new Set([
   'gpt-4.1-nano', 'gpt-4o-mini', 'GPT-5-Codex', 'gpt-5-nano',
@@ -95,10 +108,12 @@ const sortedModels = [...modelMap.values()].sort((a, b) => {
   return a.name.localeCompare(b.name);
 });
 
-const INITIAL_COUNT = 3;
+const INITIAL_COUNT = 6;
 ---
 
 <div class="available-models">
+  <h2 class="models-heading">{t.sectionHeading} <span class="models-count">({sortedModels.length})</span></h2>
+  <span id="copy-status" class="copy-status" aria-live="polite" aria-atomic="true"></span>
   <div class="models-grid" id="models-grid">
     {sortedModels.map((model, index) => (
       <div class:list={['model-card', { 'model-card--hidden': index >= INITIAL_COUNT }]} data-index={index}>
@@ -107,19 +122,26 @@ const INITIAL_COUNT = 3;
           data-model-id={model.modelId}
           title={`Copy model ID: ${model.modelId}`}
           aria-label={`Copy model ID ${model.modelId}`}
-        ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-        <h4 class="model-card__name">{model.name}</h4>
+        ><svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="icon-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></button>
+        <h3 class="model-card__name">{model.name}</h3>
         <div class="model-card__details">
-          <span>Cloud: <strong>{model.provider}</strong></span>
-          <span>Server Location: <strong>{model.hosted}</strong> {model.countryCode && <span class={`fi fi-${model.countryCode}`} style="margin-left: 4px;" />}</span>
-          <span>Data Processing: <strong>{model.dataProcessing}</strong></span>
+          <span>{t.cloud}: <strong>{model.provider}</strong></span>
+          <span>{t.serverLocation}: <strong>{model.hosted}</strong> {model.countryCode && <span class={`fi fi-${model.countryCode}`} style="margin-left: 4px;" />}</span>
+          <span>{t.dataProcessing}: <strong>{model.dataProcessing}</strong></span>
         </div>
       </div>
     ))}
   </div>
   {sortedModels.length > INITIAL_COUNT && (
-    <button class="models-toggle" id="models-toggle" data-total={sortedModels.length} data-initial={INITIAL_COUNT}>
-      Show More ({sortedModels.length - INITIAL_COUNT} more)
+    <button
+      class="models-toggle"
+      id="models-toggle"
+      data-total={sortedModels.length}
+      data-initial={INITIAL_COUNT}
+      data-show-more-template={t.showMoreTemplate}
+      data-show-less={t.showLess}
+    >
+      {t.showMoreTemplate.replace('{count}', String(sortedModels.length - INITIAL_COUNT))}
     </button>
   )}
 </div>
@@ -129,15 +151,38 @@ const INITIAL_COUNT = 3;
     margin: 1.5rem 0;
   }
 
+  .models-heading {
+    margin-bottom: 1rem;
+  }
+
+  .models-count {
+    font-size: 0.75em;
+    font-weight: 400;
+    color: var(--sl-color-gray-3);
+    vertical-align: middle;
+  }
+
   .models-grid > .model-card {
     margin: 0;
   }
 
   .models-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
+    grid-template-columns: 1fr;
     align-items: stretch;
+  }
+
+  @media (min-width: 640px) {
+    .models-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .models-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   .model-card {
@@ -182,6 +227,33 @@ const INITIAL_COUNT = 3;
     color: var(--sl-color-white);
   }
 
+  .model-card__copy .icon-check {
+    display: none;
+    color: #4ade80;
+  }
+
+  .model-card__copy[data-copied] .icon-copy {
+    display: none;
+  }
+
+  .model-card__copy[data-copied] .icon-check {
+    display: inline;
+  }
+
+  .model-card__copy[data-copied] {
+    opacity: 1;
+    color: #4ade80;
+  }
+
+  .copy-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
   .model-card__details {
     display: flex;
     flex-direction: column;
@@ -221,6 +293,8 @@ const INITIAL_COUNT = 3;
 
     const total = Number(toggle.dataset.total);
     const initial = Number(toggle.dataset.initial);
+    const showMoreTemplate = toggle.dataset.showMoreTemplate ?? 'Show More ({count} more)';
+    const showLess = toggle.dataset.showLess ?? 'Show Less';
     let expanded = false;
 
     toggle.addEventListener('click', () => {
@@ -233,17 +307,28 @@ const INITIAL_COUNT = 3;
         }
       });
       toggle.textContent = expanded
-        ? 'Show Less'
-        : `Show More (${total - initial} more)`;
+        ? showLess
+        : showMoreTemplate.replace('{count}', String(total - initial));
     });
 
-    // Copy model ID to clipboard
+    // Copy model ID to clipboard with visual + accessible feedback
+    const copyStatus = document.getElementById('copy-status');
     document.querySelectorAll<HTMLButtonElement>('.model-card__copy').forEach((btn) => {
       btn.addEventListener('click', async () => {
         const modelId = btn.dataset.modelId;
         if (!modelId) return;
         try {
           await navigator.clipboard.writeText(modelId);
+          // Visual feedback: swap icon for 1500ms
+          btn.setAttribute('data-copied', '');
+          const originalLabel = btn.getAttribute('aria-label') ?? '';
+          btn.setAttribute('aria-label', `Copied ${modelId}`);
+          if (copyStatus) copyStatus.textContent = `Copied ${modelId}`;
+          setTimeout(() => {
+            btn.removeAttribute('data-copied');
+            btn.setAttribute('aria-label', originalLabel);
+            if (copyStatus) copyStatus.textContent = '';
+          }, 1500);
         } catch {
           // Fallback: do nothing silently
         }

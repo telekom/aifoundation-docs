@@ -1,5 +1,6 @@
 ---
-title: "Chat-Vervollständigungen"
+title: "Chat Completions"
+description: "Chat-Completion-Anfragen mit System- und Nutzernachrichten über die OpenAI-kompatible Chat Completions API auf AI Foundation Services senden."
 ---
 
 
@@ -9,7 +10,7 @@ Die Chat Completions API ist die primäre Methode zur Interaktion mit LLMs auf A
 
 :::note[Voraussetzungen]
 - Ein API-Schlüssel ([hier erhalten](https://apikey.llmhub.t-systems.net/))
-- OpenAI SDK oder HTTP-Client installiert ([Schnellstart](/getting-started/quickstart))
+- OpenAI SDK oder HTTP-Client installiert ([Quickstart](/de/getting-started/quickstart))
 :::
 
 **Was Sie lernen werden:**
@@ -95,7 +96,7 @@ for chunk in stream:
         print(chunk.choices[0].delta.content, end="", flush=True)
 ```
 
-Die vollständige Streaming-Dokumentation einschließlich Fehlerbehandlung, Function Calling mit Streams und Stream-Optionen finden Sie im **[Streaming-Leitfaden](/guides/streaming)**.
+Die vollständige Streaming-Dokumentation einschließlich Fehlerbehandlung, Function Calling mit Streams und Stream-Optionen finden Sie im **[Streaming-Leitfaden](/de/guides/streaming)**.
 
 
 ## Completion API
@@ -183,7 +184,7 @@ Die vollständige API-Spezifikation finden Sie in der [API-Referenz](https://llm
 
 ## Nächste Schritte
 
-- [Streaming](/guides/streaming) — Antworten Token für Token streamen
-- [Function Calling](/guides/function-calling) — Modelle mit externen Tools verbinden
-- [Multimodal](/guides/multimodal) — Bilder zusammen mit Text analysieren
-- [Asynchrone Anfragen](/guides/asynchronous-requests) — Warteschlangenbasierte Verarbeitung für Batch-Workloads
+- [Streaming](/de/guides/streaming) — Antworten Token für Token streamen
+- [Function Calling](/de/guides/function-calling) — Modelle mit externen Tools verbinden
+- [Multimodal](/de/guides/multimodal) — Bilder zusammen mit Text analysieren
+- [Asynchronous Requests](/de/guides/asynchronous-requests) — Warteschlangenbasierte Verarbeitung für Batch-Workloads

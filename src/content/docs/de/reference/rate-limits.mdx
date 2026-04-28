@@ -1,5 +1,6 @@
 ---
 title: "Rate-Limits"
+description: "Token- und Anfrage-Rate-Limits je Tarifstufe im LLM Hub, mit Hinweisen zur Behandlung von 429-Antworten und Retry-Strategien."
 ---
 
 
@@ -10,12 +11,42 @@ Rate-Limits schützen den Dienst und gewährleisten eine faire Nutzung. Limits w
 
 ## Limits nach Tarifstufe
 
-| Metrik | Basic | Standard4000 |
-|---|---|---|
-| **Token pro Minute (TPM)** | 18.750 Eingabe | Bis zu 150.000 Eingabe |
-| **Anfragen pro Minute (RPM)** | 20 | Bis zu 600 |
+Limits variieren sowohl nach Tarifstufe als auch nach Modell. Die folgende Tabelle zeigt repräsentative Bereiche über alle fünf Stufen:
 
-Genaue Limits variieren je nach Modell. Weitere Details finden Sie auf der Seite [Tarife & Preise](/de/plans) oder laden Sie die [Leistungsbeschreibung (PDF)](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) herunter.
+| Metrik | Basic | Standard 1000 | Standard 2000 | Standard 3000 | Standard 4000 |
+|---|---|---|---|---|---|
+| **Verfügbare Modelle** | 15 | 38 | 38 | 38 | 38 |
+| **RPM** | 20–120 | 60–5.000 | 60–5.000 | 20–5.000 | 60–5.000 |
+| **Eingabe-TPM** | 109–87.500 | 218–5.000.000 | 435–5.000.000 | 653–5.000.000 | 870–5.000.000 |
+
+### Beispiel: Limits pro Modell je Tarifstufe
+
+Zur Veranschaulichung der Skalierung hier die Limits für zwei repräsentative Modelle:
+
+**Llama 3.3 70B** (T-Cloud, Deutschland):
+
+| Stufe | RPM | Eingabe-TPM | Ausgabe-TPM |
+|---|---|---|---|
+| Basic | 20 | 13.800 | 5.000 |
+| Standard 1000 | 150 | 34.500 | 12.500 |
+| Standard 2000 | 300 | 69.000 | 25.000 |
+| Standard 3000 | 450 | 103.500 | 37.500 |
+| Standard 4000 | 600 | 138.000 | 50.000 |
+
+**GPT-4.1** (Azure, EU — nur Standard-Stufen):
+
+| Stufe | RPM | Eingabe-TPM | Ausgabe-TPM |
+|---|---|---|---|
+| Standard 1000 | 5.000 | 5.000.000 | 5.000.000 |
+| Standard 2000 | 5.000 | 5.000.000 | 5.000.000 |
+| Standard 3000 | 5.000 | 5.000.000 | 5.000.000 |
+| Standard 4000 | 5.000 | 5.000.000 | 5.000.000 |
+
+:::note
+Azure-gehostete Modelle (GPT, o-Serie) haben in der Regel höhere absolute Limits, die vom Upstream-Anbieter festgelegt werden. T-Cloud-Modelle skalieren proportional mit jeder Tarifstufenerhöhung.
+:::
+
+Für die vollständige Aufschlüsselung pro Modell für Ihren Tarif besuchen Sie die Seite [Tarife & Preise](/de/plans) oder laden Sie die [Leistungsbeschreibung (PDF)](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) herunter.
 
 
 ## Wie Rate-Limits funktionieren
@@ -99,7 +130,7 @@ Wenn Sie ein Rate-Limit überschreiten, gibt die API einen `429 Too Many Request
 2. **Exponentielles Backoff implementieren** — Verlängern Sie die Wartezeit zwischen Wiederholungsversuchen
 3. **Anfragen bündeln** — Fassen Sie mehrere kleine Anfragen zu weniger größeren zusammen
 4. **Antworten cachen** — Vermeiden Sie das Wiederholen identischer Anfragen
-5. **Queue-API verwenden** — Für Batch-Workloads nutzen Sie [asynchrone Anfragen](/guides/asynchronous-requests), um die Last zu verteilen
+5. **Queue-API verwenden** — Für Batch-Workloads nutzen Sie [asynchrone Anfragen](/de/guides/asynchronous-requests), um die Last zu verteilen
 
 ```python
 import time
