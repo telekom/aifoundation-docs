@@ -1,6 +1,6 @@
 ---
 title: "OpenCode"
-description: "OpenCode installieren – einen Open-Source-AI-Coding-Agenten für das Terminal – und mit AI Foundation Services verbinden."
+description: "OpenCode, einen Open-Source-AI-Coding-Agenten für das Terminal, installieren und mit AI Foundation Services verbinden."
 ---
 
 OpenCode ist ein Open-Source-AI-Coding-Agent, der im Terminal läuft und neben jedem beliebigen Editor oder jeder IDE verwendet werden kann.
@@ -15,14 +15,14 @@ OpenCode ist ein Open-Source-AI-Coding-Agent, der im Terminal läuft und neben j
 
 ## Installation und Einrichtung
 
-::::note[Proxy-Nutzung]
+:::note[Proxy-Nutzung]
 Wie die meisten Kommandozeilen-Tools benötigt OpenCode unter Umständen Proxy-Einstellungen in Ihrer Shell-Umgebung:
 
 ```bash
 http_proxy=<your-proxy-url:port>
 https_proxy=<your-proxy-url:port>
 ```
-::::
+:::
 
 1. Fügen Sie die npm-Registry hinzu:
 
@@ -57,3 +57,11 @@ opencode
 Wählen Sie **AI Foundation Services** aus der Provider-Liste und geben Sie auf Aufforderung Ihren API-Key ein.
 
 Sie können nun einen Chat starten und OpenCode verwenden.
+
+## Aktualisierung
+
+Führen Sie den Installationsbefehl erneut aus, um auf die neueste veröffentlichte Version zu aktualisieren:
+
+```bash
+npm install -g @aie/opencode
+```
