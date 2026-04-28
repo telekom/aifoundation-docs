@@ -5,6 +5,11 @@
 	--sl-color-accent-high: #ff4da6;
 	/* Widen main content area to reduce right-sidebar whitespace */
 	--sl-content-width: 55rem;
+
+	--sl-border-xs: 4px;
+	--sl-border-sm: 6px;
+	--sl-border-md: 8px;
+	--sl-border-lg: 12px;
 }
 
 :root[data-theme='light'] {

@@ -1,0 +1,743 @@
+---
+import Selector from './Selector.astro';
+import TextField from './TextField.astro';
+
+import 'flag-icons/css/flag-icons.min.css';
+
+interface Props {
+  plansData: any[];
+  effectiveIndex: number;
+  locked: boolean;
+  translations: Record<string, string> & { modelsSubtitleList?: string[] };
+  modelBrandIcons: Record<string, string>;
+  hostTooltips: Record<string, string>;
+  tierTooltips: Record<string, string>;
+  testModelsSectionTitle?: string;
+}
+
+const {
+  plansData,
+  effectiveIndex,
+  locked,
+  translations,
+  modelBrandIcons,
+  hostTooltips,
+  tierTooltips,
+  testModelsSectionTitle,
+} = Astro.props;
+
+const sortableHeaders = [
+  { key: 'modelHost', label: translations.thModelHost },
+  { key: 'cloudProvider', label: translations.thCloudProvider },
+  { key: 'modelTier', label: translations.thModelTier },
+  { key: 'creator', label: translations.thCreator },
+  { key: 'displayName', label: translations.thModelName },
+  { key: 'inputPrice', label: translations.thInputPrice, unit: 'M Tokens' },
+  { key: 'outputPrice', label: translations.thOutputPrice, unit: 'M Tokens' },
+  { key: 'serverLocation', label: translations.thServerLocation },
+  { key: 'rpm', label: translations.thRPMLimit, unit: translations.thRPMUnitShort },
+  { key: 'tpm', label: translations.thTPM, unit: translations.thTPMUnit },
+  { key: 'contextWindow', label: translations.thContextWindow, unit: translations.thContextWindowUnit },
+];
+---
+
+<section
+  class="models-section models-table-section"
+  data-plans={JSON.stringify(plansData)}
+  data-brand-icons={JSON.stringify(modelBrandIcons)}
+  data-host-tooltips={JSON.stringify(hostTooltips)}
+  data-tier-tooltips={JSON.stringify(tierTooltips)}
+  data-initial-index={effectiveIndex}
+  data-locked={locked ? 'true' : 'false'}
+  data-t={JSON.stringify(translations)}>
+  <h2>{testModelsSectionTitle || translations.modelsTitle}</h2>
+  <p class="par-description">
+    {!testModelsSectionTitle && translations.modelsSubtitle}
+  </p>
+  <div>
+    {
+      testModelsSectionTitle &&
+        translations.modelsSubtitleList &&
+        translations.modelsSubtitleList.map((item) => (
+          <div
+            class="par-description"
+            style={`margin-top: 0;${item[0] === '\n' ? 'margin-top: 1em;font-weight: bold;' : ''}`}>
+            {item}
+          </div>
+        ))
+    }
+  </div>
+
+  <div class="models-controls">
+    {
+      !locked && (
+        <Selector id="plan-selector" label={translations.labelRatePlan}>
+          {plansData
+            .filter((plan: any) => plan.isFilterAvailable)
+            .map((plan: any, index: number) => (
+              <option value={index} selected={index === effectiveIndex}>
+                {plan.label}
+              </option>
+            ))}
+        </Selector>
+      )
+    }
+    <TextField id="model-search" label={translations.labelSearch} placeholder={translations.placeholderSearch} />
+    <Selector id="location-filter" label={translations.labelServerLocation}>
+      <option value="">{translations.optionAll}</option>
+    </Selector>
+    <Selector id="cloud-filter" label={translations.labelCloud}>
+      <option value="">{translations.optionAll}</option>
+    </Selector>
+    <Selector id="input-price-filter" label={translations.labelInputPriceRange || translations.thInputPrice}>
+      <option value="">{translations.optionAll}</option>
+      <option value="0-2">{translations.priceUnder2}</option>
+      <option value="2-5">{translations.price2to5}</option>
+      <option value="5+">{translations.priceOver5}</option>
+    </Selector>
+    <Selector id="output-price-filter" label={translations.labelOutputPriceRange || translations.thOutputPrice}>
+      <option value="">{translations.optionAll}</option>
+      <option value="0-2">{translations.priceUnder2}</option>
+      <option value="2-5">{translations.price2to5}</option>
+      <option value="5+">{translations.priceOver5}</option>
+    </Selector>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="plans-table" id="models-table">
+      <thead>
+        <tr>
+          {
+            sortableHeaders.map((header) => (
+              <th data-sort={header.key}>
+                <span class="sort-header">
+                  <svg class="sort-icon" viewBox="0 0 7 5" fill="none" aria-hidden="true">
+                    <path d="M3.46411 4.5L8.97647e-06 -1.75695e-07L6.92821 4.29987e-07L3.46411 4.5Z" />
+                  </svg>
+                  <span>
+                    {header.label}
+                    {header.unit && <div class="plans-table__small-text">{header.unit}</div>}
+                  </span>
+                </span>
+              </th>
+            ))
+          }
+          <th>{translations.thLinks}</th>
+        </tr>
+      </thead>
+      <tbody id="models-tbody">
+        <!-- Populated by client-side script -->
+      </tbody>
+    </table>
+  </div>
+  <small>* EU/EEA includes countries with an adequacy decision by the EU Commission.</small>
+</section>
+
+<script>
+  import { isPriceInRange } from '../shared/lib/priceRangeHelper';
+
+  function initModelsTable(section: HTMLElement) {
+    const plansData = JSON.parse(section.dataset.plans || '[]');
+    const brandIcons = JSON.parse(section.dataset.brandIcons || '{}');
+    const hostTooltips = JSON.parse(section.dataset.hostTooltips || '{}');
+    const tierTooltips = JSON.parse(section.dataset.tierTooltips || '{}');
+    const translations = JSON.parse(section.dataset.t || '{}');
+    let currentIndex = parseInt(section.dataset.initialIndex || '0', 10);
+    const locked = section.dataset.locked === 'true';
+
+    const selector = section.querySelector<HTMLSelectElement>('#plan-selector');
+    const searchInput = section.querySelector<HTMLInputElement>('#model-search');
+    const locationFilter = section.querySelector<HTMLSelectElement>('#location-filter');
+    const cloudFilter = section.querySelector<HTMLSelectElement>('#cloud-filter');
+    const inputPriceFilter = section.querySelector<HTMLSelectElement>('#input-price-filter');
+    const outputPriceFilter = section.querySelector<HTMLSelectElement>('#output-price-filter');
+    const tbody = section.querySelector<HTMLTableSectionElement>('#models-tbody');
+    const table = section.querySelector<HTMLTableElement>('#models-table');
+    const tableWrapper = section.querySelector<HTMLElement>('.table-wrapper');
+    const maxHeightRowThreshold = 12;
+
+    let sortKey = '';
+    let sortAsc = true;
+    let searchTerm = '';
+
+    function populateFilterDropdowns() {
+      const plan = plansData[currentIndex];
+      if (!plan) return;
+
+      const locations = new Set<string>();
+      const clouds = new Set<string>();
+      for (const model of plan.models) {
+        if (model.serverLocation) locations.add(model.serverLocation);
+        if (model.cloudProvider) clouds.add(model.cloudProvider);
+      }
+
+      if (locationFilter) {
+        const current = locationFilter.value;
+        locationFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
+        [...locations].sort().forEach((location) => {
+          const option = document.createElement('option');
+          option.value = location;
+          option.textContent = location;
+          if (location === current) option.selected = true;
+          locationFilter.appendChild(option);
+        });
+      }
+
+      if (cloudFilter) {
+        const current = cloudFilter.value;
+        cloudFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
+        [...clouds].sort().forEach((cloud) => {
+          const option = document.createElement('option');
+          option.value = cloud;
+          option.textContent = cloud;
+          if (cloud === current) option.selected = true;
+          cloudFilter.appendChild(option);
+        });
+      }
+    }
+
+    function applyPriceFilter(models: any[], filterValue: string, getPrice: (model: any) => number | null | undefined) {
+      if (!filterValue) return models;
+
+      if (filterValue === '0-2') {
+        return models.filter((model) => isPriceInRange(getPrice(model), 0, 2));
+      }
+
+      if (filterValue === '2-5') {
+        return models.filter((model) => isPriceInRange(getPrice(model), 2, 5));
+      }
+
+      if (filterValue === '5+') {
+        return models.filter((model) => isPriceInRange(getPrice(model), 5));
+      }
+
+      return models;
+    }
+
+    function getModels() {
+      const plan = plansData[currentIndex];
+      if (!plan) return [];
+      let models = [...plan.models];
+
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        models = models.filter(
+          (model) =>
+            model.displayName.toLowerCase().includes(term) ||
+            model.subName.toLowerCase().includes(term) ||
+            model.modelHost.toLowerCase().includes(term) ||
+            model.cloudProvider.toLowerCase().includes(term) ||
+            model.modelTier.toLowerCase().includes(term) ||
+            model.creator.toLowerCase().includes(term) ||
+            model.serverLocation.toLowerCase().includes(term),
+        );
+      }
+
+      if (locationFilter && locationFilter.value) {
+        models = models.filter((model) => model.serverLocation === locationFilter.value);
+      }
+
+      if (cloudFilter && cloudFilter.value) {
+        models = models.filter((model) => model.cloudProvider === cloudFilter.value);
+      }
+
+      if (inputPriceFilter) {
+        models = applyPriceFilter(models, inputPriceFilter.value, (model) => model.inputPrice);
+      }
+
+      if (outputPriceFilter) {
+        models = applyPriceFilter(models, outputPriceFilter.value, (model) => model.outputPrice);
+      }
+
+      if (sortKey) {
+        models.sort((left, right) => {
+          let leftValue = left[sortKey];
+          let rightValue = right[sortKey];
+          if (typeof leftValue === 'number' && typeof rightValue === 'number') {
+            return sortAsc ? leftValue - rightValue : rightValue - leftValue;
+          }
+          leftValue = String(leftValue).toLowerCase();
+          rightValue = String(rightValue).toLowerCase();
+          if (leftValue < rightValue) return sortAsc ? -1 : 1;
+          if (leftValue > rightValue) return sortAsc ? 1 : -1;
+          return 0;
+        });
+      }
+
+      return models;
+    }
+
+    function formatNumber(value: number | null | undefined) {
+      return value != null ? value.toLocaleString('en-US') : '-';
+    }
+
+    function formatPrice(value: number | null | undefined) {
+      return value != null ? value.toFixed(2) : '-';
+    }
+
+    function capitalize(value: string = '') {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    function escapeHtml(value: string | number) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getCloudProviderTagClass(value: string) {
+      return normalizeCloudProvider(value) === 'Telekom' ? 'tag-tcloud' : 'tag-external-cloud';
+    }
+
+    function normalizeCloudProvider(value: string) {
+      return value === 'Open Telekom Cloud' || value === 'OTC' ? 'Telekom' : value;
+    }
+
+    function getCloudProviderFullName(value: string) {
+      const normalized = normalizeCloudProvider(value);
+      if (normalized === 'Telekom') return 'T-Cloud Public';
+      if (normalized === 'Azure') return 'Microsoft Azure';
+      if (normalized === 'GCP') return 'Google Cloud Platform';
+      return normalized;
+    }
+
+    function render() {
+      if (!tbody) return;
+      const models = getModels();
+      tbody.innerHTML = '';
+
+      for (const model of models) {
+        const row = document.createElement('tr');
+        if (model.isSubRow) row.classList.add('sub-row');
+
+        const modelTier = capitalize(model.modelTier);
+
+        const hostClass = model.modelHost?.toLowerCase() === 't-cloud' ? 'tag-tcloud' : 'tag-cloud';
+        const tierClass = modelTier.toLowerCase() === 'premium' ? 'tag-premium' : 'tag-tier';
+        const cloudProvider = normalizeCloudProvider(model.cloudProvider);
+        const cloudProviderFullName = getCloudProviderFullName(model.cloudProvider);
+        const cloudProviderClass = getCloudProviderTagClass(model.cloudProvider);
+        const hostTooltip = hostTooltips[model.modelHost] || '';
+        const tierTooltip = tierTooltips[modelTier] || '';
+        const creatorIcon = brandIcons[model.creator] || '';
+        row.innerHTML = `
+          <td>${hostTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 26rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(hostTooltip)}</span></span>` : `<span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span>`}</td>
+          <td><span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${cloudProviderClass}">${escapeHtml(cloudProvider)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(cloudProviderFullName)}</span></span></td>
+          <td>${tierTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(modelTier)}</span>`}</td>
+          <td>
+            <span class="creator-brand ${creatorIcon ? 'creator-brand--icon' : 'creator-brand--text'}" title="${escapeHtml(model.creator)}" aria-label="${escapeHtml(model.creator)}">
+              ${creatorIcon ? `<img class="creator-brand__icon" src="${escapeHtml(creatorIcon)}" alt="${escapeHtml(model.creator)}" />` : `<span class="creator-brand__label">${escapeHtml(model.creator)}</span>`}
+            </span>
+          </td>
+          <td>
+            <div>
+            <strong>${escapeHtml(model.displayName)}</strong>
+            </div>
+          </td>
+          <td><strong>&euro; ${formatPrice(model.inputPrice)}</strong></td>
+          <td><strong>&euro; ${formatPrice(model.outputPrice)}</strong></td>
+          <td><div class="loc-wrapper">${model.locationCode ? `<span class="fi fi-${escapeHtml(model.locationCode)}"></span> ` : ''}${escapeHtml(model.serverLocation)}</div></td>
+          <td>${formatNumber(model.rpm)}</td>
+          <td>${formatNumber(model.tpm)}</td>
+          <td>${model.contextWindow != null ? formatNumber(model.contextWindow) : '-'}</td>
+          <td>
+            <span class="model-links">
+              ${model.termsOfUseUrl ? `<a href="${escapeHtml(model.termsOfUseUrl)}" class="model-links__item" target="_blank" rel="noreferrer noopener">${translations.linkTermsOfUse || 'Terms of Use'}<svg class="model-links__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H21V10"/><path d="M21 3L10 14"/><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13"/></svg></a>` : ''}
+              ${model.dataProtectionUrl ? `<a href="${escapeHtml(model.dataProtectionUrl)}" class="model-links__item" target="_blank" rel="noreferrer noopener">${translations.linkDataProtection || 'Data Protection'}<svg class="model-links__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H21V10"/><path d="M21 3L10 14"/><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13"/></svg></a>` : ''}
+              ${!model.termsOfUseUrl && !model.dataProtectionUrl ? '<span class="model-links__empty">-</span>' : ''}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(row);
+      }
+
+      if (models.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="12" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
+        tbody.appendChild(row);
+      }
+
+      if (tableWrapper) {
+        tableWrapper.classList.toggle('table-wrapper--auto-height', models.length < maxHeightRowThreshold);
+      }
+
+      if (table) {
+        table.querySelectorAll<HTMLElement>('th[data-sort]').forEach((header: HTMLElement) => {
+          const icon = header.querySelector<SVGElement>('.sort-icon');
+          if (!icon) return;
+          const key = header.dataset.sort || '';
+          const isActive = key === sortKey;
+          header.classList.toggle('sort-active', isActive);
+          icon.classList.toggle('sort-icon--active', isActive);
+          icon.classList.toggle('sort-icon--asc', isActive && sortAsc);
+          icon.classList.toggle('sort-icon--desc', isActive && !sortAsc);
+        });
+      }
+    }
+
+    if (selector && !locked) {
+      selector.addEventListener('change', () => {
+        currentIndex = parseInt(selector.value, 10);
+        populateFilterDropdowns();
+        render();
+      });
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        searchTerm = searchInput.value;
+        render();
+      });
+    }
+
+    if (locationFilter) {
+      locationFilter.addEventListener('change', render);
+    }
+
+    if (cloudFilter) {
+      cloudFilter.addEventListener('change', render);
+    }
+
+    if (inputPriceFilter) {
+      inputPriceFilter.addEventListener('change', render);
+    }
+
+    if (outputPriceFilter) {
+      outputPriceFilter.addEventListener('change', render);
+    }
+
+    if (table) {
+      table.querySelectorAll<HTMLElement>('th[data-sort]').forEach((header: HTMLElement) => {
+        header.addEventListener('click', () => {
+          const key = header.dataset.sort || '';
+          if (sortKey === key) {
+            sortAsc = !sortAsc;
+          } else {
+            sortKey = key;
+            sortAsc = true;
+          }
+          render();
+        });
+      });
+    }
+
+    populateFilterDropdowns();
+    render();
+  }
+
+  function initAllModelsTables() {
+    document
+      .querySelectorAll<HTMLElement>('.models-table-section')
+      .forEach((section: HTMLElement) => initModelsTable(section));
+  }
+
+  document.addEventListener('astro:page-load', initAllModelsTables);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllModelsTables);
+  } else {
+    initAllModelsTables();
+  }
+</script>
+
+<style is:global>
+  .models-table-section {
+    margin-bottom: 2rem;
+    --model-link-color: #4f5cff;
+    --model-link-icon-color: #000000;
+    --models-sort-active-color: var(--sl-color-accent);
+  }
+
+  .models-table-section .table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 42rem;
+  }
+
+  .models-table-section .table-wrapper.table-wrapper--auto-height {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .models-table-section .plans-table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+    font-size: 0.76rem;
+  }
+
+  .models-table-section .plans-table th,
+  .models-table-section .plans-table td {
+    padding: 0.55rem 0.8rem;
+    line-height: 1.25;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    min-width: 0;
+  }
+
+  .models-table-section .plans-table th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--sl-color-gray-6);
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+    white-space: wrap;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .models-table-section .plans-table__small-text {
+    margin-top: 0.1rem;
+    line-height: 1.1;
+  }
+
+  .models-table-section .plans-tag {
+    padding: 0.14rem 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 4px;
+  }
+
+  :root[data-theme='dark'] .models-table-section {
+    --model-link-color: #7d87ff;
+    --model-link-icon-color: #7d87ff;
+    --models-sort-active-color: var(--sl-color-accent-high);
+  }
+
+  .models-controls {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .sort-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+    color: inherit;
+  }
+
+  th.sort-active .sort-header {
+    color: var(--models-sort-active-color);
+  }
+
+  .sort-icon {
+    width: 0.48rem;
+    height: 0.36rem;
+    flex: 0 0 auto;
+    display: inline-block;
+    opacity: 0.85;
+    margin-left: 0 !important;
+    color: currentColor;
+    transform: rotate(0deg);
+    transition:
+      transform 160ms ease,
+      opacity 160ms ease;
+  }
+
+  .sort-icon path {
+    fill: currentColor;
+  }
+
+  .sort-icon--active {
+    opacity: 1;
+  }
+
+  .sort-icon--asc {
+    transform: rotate(180deg);
+  }
+
+  .sort-icon--desc {
+    transform: rotate(0deg);
+  }
+
+  .tag-external-cloud {
+    background: color-mix(in srgb, var(--sl-color-gray-5) 72%, white 28%);
+    color: var(--sl-color-text);
+  }
+
+  .ui-tooltip {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    vertical-align: middle;
+    outline: none;
+  }
+
+  .ui-tooltip__trigger {
+    display: inline-flex;
+  }
+
+  .ui-tooltip__content {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.85rem);
+    transform: translateX(-50%) translateY(0.35rem);
+    width: max-content;
+    max-width: min(var(--ui-tooltip-max-width, 24rem), calc(100vw - 2rem));
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.75rem;
+    background: #232326;
+    color: white;
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.35;
+    white-space: normal;
+    text-align: left;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease,
+      visibility 160ms ease;
+    z-index: 30;
+  }
+
+  .ui-tooltip__content::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -0.45rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    background: #232326;
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 0.1rem;
+  }
+
+  .ui-tooltip:hover .ui-tooltip__content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .ui-tooltip--right-center .ui-tooltip__content {
+    left: calc(100% + 0.85rem);
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) translateX(-0.35rem);
+  }
+
+  .ui-tooltip--right-center .ui-tooltip__content::after {
+    left: -0.45rem;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .ui-tooltip--right-center:hover .ui-tooltip__content {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .creator-brand {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  .creator-brand--icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: var(--sl-border-sm);
+    padding: 3px;
+    background-color: white;
+  }
+
+  .creator-brand--text {
+    width: auto;
+    height: auto;
+    justify-content: flex-start;
+  }
+
+  .creator-brand__icon {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .creator-brand__label {
+    font-weight: 600;
+    font-size: 0.76rem;
+    white-space: nowrap;
+    font-style: normal;
+  }
+
+  .loc-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .model-links {
+    display: inline-flex;
+    gap: 0.65rem;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .model-links__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--model-link-color);
+    text-decoration-color: currentColor;
+    font-size: 0.74rem;
+  }
+
+  .model-links__item:visited,
+  .model-links__item:hover,
+  .model-links__item:focus-visible {
+    color: var(--model-link-color);
+  }
+
+  .model-links__icon {
+    width: 0.82rem;
+    height: 0.82rem;
+    display: inline-block;
+    flex: 0 0 auto;
+  }
+
+  .model-links__icon path {
+    stroke: var(--model-link-icon-color);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .model-links__empty {
+    color: var(--sl-color-text-accent);
+  }
+
+  .models-table-section .fi {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    vertical-align: -0.12em;
+  }
+
+  .model-id-label {
+    font-weight: normal;
+    text-decoration: underline;
+  }
+</style>

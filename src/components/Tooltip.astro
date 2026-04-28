@@ -1,0 +1,101 @@
+---
+interface Props {
+  text: string;
+  maxWidth?: string;
+  position?: 'top' | 'right-center';
+}
+
+const { text, maxWidth = '24rem', position = 'top' } = Astro.props;
+---
+
+<span class={`ui-tooltip ui-tooltip--${position}`} style={`--ui-tooltip-max-width: ${maxWidth};`}>
+  <span class="ui-tooltip__trigger">
+    <slot />
+  </span>
+  <span class="ui-tooltip__content" role="tooltip">
+    {text}
+  </span>
+</span>
+
+<style>
+  .ui-tooltip {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    vertical-align: middle;
+    outline: none;
+  }
+
+  .ui-tooltip__trigger {
+    display: inline-flex;
+  }
+
+  .ui-tooltip__content {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.85rem);
+    transform: translateX(-50%) translateY(0.35rem);
+    width: max-content;
+    max-width: min(var(--ui-tooltip-max-width), calc(100vw - 2rem));
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: #232326;
+    color: white;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    white-space: normal;
+    text-align: left;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease,
+      visibility 160ms ease;
+    z-index: 30;
+  }
+
+  .ui-tooltip__content::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -0.45rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    background: #232326;
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 0.1rem;
+  }
+
+  .ui-tooltip:hover .ui-tooltip__content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .ui-tooltip--right-center .ui-tooltip__content {
+    left: calc(100% + 0.85rem);
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) translateX(-0.35rem);
+  }
+
+  .ui-tooltip--right-center .ui-tooltip__content::after {
+    left: -0.45rem;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .ui-tooltip--right-center:hover .ui-tooltip__content {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  @media (max-width: 900px) {
+    .ui-tooltip__content {
+      font-size: 0.9rem;
+      padding: 0.65rem 0.85rem;
+    }
+  }
+</style>
