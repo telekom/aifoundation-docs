@@ -1,5 +1,6 @@
 ---
-import allPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-04-24.json';
+import currentPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-04-24.json';
+import legacyPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
 import ModelsTable from './ModelsTable.astro';
 import Tooltip from './Tooltip.astro';
 import { modelBrandIcons } from '../shared/lib/modelBrandIcons';
@@ -8,8 +9,11 @@ interface Props {
   selectedPlanId?: string;
   sectionTitle?: string;
   modelsSectionTitle?: string;
+  legacy?: boolean;
 }
-const { selectedPlanId = '', sectionTitle = '', modelsSectionTitle = '' } = Astro.props;
+const { selectedPlanId = '', sectionTitle = '', modelsSectionTitle = '', legacy = false } = Astro.props;
+
+const allPricing = legacy ? legacyPricing : currentPricing;
 
 // Detect locale from URL path
 const isDE = Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/de';
@@ -95,6 +99,16 @@ const t = {
     : 'Powerful, high-capability models for complex and quality-critical work.',
 } as Record<string, any>;
 
+// Legacy (v1.0.0) overrides — different copy for the archived plans page.
+if (legacy) {
+  t.subtitle = isDE
+    ? 'Die AI Foundation Services bieten nutzungsbasierte Preise. Preise variieren je nach Modell, Vereinbarung und Tarif. Kontaktieren Sie uns gerne für weitere Informationen zu dedizierten und On-Premises-Hosting-Optionen.'
+    : 'AI Foundation Services offers pay-as-you-go pricing. Prices vary by model, agreement, and rate plan. Please contact us for more information on the dedicated and on-premises hosting options.';
+  t.modelsSubtitle = isDE
+    ? 'Wählen Sie das richtige Modell für Ihren Anwendungsfall – von schnellen Antworten bis zu tiefgehender Analyse.'
+    : 'Choose the right model for your use case - from fast responses to deep analysis';
+}
+
 const hostTooltips: Record<string, string> = {
   'T-Cloud': t.tooltipTCloud,
   External: t.tooltipExternal,
@@ -105,8 +119,8 @@ const tierTooltips: Record<string, string> = {
   Premium: t.tooltipPremium,
 };
 
-// Plan display config
-const planConfigs = [
+// Plan display config (current)
+const currentPlanConfigs = [
   {
     packageName: 'Essential',
     label: 'Essential',
@@ -152,6 +166,67 @@ const planConfigs = [
     isFilterAvailable: false,
   },
 ];
+
+// Plan display config (legacy v1: pre-2026-04 5-tier structure)
+const legacyPlanConfigs = [
+  {
+    packageName: 'Tarif Basic Template',
+    label: 'Basic',
+    color: '#4de0af',
+    basePrice: '–',
+    tokenPrice: '3.53',
+    rpm: '20',
+    modelHost: ['T-Cloud'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard1000 Template',
+    label: 'Standard 1000',
+    color: '#4ad9cd',
+    basePrice: '1,000 €',
+    tokenPrice: '3.53',
+    rpm: '150',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard2000 Template',
+    label: 'Standard 2000',
+    color: '#4dd1e0',
+    basePrice: '2,000 €',
+    tokenPrice: '2.89',
+    rpm: '300',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard3000 Template',
+    label: 'Standard 3000',
+    color: '#5ec2ed',
+    basePrice: '3,000 €',
+    tokenPrice: '2.23',
+    rpm: '450',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard4000 Template',
+    label: 'Standard 4000',
+    color: '#84b0f5',
+    basePrice: '4,000 €',
+    tokenPrice: '1.75',
+    rpm: '600',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+];
+
+const planConfigs = legacy ? legacyPlanConfigs : currentPlanConfigs;
 
 // Helper: parse deployment region
 function parseCloud(deploymentRegion: string): string {
@@ -311,7 +386,7 @@ const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.pack
                   <div class="plans-table__small-text">{t.thRPMUnit}</div>
                 </th>
                 <th>{t.thModelHost}</th>
-                <th>{t.thModelTier}</th>
+                {!legacy && <th>{t.thModelTier}</th>}
               </tr>
             </thead>
             <tbody>
@@ -337,16 +412,18 @@ const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.pack
                       </>
                     ))}
                   </td>
-                  <td>
-                    {plan.modelTier.map((tier, i) => (
-                      <>
-                        {i > 0 && ' '}
-                        <Tooltip text={tierTooltips[tier] || tier} maxWidth="24rem">
-                          <span class={`plans-tag ${tier === 'Premium' ? 'tag-premium' : 'tag-tier'}`}>{tier}</span>
-                        </Tooltip>
-                      </>
-                    ))}
-                  </td>
+                  {!legacy && (
+                    <td>
+                      {plan.modelTier.map((tier, i) => (
+                        <>
+                          {i > 0 && ' '}
+                          <Tooltip text={tierTooltips[tier] || tier} maxWidth="24rem">
+                            <span class={`plans-tag ${tier === 'Premium' ? 'tag-premium' : 'tag-tier'}`}>{tier}</span>
+                          </Tooltip>
+                        </>
+                      ))}
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -372,6 +449,7 @@ const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.pack
     hostTooltips={hostTooltips}
     tierTooltips={tierTooltips}
     testModelsSectionTitle={modelsSectionTitle}
+    legacy={legacy}
   />
 </div>
 

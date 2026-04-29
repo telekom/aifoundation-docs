@@ -13,6 +13,7 @@ interface Props {
   hostTooltips: Record<string, string>;
   tierTooltips: Record<string, string>;
   testModelsSectionTitle?: string;
+  legacy?: boolean;
 }
 
 const {
@@ -24,12 +25,13 @@ const {
   hostTooltips,
   tierTooltips,
   testModelsSectionTitle,
+  legacy = false,
 } = Astro.props;
 
 const sortableHeaders = [
   { key: 'modelHost', label: translations.thModelHost },
   { key: 'cloudProvider', label: translations.thCloudProvider },
-  { key: 'modelTier', label: translations.thModelTier },
+  ...(legacy ? [] : [{ key: 'modelTier', label: translations.thModelTier }]),
   { key: 'creator', label: translations.thCreator },
   { key: 'displayName', label: translations.thModelName },
   { key: 'inputPrice', label: translations.thInputPrice, unit: 'M Tokens' },
@@ -37,8 +39,10 @@ const sortableHeaders = [
   { key: 'serverLocation', label: translations.thServerLocation },
   { key: 'rpm', label: translations.thRPMLimit, unit: translations.thRPMUnitShort },
   { key: 'tpm', label: translations.thTPM, unit: translations.thTPMUnit },
-  { key: 'contextWindow', label: translations.thContextWindow, unit: translations.thContextWindowUnit },
+  ...(legacy ? [] : [{ key: 'contextWindow', label: translations.thContextWindow, unit: translations.thContextWindowUnit }]),
 ];
+
+const totalColumnCount = sortableHeaders.length + (legacy ? 0 : 1);
 ---
 
 <section
@@ -49,6 +53,8 @@ const sortableHeaders = [
   data-tier-tooltips={JSON.stringify(tierTooltips)}
   data-initial-index={effectiveIndex}
   data-locked={locked ? 'true' : 'false'}
+  data-legacy={legacy ? 'true' : 'false'}
+  data-total-columns={totalColumnCount}
   data-t={JSON.stringify(translations)}>
   <h2>{testModelsSectionTitle || translations.modelsTitle}</h2>
   <p class="par-description">
@@ -122,7 +128,7 @@ const sortableHeaders = [
               </th>
             ))
           }
-          <th>{translations.thLinks}</th>
+          {!legacy && <th>{translations.thLinks}</th>}
         </tr>
       </thead>
       <tbody id="models-tbody">
@@ -144,6 +150,8 @@ const sortableHeaders = [
     const translations = JSON.parse(section.dataset.t || '{}');
     let currentIndex = parseInt(section.dataset.initialIndex || '0', 10);
     const locked = section.dataset.locked === 'true';
+    const legacy = section.dataset.legacy === 'true';
+    const totalColumns = parseInt(section.dataset.totalColumns || '12', 10);
 
     const selector = section.querySelector<HTMLSelectElement>('#plan-selector');
     const searchInput = section.querySelector<HTMLInputElement>('#model-search');
@@ -326,7 +334,7 @@ const sortableHeaders = [
         row.innerHTML = `
           <td>${hostTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 26rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(hostTooltip)}</span></span>` : `<span class="plans-tag ${hostClass}">${escapeHtml(model.modelHost)}</span>`}</td>
           <td><span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${cloudProviderClass}">${escapeHtml(cloudProvider)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(cloudProviderFullName)}</span></span></td>
-          <td>${tierTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(modelTier)}</span>`}</td>
+          ${legacy ? '' : `<td>${tierTooltip ? `<span class="ui-tooltip ui-tooltip--right-center" style="--ui-tooltip-max-width: 24rem;"><span class="ui-tooltip__trigger"><span class="plans-tag ${tierClass}">${escapeHtml(modelTier)}</span></span><span class="ui-tooltip__content" role="tooltip">${escapeHtml(tierTooltip)}</span></span>` : `<span class="plans-tag ${tierClass}">${escapeHtml(modelTier)}</span>`}</td>`}
           <td>
             <span class="creator-brand ${creatorIcon ? 'creator-brand--icon' : 'creator-brand--text'}" title="${escapeHtml(model.creator)}" aria-label="${escapeHtml(model.creator)}">
               ${creatorIcon ? `<img class="creator-brand__icon" src="${escapeHtml(creatorIcon)}" alt="${escapeHtml(model.creator)}" />` : `<span class="creator-brand__label">${escapeHtml(model.creator)}</span>`}
@@ -342,21 +350,21 @@ const sortableHeaders = [
           <td><div class="loc-wrapper">${model.locationCode ? `<span class="fi fi-${escapeHtml(model.locationCode)}"></span> ` : ''}${escapeHtml(model.serverLocation)}</div></td>
           <td>${formatNumber(model.rpm)}</td>
           <td>${formatNumber(model.tpm)}</td>
-          <td>${model.contextWindow != null ? formatNumber(model.contextWindow) : '-'}</td>
-          <td>
+          ${legacy ? '' : `<td>${model.contextWindow != null ? formatNumber(model.contextWindow) : '-'}</td>`}
+          ${legacy ? '' : `<td>
             <span class="model-links">
               ${model.termsOfUseUrl ? `<a href="${escapeHtml(model.termsOfUseUrl)}" class="model-links__item" target="_blank" rel="noreferrer noopener">${translations.linkTermsOfUse || 'Terms of Use'}<svg class="model-links__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H21V10"/><path d="M21 3L10 14"/><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13"/></svg></a>` : ''}
               ${model.dataProtectionUrl ? `<a href="${escapeHtml(model.dataProtectionUrl)}" class="model-links__item" target="_blank" rel="noreferrer noopener">${translations.linkDataProtection || 'Data Protection'}<svg class="model-links__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H21V10"/><path d="M21 3L10 14"/><path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13"/></svg></a>` : ''}
               ${!model.termsOfUseUrl && !model.dataProtectionUrl ? '<span class="model-links__empty">-</span>' : ''}
             </span>
-          </td>
+          </td>`}
         `;
         tbody.appendChild(row);
       }
 
       if (models.length === 0) {
         const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="12" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
+        row.innerHTML = `<td colspan="${totalColumns}" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
         tbody.appendChild(row);
       }
 
