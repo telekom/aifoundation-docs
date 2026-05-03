@@ -1,54 +1,102 @@
 ---
 title: "Enterprise Trust"
-description: "Sicherheit, Compliance und Datensouveränität für AI Foundation Services — ISO 27001, DSGVO und europäische Datenresidenz."
+description: "Sicherheit, Compliance, Datensouveränität und KI-Verordnungs-Konformität für AI Foundation Services gemäß Leistungsbeschreibung."
 ---
 
-AI Foundation Services basiert auf souveräner europäischer Infrastruktur mit unternehmensgerechter Sicherheit. Ihre Daten bleiben in Europa, werden niemals für Modelltraining verwendet und sind durch deutsches und EU-Datenschutzrecht geschützt.
+AI Foundation Services bietet eine einheitliche OpenAI-kompatible API für zwei klar getrennte Modellkategorien — solche, die von der Telekom in der EU/EWR betrieben werden, und solche, die an Drittanbieter unter deren eigenen Bedingungen weitergeleitet werden. Diese Seite fasst die Trust- und Compliance-Position zusammen; die [Leistungsbeschreibung (PDF)](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) (v1.20) ist die verbindliche Quelle.
 
 
-## Datensouveränität
+## Zwei Modellkategorien — wählen Sie die passende für Ihre Daten
 
-- **T-Cloud-Modelle** — Open-Source-Modelle (Llama, Mistral, DeepSeek, Qwen, etc.) laufen auf T-Systems-Infrastruktur in Deutschland. Daten werden ausschließlich in deutschen Rechenzentren verarbeitet und gespeichert.
-- **Drittanbieter-Modelle** — Closed-Source-Modelle (GPT, Claude, Gemini) werden über AIFS von Azure, AWS oder Google Cloud bezogen. Der Verarbeitungsort für diese Modelle richtet sich nach der angegebenen Region des Upstream-Anbieters (EU-Regionen).
-- **Umfang des Datentransfers** — Für Modelle, die auf der Infrastruktur der AI Foundation Services gehostet werden, werden keine Kundendaten außerhalb der EU übertragen. Für Drittanbieter-Modelle, auf die über AIFS zugegriffen wird, richtet sich der Verarbeitungsort nach der angegebenen Region des Upstream-Anbieters.
+Die Leistungsbeschreibung unterteilt den Modellkatalog in zwei Kategorien mit deutlich unterschiedlichen Datensouveränitäts-Profilen. **Die Wahl des Modells ist die Wahl des Datenverarbeitungsregimes.**
+
+### Kategorie 1 — Verarbeitung innerhalb EU/EWR und Staaten mit Angemessenheitsbeschluss
+
+Werden von der Telekom auf der T-Cloud Public betrieben. Beispiele:
+
+- Meta Llama 3.3 70B Instruct
+- Mistral Small 3
+- Alibaba Qwen3 (VL, Coder, Next-Varianten)
+- OpenAI GPT-OSS-120B
+- DeutschlandGPT Llama-BildungsLLM
+- OpenAI Whisper Large v3 / v3 Turbo (STT)
+- Jina Embeddings v2, BAAI BGE m3 (Embeddings)
+
+Für diese Modelle gilt:
+
+- Datenverarbeitung erfolgt **innerhalb der EU/EWR oder in Staaten mit datenschutzrechtlichem Angemessenheitsbeschluss der EU-Kommission**
+- Übermittelte Daten und zurückgelieferte Ergebnisse werden **nicht gespeichert**, sind **weder für die Telekom noch für Dritte einsehbar** und werden **nicht zum Training der Modelle genutzt**
+
+### Kategorie 2 — Drittanbieter, Subunternehmer weltweit
+
+Werden von der Telekom direkt an den jeweiligen Drittanbieter weitergeleitet, der diese auf eigener Infrastruktur betreibt. Beispiele:
+
+- OpenAI GPT-4o, GPT-4.1-Familie, GPT-Image-1, o1/o3/o4-Familie, GPT-5-Familie, Ada-Text — auf Microsoft Azure (Frankreich/Schweden)
+- Anthropic Claude (3.7, 4, 4.5, 4.6 Sonnet/Haiku/Opus) — auf Google Cloud oder Microsoft Azure
+- Google Gemini 2.5 / 3 Familie — auf Google Cloud
+- Mistral Medium 3 — auf Google Cloud
+
+Für diese Modelle gilt:
+
+- Der Drittanbieter kann **Subunternehmer weltweit** einsetzen, sodass Kundendaten weltweit verarbeitet werden können
+- Mit der Auswahl eines Kategorie-2-Modells akzeptiert der Kunde die **Nutzungsbedingungen, Lizenzen und Datenschutzbestimmungen des Drittanbieters**
+- Ausfälle dieser Drittanbieter sind aus der [Verfügbarkeitsberechnung](/de/reference/service-levels#ausgeschlossene-ereignisse-excused-events) der Telekom ausgenommen
+
+:::caution
+Bestimmte Datenkategorien (z. B. Sozial- oder Gesundheitsdaten nach deutschem Recht) dürfen **rechtlich nicht außerhalb der EU/EWR verarbeitet werden**. Die Prüfung der Zulässigkeit der Nutzung eines bestimmten Modells fällt allein in die Verantwortung des Kunden.
+:::
+
+
+## Konformität mit der KI-Verordnung
+
+- Die Telekom erbringt die Leistungen im Einklang mit den auf sie anwendbaren Pflichten der [Verordnung (EU) 2024/1689](https://eur-lex.europa.eu/eli/reg/2024/1689/oj) (KI-Verordnung).
+- Der Kunde ist vertraglich verpflichtet, den Service in Übereinstimmung mit der KI-Verordnung zu nutzen.
+- Der Service ist **nicht für Hochrisiko-KI-Systeme** im Sinne der KI-Verordnung oder verbotene Anwendungsfälle bestimmt oder zugelassen.
+- Der Service ist **kein Medizinprodukt** im Sinne der MDR und darf nicht zur Diagnose, Verhütung, Überwachung, Vorhersage, Prognose, Behandlung oder Linderung von Krankheiten eingesetzt werden.
 
 
 ## Zertifizierungen
 
 Die Betriebsabläufe von T-Systems sind **ISO 27001** zertifiziert und decken das Informationssicherheitsmanagement für die Infrastruktur und Prozesse der AI Foundation Services ab.
 
-Die vollständige Liste der für die T-Cloud-Infrastruktur geltenden Zertifizierungen finden Sie auf der [T-Systems-Zertifikateseite](https://www.t-systems.com/de/en/company/about-t-systems/t-systems-certificates).
+Die vollständige Liste der für die T-Systems-Infrastruktur geltenden Zertifizierungen finden Sie auf der [T-Systems-Zertifikateseite](https://www.t-systems.com/de/en/company/about-t-systems/t-systems-certificates).
 
 :::note
 Der Zertifizierungsumfang hängt vom spezifischen Service und der Infrastrukturebene ab. Bei Fragen zu den für Ihren Anwendungsfall geltenden Zertifizierungen wenden Sie sich bitte an das AIFS-Team.
 :::
 
 
-## DSGVO-Konformität
+## DSGVO & Auftragsverarbeitung
 
-- AI Foundation Services ist vollständig **DSGVO-konform** gemäß EU-Verordnung 2016/679
-- Auftragsverarbeitungsverträge (AVV) sind auf Anfrage für Unternehmenskunden verfügbar
-- T-Systems agiert als Auftragsverarbeiter; Sie bleiben der Verantwortliche
-- Rechtsgrundlage, Betroffenenrechte und Verarbeitungsverzeichnisse sind im AVV dokumentiert
+- AI Foundation Services wird im Einklang mit der [EU-Verordnung 2016/679 (DSGVO)](https://eur-lex.europa.eu/eli/reg/2016/679/oj) erbracht.
+- Ein **Auftragsverarbeitungsvertrag (AVV)** nach Mustervorlage der Telekom ist auf Anfrage verfügbar — erforderlich, wenn der Kunde personenbezogene Daten über den Service verarbeitet.
+- Die Telekom agiert als Auftragsverarbeiter; der Kunde bleibt Verantwortlicher.
+- Der Kunde ist dafür verantwortlich zu prüfen, ob die übermittelten Daten zulässig verarbeitet werden dürfen — einschließlich Beschränkungen des Verarbeitungsortes.
 
 
-## Datenverarbeitung
+## Übersicht zur Datenverarbeitung
 
-| Aspekt | Richtlinie |
-|---|---|
-| **Verschlüsselung bei Übertragung** | TLS 1.2+ für die gesamte API-Kommunikation |
-| **Verschlüsselung im Ruhezustand** | AES-256-Verschlüsselung für gespeicherte Daten |
-| **Modelltraining** | Kundendaten werden niemals zum Training oder Fine-Tuning von Foundation-Modellen verwendet |
-| **Datenaufbewahrung** | API-Anfrage-/Antwortdaten werden nicht über die Anfrageverarbeitung hinaus gespeichert {/* TODO: Aufbewahrungsdetails mit dem Team bestätigen */} |
-| **Zugriffskontrolle** | API-Key-Authentifizierung; Keys sind projektbezogen |
-| **Protokollierung** | Anfrage-Metadaten werden zu betrieblichen Zwecken protokolliert; Prompt-/Antwortinhalte werden nicht protokolliert |
+| Aspekt | Kategorie 1 (EU-Betrieb) | Kategorie 2 (Drittanbieter) |
+|---|---|---|
+| **Verarbeitungsort** | EU/EWR oder Land mit Angemessenheitsbeschluss | Vom Drittanbieter bestimmt; ggf. weltweit |
+| **Speicherung** | Keine | Gemäß Bedingungen des Drittanbieters |
+| **Einsehbarkeit** | Weder für Telekom noch Dritte einsehbar | Gemäß Bedingungen des Drittanbieters |
+| **Nutzung für Training** | Keine | Gemäß Bedingungen des Drittanbieters |
+| **Verschlüsselung bei Übertragung** | TLS-gesichert (HTTPS) | TLS-gesichert (HTTPS) |
+| **Authentifizierung** | API-Keys über das [Self-Service-Portal](https://apikey.llmhub.t-systems.net) | API-Keys über das [Self-Service-Portal](https://apikey.llmhub.t-systems.net) |
+
+
+## Beendigung & Datenlöschung
+
+Die Leistung ist mit einer Frist von einem Monat zum Monatsende kündbar. **Bei Beendigung werden alle Zugänge deaktiviert und die Kundendaten gelöscht.** Siehe [Service-Level: Beendigung](/de/reference/service-levels#beendigung).
 
 
 ## Compliance & Beschaffung
 
 Für Unternehmens-Beschaffungsteams, die AI Foundation Services evaluieren:
 
-- **Compliance-Fragebögen** — Kontaktieren Sie uns für ausgefüllte Sicherheitsfragebögen (CAIQ, VSA oder individuelle Formate)
-- **Auftragsverarbeitungsvertrag** — Fordern Sie einen AVV an, der auf Ihre Anforderungen zugeschnitten ist
-- **Sicherheitsdokumentation** — Technische Sicherheitsdokumentation unter NDA verfügbar
-- **Kontakt** — Erreichen Sie das AIFS-Team unter [ai@t-systems.com](mailto:ai@t-systems.com) oder über den [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/)
+- **Leistungsbeschreibung (PDF)** — Die [Leistungsbeschreibung](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) ist das verbindliche Vertragsdokument zu Leistungsumfang, SLAs, Bedingungen und Preisen.
+- **Compliance-Fragebögen** — Kontaktieren Sie uns für ausgefüllte Sicherheitsfragebögen (CAIQ, VSA oder individuelle Formate).
+- **Auftragsverarbeitungsvertrag** — Fordern Sie einen AVV an, der auf Ihre Anforderungen zugeschnitten ist.
+- **Sicherheitsdokumentation** — Unter NDA verfügbar.
+- **Kontakt** — [ai@t-systems.com](mailto:ai@t-systems.com) oder über den [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/).

@@ -1,61 +1,101 @@
 ---
 title: "Service-Level"
-description: "Verfügbarkeitsziele, Support-Reaktionszeiten und Wartungsrichtlinien für AI Foundation Services nach Tarif."
+description: "Verfügbarkeitsziel, Service Credits, Support-Zeiten und Wartungsrichtlinien für AI Foundation Services gemäß Leistungsbeschreibung."
 ---
 
-Die Service-Level-Zusagen variieren je nach Tarif. Diese Seite fasst Verfügbarkeitsziele, Support-Reaktionszeiten und betriebliche Richtlinien zusammen.
+Diese Seite fasst die Service-Level-Zusagen aus der [Leistungsbeschreibung (PDF)](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) (v1.20) zusammen. Das PDF ist die verbindliche Quelle — diese Seite ist eine entwicklerfreundliche Übersicht.
+
 
 ## Verfügbarkeit
 
-{/* TODO: genaue SLA-Prozentsätze mit dem Team bestätigen */}
+Die Mindestverfügbarkeit des LLM-Serving-Services am Leistungsübergabepunkt (API-Endpunkt im Rechenzentrum der Telekom) liegt bei **99,9%** innerhalb der betreuten Betriebszeit eines Kalendermonats und wird wie folgt berechnet:
 
-| Tarif | Verfügbarkeitsziel | Monatliches Ausfallbudget |
+> (Gesamte Serviceminuten − Gesamte Ausfallminuten) ÷ Gesamte Serviceminuten × 100%
+
+Die Verfügbarkeit gilt für alle Tarife mit Mindestumsatz (Essential, Professional, Agentic).
+
+| Tarif | Mindestumsatz | Verfügbarkeitsziel |
 |---|---|---|
-| Essential | 99,5% | ~3h 39min |
-| Professional | 99,9% | ~43min |
-| Agentic | 99,9% | ~43min |
+| Essential | 1.000 €/Monat | 99,9% |
+| Professional | 3.000 €/Monat | 99,9% |
+| Agentic | 5.000 €/Monat | 99,9% |
 
 :::note
-Die Verfügbarkeitsziele für Azure-gehostete Modelle (z. B. GPT-5.2, o-Serie) unterliegen den SLAs des Upstream-Anbieters. Die oben genannten Ziele gelten für Open-Source-Modelle auf der T-Cloud.
+Die Verfügbarkeit wird gegen die **betreute Betriebszeit** (Mo–Fr, 9:00–17:00 MEZ/MESZ, ausgenommen bundeseinheitliche Feiertage in Deutschland) gemessen, nicht 24/7.
 :::
 
 :::note
-**Preview-Modelle** (Test-Katalog, z. B. `Gemma 4`) haben keine Verfügbarkeitszusage. Die Telekom kann die Nutzung von Preview-Modellen jederzeit ohne vorherige Ankündigung anpassen oder einschränken.
+**Testmodelle** haben keine Verfügbarkeitszusage. Die Telekom kann den Zugang zu Testmodellen jederzeit ohne vorherige Ankündigung einschränken oder einstellen.
 :::
 
 
-## Support-Reaktionszeiten
+### Ausgeschlossene Ereignisse (Excused Events)
 
-{/* TODO: Reaktionszeiten mit dem Team bestätigen */}
+Folgende Ausfälle gelten nicht als Ausfallminuten in der Verfügbarkeitsberechnung:
 
-Die Reaktionszeiten werden ab Ticketerstellung bis zur ersten qualifizierten Antwort während der Geschäftszeiten (Mo–Fr, 08:00–18:00 MEZ) gemessen.
+- Ausfälle durch geplante Wartungsarbeiten
+- Ausfälle, die auf den Kunden, seine Mitarbeiter oder dem Kunden zuzurechnende Dritte zurückzuführen sind
+- Ausfälle durch höhere Gewalt oder Dritte außerhalb des Einflussbereichs der Telekom
+- Ausfälle von Drittanbieter-LLMs (Modelle mit Betrieb außerhalb der EU/EWR — siehe [Enterprise Trust](/de/reference/enterprise-trust))
 
-| Schweregrad | Beschreibung | Essential | Professional | Agentic |
-|---|---|---|---|---|
-| **P1 — Kritisch** | Service vollständig nicht verfügbar | 8 Stunden | 4 Stunden | 1 Stunde |
-| **P2 — Hoch** | Hauptfunktion beeinträchtigt | 1 Werktag | 8 Stunden | 4 Stunden |
-| **P3 — Mittel** | Geringfügiges Problem, Workaround verfügbar | 3 Werktage | 2 Werktage | 1 Werktag |
-| **P4 — Niedrig** | Allgemeine Frage oder Anfrage | 5 Werktage | 5 Werktage | 3 Werktage |
+
+### Service Credits
+
+Bei Nichteinhaltung der 99,9%-Verfügbarkeit, die ausschließlich von der Telekom zu vertreten ist, kann der Kunde innerhalb von drei Monaten nach dem betroffenen Abrechnungszeitraum Service Credits geltend machen:
+
+| Verfügbarkeit im Abrechnungszeitraum | Service Credit |
+|---|---|
+| `<99,9%` – 99,7% | 5% des Mindestumsatzes |
+| `<99,7%` – 95% | 10% des Mindestumsatzes |
+| `<95%` | 25% des Mindestumsatzes |
+
+Die Credits werden mit der Folgemonatsrechnung verrechnet oder nach Beendigung der Leistung erstattet. Service Credits sind der ausschließliche Anspruch bei Verfügbarkeitsunterschreitungen.
+
+
+## Kundensupport
+
+Der Kundensupport ist der zentrale Ansprechpartner für die benannten Administratoren des Kunden (bis zu 5) als **2nd-Level-Support**. Der Kunde erbringt für seine Nutzer einen 1st-Level-Support.
+
+| Aspekt | Detail |
+|---|---|
+| **Zeiten** | Mo–Fr, 9:00–17:00 MEZ/MESZ (ohne bundeseinheitliche Feiertage in Deutschland) |
+| **Kanal** | Bei der Bereitstellung mitgeteilte E-Mail-Adresse |
+| **Umfang** | Bearbeitung von Incidents und Service-Requests |
+| **Prozess** | Ticket eröffnet → Analyse → Status-E-Mail → Abschluss |
+
+:::caution
+**Keine zugesagten Lösungszeiten.** Gemäß Leistungsbeschreibung sagt die Telekom keine konkreten Lösungszeiten zu und kann Incidents auch durch einen Workaround beheben. Tickets werden ausschließlich innerhalb der betreuten Betriebszeit bearbeitet.
+:::
 
 
 ## Geplante Wartung
 
-- **Wartungsfenster** — Geplante Wartungsarbeiten können an Wochenenden zwischen 22:00–06:00 MEZ stattfinden. Kunden werden mindestens 5 Werktage im Voraus benachrichtigt.
-- **Notfallwartung** — Kritische Sicherheitspatches oder dringende Fehlerbehebungen können außerhalb geplanter Fenster mit bestmöglicher Vorankündigung durchgeführt werden.
-- **Auswirkung** — Wartungsarbeiten können kurze Serviceunterbrechungen verursachen. Wir streben eine Ausfallzeit von unter 30 Minuten pro Wartungsfenster an.
+- Die Telekom führt regelmäßig Wartungsarbeiten durch und informiert den Kunden vorab, sofern diese zu Leistungsunterbrechungen führen.
+- Die Telekom ist bestrebt, Beeinträchtigungen durch Wartungsarbeiten möglichst gering zu halten.
+- Wartungsarbeiten gelten **nicht** als Ausfallzeiten in der Verfügbarkeitsberechnung.
 
 
-## Störungskommunikation
+## Reporting
 
-- **Statusseite** — Der aktuelle Servicestatus ist auf der [Model-Status](https://uptime.llmhub.t-systems.net/status/health)-Seite verfügbar.
-- **Benachrichtigungen** — Professional- und Agentic-Kunden erhalten E-Mail-Benachrichtigungen bei P1/P2-Störungen und geplanter Wartung.
-- **Nachberichte** — Ursachenanalysen werden für P1-Störungen an Agentic-Kunden geteilt.
+Für Tarife mit Mindestumsatz stellt die Telekom auf Anfrage einen **monatlichen Verfügbarkeitsreport** per E-Mail bereit, fünf Werktage nach Monatsende. Der Report enthält:
+
+- Verfügbarkeitsübersicht (Ziel erreicht oder nicht)
+- Monatliche Details mit 6-Monats-Historie zu Ausfallhäufigkeiten und -zeiten
+- Minutengenaues Ausfallprotokoll innerhalb der betreuten Betriebszeit für den aktuellen Monat
+- Änderungshistorie
+
+Der Report kann beim Support-Kontakt angefordert werden.
 
 
-## Eskalation
+## Beendigung
+
+Die Leistung ist mit einer Frist von **einem Monat zum Monatsende** kündbar — per E-Mail an die bei der Bereitstellung mitgeteilte E-Mail-Adresse unter Angabe der Vertragsnummer. Bei Beendigung werden alle Zugänge deaktiviert und die Kundendaten gelöscht.
+
+
+## Eskalation & individuelle SLAs
 
 Für dringende Anliegen oder unternehmensspezifische SLA-Anforderungen:
 
-- **Support-Portal** — Erstellen Sie ein Support-Ticket über den [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/)
-- **Direktkontakt** — Erreichen Sie das AIFS-Team unter [ai@t-systems.com](mailto:ai@t-systems.com)
-- **Individuelle SLAs** — Unternehmenskunden mit dedizierten GPU-Ressourcen können individuelle Verfügbarkeitsziele und Supportbedingungen vereinbaren
+- **Support-Portal** — Ticket über den [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/) öffnen
+- **Direktkontakt** — [ai@t-systems.com](mailto:ai@t-systems.com)
+- **Individuelle SLAs** — Unternehmenskunden mit [dedizierten GPU-Instanzen](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) können individuelle Verfügbarkeitsziele und Supportbedingungen vereinbaren
