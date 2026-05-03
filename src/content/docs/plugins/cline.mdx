@@ -1,0 +1,66 @@
+---
+title: "Cline"
+description: "Install and configure Cline for AI Engineer in Visual Studio Code, an agentic coding plugin connected to AI Foundation Services."
+---
+
+Cline for AI Engineer is a custom version of the Cline extension for enterprise use cases with no telemetry. It integrates with Visual Studio Code and gives you an agentic workflow for planning changes, editing files, running terminal commands, and connecting to external tools through MCP.
+
+## Key Features
+
+- Agentic workflow for planning, editing files, and running terminal commands
+- MCP support for external tools and data sources
+- Strong fit for autonomous fix and feature-completion loops
+- Best when you want a standard coding agent with broad integrations
+
+## Installation
+
+1. Download the Cline VS Code extension from [AI Coding Plugins](https://apikey.llmhub.t-systems.net/plugins).
+2. If you are updating an existing installation, delete the old Cline extension folder from `.vscode/extensions`.
+3. In VS Code, open **Extensions**, open the three-dot menu, and choose **Install from VSIX**.
+4. Select the downloaded file and reload VS Code.
+
+## Setup
+
+1. Select **Bring my own API Key** and click **Continue**.
+
+![Cline onboarding](/img/cline_onboarding_state.png)
+
+2. Set the API provider:
+
+```text
+API Provider = OpenAI Compatible
+```
+
+3. Set the base URL:
+
+```text
+Base URL = https://llm-server.llmhub.t-systems.net/v2/coding
+```
+
+4. Generate an API key in [LLM Serving API Keys](https://apikey.llmhub.t-systems.net/dashboard) and paste it into Cline:
+
+```text
+API Key = gen-************************************************
+```
+
+5. Choose a model ID from [Available Models](/getting-started/models):
+
+```text
+Model = gpt-oss-120b
+```
+
+You can now start a chat and use Cline in VS Code.
+
+## Updating
+
+After setup, Cline can fetch newly published versions automatically. When you start or reload VS Code and an update is available, a popup appears.
+
+1. Click **Yes** to download the latest version.
+
+![Cline update download prompt](/img/cline_auto_update_1.png)
+
+2. After the download finishes, click **Reload Now** to restart the extension.
+
+![Cline update reload prompt](/img/cline_auto_update_2.png)
+
+After Visual Studio Code restarts, the latest Cline version is ready to use.

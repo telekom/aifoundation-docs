@@ -1,0 +1,70 @@
+---
+title: "Roo Code"
+description: "Install and configure Roo Code for AI Engineer in Visual Studio Code, a high-performance Cline fork with mode-based guardrails on AI Foundation Services."
+---
+
+Roo Code for AI Engineer is a custom version of Roo Code for enterprise use cases with no telemetry. As a fork of Cline, it keeps the same core agent workflow while adding more control and configuration options for power users.
+
+## Key Features
+
+- High-performance Cline fork optimized for speed and cost control
+- Mode-based guardrails to limit actions by role and risk
+- Efficient line-based diffs to reduce large file rewrites
+- Best when you want agent power with tighter operational control
+
+## Installation
+
+1. Download the Roo Code VS Code extension from [AI Coding Plugins](https://apikey.llmhub.t-systems.net/plugins).
+2. If you are updating an existing installation, delete the old Roo Code extension folder from `.vscode/extensions`.
+3. In VS Code, open **Extensions**, open the three-dot menu, and choose **Install from VSIX**.
+4. Select the downloaded file and reload VS Code.
+
+## Setup
+
+1. Click **Use without an account**.
+
+![Roo Code onboarding step 1](/img/roo_code_onboarding_1.png)
+
+2. Select **3rd-party Provider**.
+
+![Roo Code onboarding step 2](/img/roo_code_onboarding_2.png)
+
+3. Set the API provider:
+
+```text
+API Provider = OpenAI Compatible
+```
+
+4. Set the base URL:
+
+```text
+Base URL = https://llm-server.llmhub.t-systems.net/v2/coding
+```
+
+5. Generate an API key in [LLM Serving API Keys](https://apikey.llmhub.t-systems.net/dashboard) and paste it into Roo Code:
+
+```text
+API Key = gen-************************************************
+```
+
+6. Choose a model ID from [Available Models](/getting-started/models), then click **Finish**:
+
+```text
+Model = gpt-oss-120b
+```
+
+You can now start a chat and use Roo Code in VS Code.
+
+## Updating
+
+After setup, Roo Code can fetch newly published versions automatically. When you start or reload VS Code and an update is available, a popup appears.
+
+1. Click **Yes** to download the latest version.
+
+![Roo Code update download prompt](/img/roo_code_auto_update_1.png)
+
+2. After the download finishes, click **Reload Now** to restart the extension.
+
+![Roo Code update reload prompt](/img/roo_code_auto_update_2.png)
+
+After Visual Studio Code restarts, the latest Roo Code version is ready to use.

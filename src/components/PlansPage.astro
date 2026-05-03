@@ -1,52 +1,83 @@
 ---
-import 'flag-icons/css/flag-icons.min.css';
-import allPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
-import countryData from '../shared/lib/countryCodeWithFlags.json';
+import currentPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-04-24.json';
+import legacyPricing from './PlansPageFeatures/PlansData/PlansModelData/v1.20.2/all-pricing--2026-01-19.json';
+import ModelsTable from './ModelsTable.astro';
+import Tooltip from './Tooltip.astro';
+import { modelBrandIcons } from '../shared/lib/modelBrandIcons';
 
 interface Props {
   selectedPlanId?: string;
+  sectionTitle?: string;
+  modelsSectionTitle?: string;
+  legacy?: boolean;
 }
-const { selectedPlanId = '' } = Astro.props;
+const { selectedPlanId = '', sectionTitle = '', modelsSectionTitle = '', legacy = false } = Astro.props;
+
+const allPricing = legacy ? legacyPricing : currentPricing;
 
 // Detect locale from URL path
 const isDE = Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/de';
 
 const t = {
-  ratePlansTitle: isDE ? 'Tarife' : 'Rate Plans',
+  ratePlansTitle: isDE ? 'Tarife' : 'Our Rate Plans',
   subtitle: isDE
-    ? 'Die AI Foundation Services Plattform bietet eine nutzungsabhängige Preisgestaltung. Die Preise variieren je nach Modell, Vereinbarung und Tarif.'
-    : 'AI Foundation Services offers pay-as-you-go pricing. Prices vary by model, agreement, and rate plan.',
-  subtitle2: isDE
-    ? 'Bitte kontaktieren Sie uns für weitere Informationen zu den dedizierten und on-premises Hosting-Optionen.'
-    : 'Please contact us for more information on the dedicated and on-premises hosting options.',
-  thPlan: isDE ? 'Tarif' : 'Plan',
+    ? 'Wählen Sie den Tarif, der zu Ihren Anforderungen passt. Ein höherer Grundpreis bedeutet höhere Anfragelimits und Zugriff auf leistungsstärkere Modelle. Sie benötigen eine individuelle Lösung oder ein On-Premises-Hosting? Schreiben Sie uns gerne!'
+    : 'Choose the plan that matches your workload. Higher base prices unlock higher rate limits and more powerful models. Need a custom setup or on-premises hosting? Contact us!',
+  thPlan: isDE ? 'Tarif' : 'Rate Plan',
+  thBasePrice: isDE ? 'Grundpreis' : 'Base Price',
+  thModelHost: isDE ? 'Modell-Hosting' : 'Model Host',
+  thModelTier: isDE ? 'Modell-Tier' : 'Model Tier',
   thMinConsumption: isDE ? 'Mindestverbrauch' : 'Min. Consumption',
-  thTokenPrice: isDE ? 'Beispiel Token Preis *' : 'Token Price *',
-  thTokenPriceUnit: '€/Mil. Tokens',
-  thRPM: isDE ? 'Beispiel RPM\u2020' : 'RPM\u2020',
-  thRPMUnit: isDE ? 'Anfragen/Min' : 'Req/Min',
+  thTokenPrice: isDE ? 'Input- / Output-Token-Preis' : 'Input / Output Token Price',
+  thTokenPriceUnit: '€ / M Tokens',
+  thRPM: isDE ? 'Beispiel RPM' : 'RPM',
+  thRPMUnit: isDE ? 'Anfragen/Minute' : 'Requests/Minute',
+  thRPMUnitShort: isDE ? 'Anfragen/Min' : 'Requests/Min',
   thCloud: isDE ? 'Cloud Anbieter' : 'Cloud',
   footnote: isDE
     ? '* Beispielpreise für T-Cloud-gehostete Large Language Models · † Beispiel-RPM für ein repräsentatives T-Cloud-Modell — genaue Limits variieren je Modell'
     : '* Example pricing for T-Cloud-hosted Large Language Models · † Example RPM for a representative T-Cloud model — exact limits vary by model',
-  modelsTitle: isDE ? 'Modelle & Preise' : 'Models & Pricing',
+  modelsTitle: isDE ? 'Unsere Modelle' : 'Our Models',
   modelsSubtitle: isDE
-    ? 'Wählen Sie das richtige Modell für Ihren Anwendungsfall – von schnellen Antworten bis hin zu tiefgreifenden Analysen.'
-    : 'Choose the right model for your use case - from fast responses to deep analysis',
+    ? 'Standard-Modelle sind leistungsfähig und auf Geschwindigkeit ausgelegt – zuverlässig für die meisten Anwendungsfälle, ohne Kompromisse bei der Qualität. Premium-Modelle gehen darüber hinaus: für komplexes Reasoning, lange Kontexte und Aufgaben, bei denen die Ausgabequalität im Vordergrund steht.'
+    : 'Standard models are capable and built for speed - reliable across most use cases, without cutting corners. Premium models go further: complex reasoning, long contexts, and tasks where output quality is the priority.',
+  modelsSubtitleList: isDE
+    ? [
+        'Probieren Sie die neuesten KI-Modelle aus: kostenlos testen, sofort erkunden. Unser Preview-Katalog ist Ihre Testumgebung, in der Sie Funktionen bewerten, die Leistung vergleichen und Ideen prototypisieren können, bevor Sie sie in Produktionsumgebungen einsetzen. Sie benötigen lediglich einen aktiven Tarif (Essential, Professional oder Agentic), um loszulegen.',
+        'Wähle ein Modell aus, probiere es in deinem Arbeitsablauf aus und finde heraus, was am besten passt.',
+        '\nHinweis',
+        'Die Nutzung der Testmodelle ist kostenfrei, setzt jedoch das Abschließen eines Tarifes (Essential / Professional / Agentic) voraus. Die Telekom ist berechtigt, die Nutzung der Testmodelle jederzeit zu limitieren, insbesondere hinsichtlich der verfügbaren Tokens, Rate-Limits (TPM/RPM) und der Nutzungsdauer. Die Telekom ist berechtigt, die Testmodelle jederzeit und ohne vorherige Ankündigung abzuschalten oder den Zugang des Kunden zu diesen einzuschränken. Der Kunde hat keinen Rechtsanspruch auf die fortlaufende Bereitstellung der Testmodelle.',
+      ]
+    : [
+        'Get hands-on with the latest AI models: free to test, ready to explore. Our preview catalog is your sandbox to evaluate capabilities, benchmark performance, and prototype ideas before committing to production workloads. All you need is an active plan (Essential, Professional, or Agentic) to start.',
+        'Pick a model, try it in your workflow, and see what fits.',
+        '\nDisclaimer',
+        'Test models are provided free of charge with any active plan. Telekom may limit usage at any time — including available tokens, rate limits (TPM/RPM), and duration of use and may deactivate test models or restrict access without prior notice. Customers have no legal entitlement to the continued provision of test models.',
+      ],
   labelRatePlan: isDE ? 'Gewählter Tarif' : 'Rate Plan',
   labelSearch: isDE ? 'Suche' : 'Search',
   labelServerLocation: 'Server Location',
-  labelCloud: 'Cloud',
-  labelPriceRange: 'Price Range',
+  labelCloud: isDE ? 'Cloud-Anbieter' : 'Cloud Provider',
+  labelInputPriceRange: isDE ? 'Input-Preis' : 'Input Price',
+  labelOutputPriceRange: isDE ? 'Output-Preis' : 'Output Price',
   placeholderSearch: isDE ? 'Modelle filtern...' : 'Filter models...',
   optionAll: isDE ? 'Alle' : 'All',
   priceUnder2: 'Under €2/MTok',
   price2to5: '€2-5/MTok',
   priceOver5: 'Over €5/MTok',
   thDPLocation: 'Data Processing Location',
+  thCloudProvider: isDE ? 'Cloud-Anbieter' : 'Cloud Provider',
+  thCreator: isDE ? 'Anbieter' : 'Creator',
   thModelName: isDE ? 'Modellname' : 'Model Name',
   thInputPrice: 'Input Token Price',
   thOutputPrice: 'Output Token Price',
+  thTPM: 'TPM',
+  thTPMUnit: 'Tokens/Min',
+  thContextWindow: 'Context Window',
+  thContextWindowUnit: 'Tokens',
+  thLinks: 'Links',
+  linkTermsOfUse: isDE ? 'Nutzungsbedingungen' : 'Terms of Use',
+  linkDataProtection: isDE ? 'Datenschutz' : 'Data Protection',
   thHostingPlatform: 'Hosting Platform',
   thServerLocation: 'Server Location',
   thInputTokenLimit: 'Input Token Limit',
@@ -54,16 +85,148 @@ const t = {
   thRPMLimit: isDE ? 'RPM-Limit' : 'RPM Limit',
   noModels: isDE ? 'Keine Modelle gefunden.' : 'No models found.',
   euWorldwide: isDE ? 'EU & Weltweit' : 'EU & Worldwide',
+  tooltipTCloud: isDE
+    ? 'Gehostet auf der souveränen Infrastruktur der Telekom.'
+    : "Hosted on Telekom's sovereign infrastructure.",
+  tooltipExternal: isDE
+    ? 'Gehostet bei Drittanbietern wie Microsoft Azure oder Google Cloud Platform.'
+    : 'Hosted by third-party providers like Microsoft Azure or Google Cloud Platform.',
+  tooltipStandard: isDE
+    ? 'Leistungsfähige, schnelle und zuverlässige Modelle für die meisten Aufgaben.'
+    : 'Capable, fast, and reliable models for most tasks.',
+  tooltipPremium: isDE
+    ? 'Leistungsstarke Modelle mit hoher Qualität für komplexe und kritische Anwendungsfälle.'
+    : 'Powerful, high-capability models for complex and quality-critical work.',
+} as Record<string, any>;
+
+// Legacy (v1.0.0) overrides — different copy for the archived plans page.
+if (legacy) {
+  t.subtitle = isDE
+    ? 'Die AI Foundation Services bieten nutzungsbasierte Preise. Preise variieren je nach Modell, Vereinbarung und Tarif. Kontaktieren Sie uns gerne für weitere Informationen zu dedizierten und On-Premises-Hosting-Optionen.'
+    : 'AI Foundation Services offers pay-as-you-go pricing. Prices vary by model, agreement, and rate plan. Please contact us for more information on the dedicated and on-premises hosting options.';
+  t.modelsSubtitle = isDE
+    ? 'Wählen Sie das richtige Modell für Ihren Anwendungsfall – von schnellen Antworten bis zu tiefgehender Analyse.'
+    : 'Choose the right model for your use case - from fast responses to deep analysis';
+}
+
+const hostTooltips: Record<string, string> = {
+  'T-Cloud': t.tooltipTCloud,
+  External: t.tooltipExternal,
 };
 
-// Plan display config
-const planConfigs = [
-  { packageName: 'Tarif Basic Template',         label: 'Basic',         color: '#4de0af', minConsumption: '-',      tokenPrice: '3.53', rpm: '20',  clouds: ['T-Cloud'] },
-  { packageName: 'Tarif Standard1000 Template',   label: 'Standard 1000', color: '#4ad9cd', minConsumption: '\u20AC1,000', tokenPrice: '3.53', rpm: '150', clouds: ['T-Cloud', 'Azure', 'GCP'] },
-  { packageName: 'Tarif Standard2000 Template',   label: 'Standard 2000', color: '#4dd1e0', minConsumption: '\u20AC2,000', tokenPrice: '2.89', rpm: '300', clouds: ['T-Cloud', 'Azure', 'GCP'] },
-  { packageName: 'Tarif Standard3000 Template',   label: 'Standard 3000', color: '#5ec2ed', minConsumption: '\u20AC3,000', tokenPrice: '2.23', rpm: '450', clouds: ['T-Cloud', 'Azure', 'GCP'] },
-  { packageName: 'Tarif Standard4000 Template',   label: 'Standard 4000', color: '#84b0f5', minConsumption: '\u20AC4,000', tokenPrice: '1.75', rpm: '600', clouds: ['T-Cloud', 'Azure', 'GCP'] },
+const tierTooltips: Record<string, string> = {
+  Standard: t.tooltipStandard,
+  Premium: t.tooltipPremium,
+};
+
+// Plan display config (current)
+const currentPlanConfigs = [
+  {
+    packageName: 'Essential',
+    label: 'Essential',
+    color: '#4de0af',
+    basePrice: '1,000 \u20AC',
+    tokenPrice: '0.20 / 0.65',
+    rpm: '300',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Professional',
+    label: 'Professional',
+    color: '#4ad9cd',
+    basePrice: '3,000 \u20AC',
+    tokenPrice: '0.20 / 0.65',
+    rpm: '600',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard', 'Premium'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Agentic',
+    label: 'Agentic',
+    color: '#4dd1e0',
+    basePrice: '5,000 \u20AC',
+    tokenPrice: '0.20 / 0.65',
+    rpm: '1,000',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard', 'Premium'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard3000 Template',
+    label: 'Enterprise',
+    color: '#5ec2ed',
+    basePrice: 'Custom',
+    tokenPrice: '0.20 / 0.65',
+    rpm: 'Custom',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard', 'Premium'],
+    isFilterAvailable: false,
+  },
 ];
+
+// Plan display config (legacy v1: pre-2026-04 5-tier structure)
+const legacyPlanConfigs = [
+  {
+    packageName: 'Tarif Basic Template',
+    label: 'Basic',
+    color: '#4de0af',
+    basePrice: '–',
+    tokenPrice: '3.53',
+    rpm: '20',
+    modelHost: ['T-Cloud'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard1000 Template',
+    label: 'Standard 1000',
+    color: '#4ad9cd',
+    basePrice: '1,000 €',
+    tokenPrice: '3.53',
+    rpm: '150',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard2000 Template',
+    label: 'Standard 2000',
+    color: '#4dd1e0',
+    basePrice: '2,000 €',
+    tokenPrice: '2.89',
+    rpm: '300',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard3000 Template',
+    label: 'Standard 3000',
+    color: '#5ec2ed',
+    basePrice: '3,000 €',
+    tokenPrice: '2.23',
+    rpm: '450',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+  {
+    packageName: 'Tarif Standard4000 Template',
+    label: 'Standard 4000',
+    color: '#84b0f5',
+    basePrice: '4,000 €',
+    tokenPrice: '1.75',
+    rpm: '600',
+    modelHost: ['T-Cloud', 'External'],
+    modelTier: ['Standard'],
+    isFilterAvailable: true,
+  },
+];
+
+const planConfigs = legacy ? legacyPlanConfigs : currentPlanConfigs;
 
 // Helper: parse deployment region
 function parseCloud(deploymentRegion: string): string {
@@ -75,8 +238,51 @@ function parseCloud(deploymentRegion: string): string {
   return deploymentRegion;
 }
 
+function parseModelHost(deploymentRegion: string): string {
+  return deploymentRegion.toLowerCase().startsWith('otc-') ? 'T-Cloud' : 'External';
+}
+
+function parseCloudProvider(deploymentRegion: string): string {
+  const lower = deploymentRegion.toLowerCase();
+  const provider = lower.split('-')[0];
+  if (provider === 'otc') return 'Telekom';
+  if (provider === 'azure') return 'Azure';
+  if (provider === 'gcp') return 'GCP';
+  return deploymentRegion;
+}
+
+function parseModelCreator(exactModelName: string | undefined, displayModelName: string): string {
+  const source = `${exactModelName || ''} ${displayModelName}`.toLowerCase();
+  const isOpenAIOSeries = /\bo\d+(?:[.-]|\b)/.test(source);
+  const isOpenAIAdaSeries = /\b(?:embedding\s+ada|text-embedding-ada|ada(?:[-\s]?\d+)?)\b/.test(source);
+
+  if (source.includes('claude')) return 'Anthropic';
+  if (source.includes('gemma')) return 'Google Gemma';
+  if (source.includes('gemini')) return 'Google Gemini';
+  if (
+    source.includes('gpt') ||
+    isOpenAIOSeries ||
+    isOpenAIAdaSeries ||
+    source.includes('codex') ||
+    source.includes('whisper')
+  )
+    return 'OpenAI';
+  if (source.includes('llama') || source.includes('meta')) return 'Meta';
+  if (source.includes('mistral')) return 'Mistral';
+  if (source.includes('qwen')) return 'Alibaba Cloud';
+  if (source.includes('jina')) return 'Jina AI';
+  if (source.includes('bge')) return 'BAAI';
+  if (source.includes('teuken') || source.includes('tsi') || source.includes('col qwen')) return 'T-Systems';
+
+  return 'Other';
+}
+
 const COUNTRY_CODES: Record<string, string> = {
-  germany: 'de', sweden: 'se', france: 'fr', europe: 'eu', us: 'us',
+  germany: 'de',
+  sweden: 'se',
+  france: 'fr',
+  europe: 'eu',
+  us: 'us',
 };
 
 function parseLocation(deploymentRegion: string): { name: string; code: string } {
@@ -88,181 +294,167 @@ function parseLocation(deploymentRegion: string): { name: string; code: string }
   return { name, code };
 }
 
-// Build plan data for client-side use
-const plansData = allPricing.map((plan: any) => {
-  const config = planConfigs.find(c => c.packageName === plan.packageName);
-  const models = (plan.modelQuotaConfigs || []).map((m: any) => {
-    const cloud = parseCloud(m.deploymentRegion);
-    const { name: locName, code: locCode } = parseLocation(m.deploymentRegion);
-    const rows: any[] = [{
-      cloud,
-      displayName: m.displayModelName,
-      subName: m.modelLabel || '',
-      inputPrice: m.inputPricePerMillionTokens,
-      outputPrice: m.outputPricePerMillionTokens,
-      serverLocation: locName,
-      locationCode: locCode,
-      inputTokenMin: m.inputTokenPerMinuteLimit,
-      outputTokenMin: m.outputTokenPerMinuteLimit,
-      rpm: m.requestPerMinuteLimit,
-      isSubRow: false,
-    }];
-    if (m.modelQuotaMetadata?.data) {
-      for (const sub of m.modelQuotaMetadata.data) {
-        rows.push({
-          cloud,
-          displayName: sub.displayModelName || m.displayModelName,
-          subName: sub.modelLabel || '',
-          inputPrice: sub.inputPricePerMillionTokens ?? m.inputPricePerMillionTokens,
-          outputPrice: sub.outputPricePerMillionTokens ?? m.outputPricePerMillionTokens,
-          serverLocation: locName,
-          locationCode: locCode,
-          inputTokenMin: sub.inputTokenPerMinuteLimit ?? m.inputTokenPerMinuteLimit,
-          outputTokenMin: sub.outputTokenPerMinuteLimit ?? m.outputTokenPerMinuteLimit,
-          rpm: sub.requestPerMinuteLimit ?? m.requestPerMinuteLimit,
-          isSubRow: true,
-        });
-      }
-    }
-    return rows;
-  }).flat();
+function mapModelRow(
+  model: any,
+  fallbackModel: any,
+  modelHost: string,
+  cloudProvider: string,
+  serverLocation: string,
+  locationCode: string,
+  isSubRow: boolean,
+) {
+  const exactModelName = model.exactModelName ?? fallbackModel.exactModelName;
+  const displayName = model.displayModelName || fallbackModel.displayModelName;
+
   return {
-    packageName: plan.packageName,
-    label: config?.label || plan.packageName,
-    models,
+    modelHost,
+    cloudProvider,
+    creator: parseModelCreator(exactModelName, displayName),
+    exactModelName: model.exactModelName,
+    modelTier: model.modelTier || 'Standard',
+    displayName,
+    subName: model.modelLabel || '',
+    inputPrice: model.inputPricePerMillionTokens ?? fallbackModel.inputPricePerMillionTokens,
+    outputPrice: model.outputPricePerMillionTokens ?? fallbackModel.outputPricePerMillionTokens,
+    tpm: model.inputTokenPerMinuteLimit ?? fallbackModel.inputTokenPerMinuteLimit,
+    contextWindow: model.contextWindow ?? fallbackModel.contextWindow ?? null,
+    termsOfUseUrl: model.termsOfUseUrl ?? fallbackModel.termsOfUseUrl ?? '',
+    dataProtectionUrl: model.dataProtectionUrl ?? fallbackModel.dataProtectionUrl ?? '',
+    serverLocation,
+    locationCode,
+    inputTokenMin: model.inputTokenPerMinuteLimit ?? fallbackModel.inputTokenPerMinuteLimit,
+    outputTokenMin: model.outputTokenPerMinuteLimit ?? fallbackModel.outputTokenPerMinuteLimit,
+    rpm: model.requestPerMinuteLimit ?? fallbackModel.requestPerMinuteLimit,
+    isSubRow,
   };
-});
+}
+
+// Build plan data for client-side use
+const plansData = allPricing
+  .map((plan: any) => {
+    const config = planConfigs.find((c) => c.packageName === plan.packageName);
+    // On the index page, where no specific plan is selected, ignore packages that are not present
+    // in planConfigs. This keeps the page scoped to filterable plans only, so the initial filter
+    // state and selected plan index are derived from the same plan set.
+    if (!selectedPlanId && (!config || !config.isFilterAvailable)) return null;
+    if (selectedPlanId && plan.packageName !== selectedPlanId) return null;
+    const models = (plan.modelQuotaConfigs || [])
+      .map((m: any) => {
+        const modelHost = parseModelHost(m.deploymentRegion);
+        const cloudProvider = parseCloudProvider(m.deploymentRegion);
+        const { name: locName, code: locCode } = parseLocation(m.deploymentRegion);
+        const rows: any[] = [mapModelRow(m, m, modelHost, cloudProvider, locName, locCode, false)];
+        if (m.modelQuotaMetadata?.data) {
+          for (const sub of m.modelQuotaMetadata.data) {
+            rows.push(mapModelRow(sub, m, modelHost, cloudProvider, locName, locCode, true));
+          }
+        }
+        return rows;
+      })
+      .flat();
+    return {
+      packageName: plan.packageName,
+      isFilterAvailable: config?.isFilterAvailable,
+      label: config?.label || plan.packageName,
+      models,
+    };
+  })
+  .filter(Boolean);
 
 const showRatePlans = !selectedPlanId;
-const initialPlanIndex = selectedPlanId
-  ? plansData.findIndex((p: any) => p.packageName === selectedPlanId)
-  : 0;
-const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
+const initialPlanIndex = selectedPlanId ? plansData.findIndex((p: any) => p.packageName === selectedPlanId) : 0;
 ---
 
-<div class="plans-page" data-plans={JSON.stringify(plansData)} data-initial-index={effectiveIndex} data-locked={selectedPlanId ? 'true' : 'false'} data-t={JSON.stringify(t)}>
-
-  {showRatePlans && (
-    <section class="rate-plans-section">
-      <h2>{t.ratePlansTitle}</h2>
-      <p>{t.subtitle}</p>
-      <p>{t.subtitle2}</p>
-      <div class="table-wrapper">
-        <table class="plans-table">
-          <thead>
-            <tr>
-              <th>{t.thPlan}</th>
-              <th>{t.thMinConsumption}</th>
-              <th>{t.thTokenPrice}<br/><small>{t.thTokenPriceUnit}</small></th>
-              <th>{t.thRPM}<br/><small>{t.thRPMUnit}</small></th>
-              <th>{t.thCloud}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {planConfigs.map(plan => (
+<div class="plans-page">
+  {
+    showRatePlans && (
+      <section class="rate-plans-section">
+        <h2>{t.ratePlansTitle}</h2>
+        <p class="par-description">{t.subtitle}</p>
+        <div class="table-wrapper">
+          <table class="plans-table">
+            <thead>
               <tr>
-                <td>
-                  <span class="plans-tag" style={`background:${plan.color};color:#000`}>
-                    {plan.label}
-                  </span>
-                </td>
-                <td>{plan.minConsumption}</td>
-                <td>{plan.tokenPrice}</td>
-                <td>{plan.rpm}</td>
-                <td>
-                  {plan.clouds.map((cloud, i) => (
-                    <>
-                      {i > 0 && ' '}
-                      <span class={`plans-tag ${cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud'}`}>
-                        {cloud}
-                      </span>
-                    </>
-                  ))}
-                </td>
+                <th>{t.thPlan}</th>
+                <th>{t.thBasePrice}</th>
+                <th>
+                  {t.thTokenPrice}
+                  <div class="plans-table__small-text">{t.thTokenPriceUnit}</div>
+                </th>
+                <th>
+                  {t.thRPM}
+                  <div class="plans-table__small-text">{t.thRPMUnit}</div>
+                </th>
+                <th>{t.thModelHost}</th>
+                {!legacy && <th>{t.thModelTier}</th>}
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <small>{t.footnote}</small>
-        <br/>
-        <small>
-          <a href={isDE ? '/de/reference/rate-limits' : '/reference/rate-limits'}>
-            {isDE ? 'Mehr zu Rate-Limits →' : 'Learn more about rate limits →'}
-          </a>
-        </small>
-      </div>
-    </section>
-  )}
-
-  <section class="models-section">
-    <h2>{t.modelsTitle}</h2>
-    <p>{t.modelsSubtitle}</p>
-
-    <div class="models-controls">
-      {!selectedPlanId && (
-        <div class="control-group">
-          <label for="plan-selector">{t.labelRatePlan}</label>
-          <select id="plan-selector">
-            {plansData.map((plan: any, i: number) => (
-              <option value={i} selected={i === effectiveIndex}>
-                {plan.label}
-              </option>
-            ))}
-          </select>
+            </thead>
+            <tbody>
+              {planConfigs.map((plan) => (
+                <tr>
+                  <td>
+                    <span class="plans-tag" style={`background:${plan.color};color:#000`}>
+                      {plan.label}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="plans-table__main-text">{plan.basePrice}</span>
+                  </td>
+                  <td>{plan.tokenPrice} *</td>
+                  <td>{plan.rpm} †</td>
+                  <td>
+                    {plan.modelHost.map((cloud, i) => (
+                      <>
+                        {i > 0 && ' '}
+                        <Tooltip text={hostTooltips[cloud] || cloud} maxWidth="26rem">
+                          <span class={`plans-tag ${cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud'}`}>{cloud}</span>
+                        </Tooltip>
+                      </>
+                    ))}
+                  </td>
+                  {!legacy && (
+                    <td>
+                      {plan.modelTier.map((tier, i) => (
+                        <>
+                          {i > 0 && ' '}
+                          <Tooltip text={tierTooltips[tier] || tier} maxWidth="24rem">
+                            <span class={`plans-tag ${tier === 'Premium' ? 'tag-premium' : 'tag-tier'}`}>{tier}</span>
+                          </Tooltip>
+                        </>
+                      ))}
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <small>{t.footnote}</small>
+          <br />
+          <small>
+            <a href={isDE ? '/de/reference/rate-limits' : '/reference/rate-limits'}>
+              {isDE ? 'Mehr zu Rate-Limits →' : 'Learn more about rate limits →'}
+            </a>
+          </small>
         </div>
-      )}
-      <div class="control-group">
-        <label for="model-search">{t.labelSearch}</label>
-        <input type="text" id="model-search" placeholder={t.placeholderSearch} />
-      </div>
-      <div class="control-group">
-        <label for="location-filter">{t.labelServerLocation}</label>
-        <select id="location-filter">
-          <option value="">{t.optionAll}</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label for="cloud-filter">{t.labelCloud}</label>
-        <select id="cloud-filter">
-          <option value="">{t.optionAll}</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label for="price-filter">{t.labelPriceRange}</label>
-        <select id="price-filter">
-          <option value="">{t.optionAll}</option>
-          <option value="0-2">{t.priceUnder2}</option>
-          <option value="2-5">{t.price2to5}</option>
-          <option value="5+">{t.priceOver5}</option>
-        </select>
-      </div>
-    </div>
+      </section>
+    )
+  }
 
-    <div class="table-wrapper">
-      <table class="plans-table" id="models-table">
-        <thead>
-          <tr>
-            <th>{t.thDPLocation}</th>
-            <th data-sort="displayName">{t.thModelName} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="inputPrice">{t.thInputPrice}<br/><small>&euro;/Mil. Tokens</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="outputPrice">{t.thOutputPrice}<br/><small>&euro;/Mil. Tokens</small> <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="cloud">{t.thHostingPlatform} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="serverLocation">{t.thServerLocation} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="inputTokenMin">{t.thInputTokenLimit} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="outputTokenMin">{t.thOutputTokenLimit} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-            <th data-sort="rpm">{t.thRPMLimit} <span class="sort-icon">&#x25B4;&#x25BE;</span></th>
-          </tr>
-        </thead>
-        <tbody id="models-tbody">
-          <!-- Populated by client-side script -->
-        </tbody>
-      </table>
-    </div>
-  </section>
+  <ModelsTable
+    plansData={plansData}
+    effectiveIndex={initialPlanIndex}
+    locked={Boolean(selectedPlanId)}
+    translations={t}
+    modelBrandIcons={modelBrandIcons}
+    hostTooltips={hostTooltips}
+    tierTooltips={tierTooltips}
+    testModelsSectionTitle={modelsSectionTitle}
+    legacy={legacy}
+  />
 </div>
 
 <script>
-  function initPlansPage() {
+  function initPlansPageLayout() {
     const container = document.querySelector('.plans-page') as HTMLElement;
     if (!container) return;
 
@@ -276,250 +468,45 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     // Tell the header grid to lay out as if there's a right sidebar,
     // since our content margin already mimics that alignment.
     document.documentElement.setAttribute('data-has-toc', '');
-
-    const plansData = JSON.parse(container.dataset.plans || '[]');
-    const translations = JSON.parse(container.dataset.t || '{}');
-    let currentIndex = parseInt(container.dataset.initialIndex || '0', 10);
-    const locked = container.dataset.locked === 'true';
-
-    const selector = document.getElementById('plan-selector') as HTMLSelectElement | null;
-    const searchInput = document.getElementById('model-search') as HTMLInputElement | null;
-    const locationFilter = document.getElementById('location-filter') as HTMLSelectElement | null;
-    const cloudFilter = document.getElementById('cloud-filter') as HTMLSelectElement | null;
-    const priceFilter = document.getElementById('price-filter') as HTMLSelectElement | null;
-    const tbody = document.getElementById('models-tbody') as HTMLTableSectionElement | null;
-    const table = document.getElementById('models-table') as HTMLTableElement | null;
-
-    let sortKey = '';
-    let sortAsc = true;
-    let searchTerm = '';
-
-    function populateFilterDropdowns() {
-      const plan = plansData[currentIndex];
-      if (!plan) return;
-
-      const locations = new Set<string>();
-      const clouds = new Set<string>();
-      for (const m of plan.models) {
-        if (m.serverLocation) locations.add(m.serverLocation);
-        if (m.cloud) clouds.add(m.cloud);
-      }
-
-      if (locationFilter) {
-        const current = locationFilter.value;
-        locationFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
-        [...locations].sort().forEach(loc => {
-          const opt = document.createElement('option');
-          opt.value = loc;
-          opt.textContent = loc;
-          if (loc === current) opt.selected = true;
-          locationFilter.appendChild(opt);
-        });
-      }
-
-      if (cloudFilter) {
-        const current = cloudFilter.value;
-        cloudFilter.innerHTML = `<option value="">${translations.optionAll || 'All'}</option>`;
-        [...clouds].sort().forEach(c => {
-          const opt = document.createElement('option');
-          opt.value = c;
-          opt.textContent = c;
-          if (c === current) opt.selected = true;
-          cloudFilter.appendChild(opt);
-        });
-      }
-    }
-
-    function getModels() {
-      const plan = plansData[currentIndex];
-      if (!plan) return [];
-      let models = [...plan.models];
-
-      if (searchTerm) {
-        const term = searchTerm.toLowerCase();
-        models = models.filter((m: any) =>
-          m.displayName.toLowerCase().includes(term) ||
-          m.subName.toLowerCase().includes(term) ||
-          m.cloud.toLowerCase().includes(term) ||
-          m.serverLocation.toLowerCase().includes(term)
-        );
-      }
-
-      if (locationFilter && locationFilter.value) {
-        const loc = locationFilter.value;
-        models = models.filter((m: any) => m.serverLocation === loc);
-      }
-
-      if (cloudFilter && cloudFilter.value) {
-        const cloud = cloudFilter.value;
-        models = models.filter((m: any) => m.cloud === cloud);
-      }
-
-      if (priceFilter && priceFilter.value) {
-        const val = priceFilter.value;
-        if (val === '0-2') {
-          models = models.filter((m: any) => m.inputPrice >= 0 && m.inputPrice < 2);
-        } else if (val === '2-5') {
-          models = models.filter((m: any) => m.inputPrice >= 2 && m.inputPrice < 5);
-        } else if (val === '5+') {
-          models = models.filter((m: any) => m.inputPrice >= 5);
-        }
-      }
-
-      if (sortKey) {
-        models.sort((a: any, b: any) => {
-          let va = a[sortKey];
-          let vb = b[sortKey];
-          if (typeof va === 'number' && typeof vb === 'number') {
-            return sortAsc ? va - vb : vb - va;
-          }
-          va = String(va).toLowerCase();
-          vb = String(vb).toLowerCase();
-          if (va < vb) return sortAsc ? -1 : 1;
-          if (va > vb) return sortAsc ? 1 : -1;
-          return 0;
-        });
-      }
-
-      return models;
-    }
-
-    function formatNumber(n: number): string {
-      return n != null ? n.toLocaleString('en-US') : '-';
-    }
-
-    function formatPrice(n: number): string {
-      return n != null ? n.toFixed(2) : '-';
-    }
-
-    function render() {
-      if (!tbody) return;
-      const models = getModels();
-      tbody.innerHTML = '';
-
-      for (const m of models) {
-        const tr = document.createElement('tr');
-        if (m.isSubRow) tr.classList.add('sub-row');
-
-        const cloudClass = m.cloud === 'T-Cloud' ? 'tag-tcloud' : 'tag-cloud';
-        const isEU = m.cloud === 'T-Cloud';
-        const dpLocation = isEU ? '<span class="fi fi-eu"></span> EU' : `\u{1F310} ${translations.euWorldwide || 'EU & Worldwide'}`;
-        tr.innerHTML = `
-          <td>${dpLocation}</td>
-          <td>
-            <strong>${m.displayName}</strong>
-            ${m.subName && m.subName !== m.displayName ? `<br><small>${m.subName}</small>` : ''}
-          </td>
-          <td><strong>&euro; ${formatPrice(m.inputPrice)}</strong></td>
-          <td><strong>&euro; ${formatPrice(m.outputPrice)}</strong></td>
-          <td><span class="plans-tag ${cloudClass}">${m.cloud}</span></td>
-          <td>${m.locationCode ? `<span class="fi fi-${m.locationCode}"></span> ` : ''}${m.serverLocation}</td>
-          <td>${formatNumber(m.inputTokenMin)}</td>
-          <td>${formatNumber(m.outputTokenMin)}</td>
-          <td>${formatNumber(m.rpm)}</td>
-        `;
-        tbody.appendChild(tr);
-      }
-
-      if (models.length === 0) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td colspan="9" style="text-align:center;padding:1rem;">${translations.noModels || 'No models found.'}</td>`;
-        tbody.appendChild(tr);
-      }
-
-      // Update sort icons
-      if (table) {
-        table.querySelectorAll('th[data-sort]').forEach(th => {
-          const icon = th.querySelector('.sort-icon') as HTMLElement;
-          if (!icon) return;
-          const key = (th as HTMLElement).dataset.sort;
-          if (key === sortKey) {
-            icon.textContent = sortAsc ? '\u25B4' : '\u25BE';
-            icon.classList.add('active');
-          } else {
-            icon.textContent = '\u25B4\u25BE';
-            icon.classList.remove('active');
-          }
-        });
-      }
-    }
-
-    // Event: plan selector
-    if (selector && !locked) {
-      selector.addEventListener('change', () => {
-        currentIndex = parseInt(selector.value, 10);
-        populateFilterDropdowns();
-        render();
-      });
-    }
-
-    // Event: search
-    if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        searchTerm = searchInput.value;
-        render();
-      });
-    }
-
-    // Event: location filter
-    if (locationFilter) {
-      locationFilter.addEventListener('change', () => render());
-    }
-
-    // Event: cloud filter
-    if (cloudFilter) {
-      cloudFilter.addEventListener('change', () => render());
-    }
-
-    // Event: price filter
-    if (priceFilter) {
-      priceFilter.addEventListener('change', () => render());
-    }
-
-    // Event: sortable headers
-    if (table) {
-      table.querySelectorAll('th[data-sort]').forEach(th => {
-        th.addEventListener('click', () => {
-          const key = (th as HTMLElement).dataset.sort || '';
-          if (sortKey === key) {
-            sortAsc = !sortAsc;
-          } else {
-            sortKey = key;
-            sortAsc = true;
-          }
-          render();
-        });
-      });
-    }
-
-    populateFilterDropdowns();
-    render();
   }
 
   // Run on initial load and on Astro page transitions
-  document.addEventListener('astro:page-load', initPlansPage);
+  document.addEventListener('astro:page-load', initPlansPageLayout);
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initPlansPage);
+    document.addEventListener('DOMContentLoaded', initPlansPageLayout);
   } else {
-    initPlansPage();
+    initPlansPageLayout();
   }
 </script>
 
 <style is:global>
   .plans-page {
     width: 100%;
+    --model-link-color: #4f5cff;
+    --model-link-icon-color: #000000;
+  }
+
+  :root[data-theme='dark'] .plans-page {
+    --model-link-color: #7d87ff;
+    --model-link-icon-color: #7d87ff;
   }
 
   .rate-plans-section {
     margin-bottom: 2rem;
   }
 
-  .models-section {
-    margin-bottom: 2rem;
-  }
-
   .table-wrapper {
     width: fit-content;
+    overflow: visible;
+  }
+
+  .table-wrapper > table {
+    border-radius: var(--sl-border-md);
+    overflow: visible;
+  }
+
+  .par-description {
+    width: min(100%, 54rem);
   }
 
   .plans-table {
@@ -530,8 +517,8 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
 
   .plans-table th,
   .plans-table td {
-    border: 1px solid var(--sl-color-gray-5);
-    padding: 0.35rem 0.4rem;
+    border: 0;
+    padding: 0.85rem 1.35rem;
     text-align: left;
   }
 
@@ -542,8 +529,29 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     vertical-align: middle;
   }
 
+  .plans-table__small-text {
+    font-weight: normal;
+    font-size: var(--sl-text-2xs);
+  }
+
+  .plans-table__main-text {
+    font-weight: 650;
+  }
+
   .plans-table tbody tr:hover {
     background: var(--sl-color-gray-6);
+  }
+
+  .plans-table thead tr {
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .plans-table tbody tr {
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .plans-table tbody tr:last-child {
+    border-bottom: 0;
   }
 
   .plans-table tbody tr.sub-row {
@@ -560,14 +568,29 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     white-space: nowrap;
   }
 
+  .plans-tag:hover {
+    cursor: pointer;
+  }
+
   .tag-tcloud {
     background: #e20074 !important;
-    color: var(--sl-color-white) !important;
+    color: white !important;
   }
 
   .tag-cloud {
     background: var(--sl-color-gray-5);
     color: var(--sl-color-white);
+  }
+
+  .tag-tier {
+    background: color-mix(in srgb, var(--sl-color-gray-5) 72%, white 28%);
+    color: var(--sl-color-text);
+  }
+
+  .tag-premium {
+    background: rgba(78, 201, 223, 0.28);
+    color: #238fa5;
+    box-shadow: inset 0 0 0 1px rgba(78, 201, 223, 0.22);
   }
 
   .sort-icon {
@@ -581,42 +604,15 @@ const effectiveIndex = initialPlanIndex >= 0 ? initialPlanIndex : 0;
     opacity: 1;
   }
 
-  .models-controls {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-    align-items: flex-end;
+  @media (max-width: 1200px) {
+    .par-description {
+      width: min(100%, 46rem);
+    }
   }
 
-  .control-group {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .control-group label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin: 0 0 0.2rem 0;
-    line-height: 1;
-  }
-
-  .control-group select,
-  .control-group input {
-    padding: 0.4rem 0.6rem;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 4px;
-    background: var(--sl-color-gray-6);
-    color: inherit;
-    font-size: 0.9rem;
-    height: 2rem;
-    min-width: 200px;
-    box-sizing: border-box;
-  }
-
-  .control-group select:focus,
-  .control-group input:focus {
-    outline: 2px solid #e20074;
-    outline-offset: -1px;
+  @media (max-width: 900px) {
+    .par-description {
+      width: 100%;
+    }
   }
 </style>

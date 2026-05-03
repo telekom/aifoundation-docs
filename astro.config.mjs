@@ -76,6 +76,17 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Plugins',
+					translations: { de: 'Plugins' },
+					items: [
+						{ label: 'Cline', translations: { de: 'Cline' }, slug: 'plugins/cline' },
+						{ label: 'Continue for VS Code', translations: { de: 'Continue für VS Code' }, slug: 'plugins/continue-vscode' },
+						{ label: 'Continue for JetBrains', translations: { de: 'Continue für JetBrains' }, slug: 'plugins/continue-jetbrains' },
+						{ label: 'OpenCode', translations: { de: 'OpenCode' }, slug: 'plugins/opencode' },
+						{ label: 'Roo Code', translations: { de: 'Roo Code' }, slug: 'plugins/roo-code' },
+					],
+				},
+				{
 					label: 'Reference',
 					translations: { de: 'Referenz' },
 					items: [
@@ -101,11 +112,15 @@ export default defineConfig({
 					translations: { de: 'Tarife & Preise' },
 					items: [
 						{ label: 'Plans Overview', translations: { de: 'Tarifübersicht' }, slug: 'plans' },
-						{ label: 'Basic', translations: { de: 'Basic' }, slug: 'plans/basic' },
-						{ label: 'Standard 1000', translations: { de: 'Standard 1000' }, slug: 'plans/standard-1000' },
-						{ label: 'Standard 2000', translations: { de: 'Standard 2000' }, slug: 'plans/standard-2000' },
-						{ label: 'Standard 3000', translations: { de: 'Standard 3000' }, slug: 'plans/standard-3000' },
-						{ label: 'Standard 4000', translations: { de: 'Standard 4000' }, slug: 'plans/standard-4000' },
+						{ label: 'Essential', translations: { de: 'Essential' }, slug: 'plans/essential' },
+						{ label: 'Professional', translations: { de: 'Professional' }, slug: 'plans/professional' },
+						{ label: 'Agentic', translations: { de: 'Agentic' }, slug: 'plans/agentic' },
+						{ label: 'Test / Preview', translations: { de: 'Test / Vorschau' }, slug: 'plans/test' },
+						// { label: 'Basic', translations: { de: 'Basic' }, slug: 'plans/basic' },
+						// { label: 'Standard 1000', translations: { de: 'Standard 1000' }, slug: 'plans/standard-1000' },
+						// { label: 'Standard 2000', translations: { de: 'Standard 2000' }, slug: 'plans/standard-2000' },
+						// { label: 'Standard 3000', translations: { de: 'Standard 3000' }, slug: 'plans/standard-3000' },
+						// { label: 'Standard 4000', translations: { de: 'Standard 4000' }, slug: 'plans/standard-4000' },
 					],
 				},
 				{ label: 'FAQ', translations: { de: 'FAQ' }, slug: 'faq' },

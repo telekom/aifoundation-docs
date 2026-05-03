@@ -1,0 +1,70 @@
+---
+title: "Roo Code"
+description: "Roo Code für AI Engineer, einen performanten Cline-Fork mit modusbasierten Guardrails auf AI Foundation Services, in Visual Studio Code installieren und konfigurieren."
+---
+
+Roo Code für AI Engineer ist eine angepasste Version von Roo Code für den Unternehmenseinsatz ohne Telemetrie. Als Fork von Cline behält es denselben Kern-Agent-Workflow bei und ergänzt ihn um zusätzliche Steuerungs- und Konfigurationsoptionen für Power-User.
+
+## Hauptfunktionen
+
+- Performanter Cline-Fork, optimiert auf Geschwindigkeit und Kostenkontrolle
+- Modusbasierte Guardrails, die Aktionen nach Rolle und Risiko begrenzen
+- Effiziente zeilenbasierte Diffs, um Rewrites großer Dateien zu reduzieren
+- Empfohlen, wenn Sie Agent-Power mit strikterer operativer Kontrolle möchten
+
+## Installation
+
+1. Laden Sie die Roo-Code-VS-Code-Erweiterung von [AI Coding Plugins](https://apikey.llmhub.t-systems.net/plugins) herunter.
+2. Wenn Sie eine bestehende Installation aktualisieren, löschen Sie den alten Roo-Code-Erweiterungsordner aus `.vscode/extensions`.
+3. Öffnen Sie in VS Code **Extensions**, klicken Sie auf das Drei-Punkte-Menü und wählen Sie **Install from VSIX**.
+4. Wählen Sie die heruntergeladene Datei aus und laden Sie VS Code neu.
+
+## Einrichtung
+
+1. Klicken Sie auf **Use without an account**.
+
+![Roo Code Onboarding Schritt 1](/img/roo_code_onboarding_1.png)
+
+2. Wählen Sie **3rd-party Provider**.
+
+![Roo Code Onboarding Schritt 2](/img/roo_code_onboarding_2.png)
+
+3. Setzen Sie den API-Provider:
+
+```text
+API Provider = OpenAI Compatible
+```
+
+4. Setzen Sie die Base URL:
+
+```text
+Base URL = https://llm-server.llmhub.t-systems.net/v2/coding
+```
+
+5. Erzeugen Sie einen API-Key in [LLM Serving API Keys](https://apikey.llmhub.t-systems.net/dashboard) und fügen Sie ihn in Roo Code ein:
+
+```text
+API Key = gen-************************************************
+```
+
+6. Wählen Sie eine Model-ID aus [Verfügbare Modelle](/de/getting-started/models) und klicken Sie auf **Finish**:
+
+```text
+Model = gpt-oss-120b
+```
+
+Sie können nun einen Chat starten und Roo Code in VS Code verwenden.
+
+## Aktualisierung
+
+Nach der Einrichtung kann Roo Code neu veröffentlichte Versionen automatisch beziehen. Wenn Sie VS Code starten oder neu laden und ein Update verfügbar ist, erscheint ein Popup.
+
+1. Klicken Sie auf **Yes**, um die neueste Version herunterzuladen.
+
+![Roo Code Update-Download-Hinweis](/img/roo_code_auto_update_1.png)
+
+2. Klicken Sie nach Abschluss des Downloads auf **Reload Now**, um die Erweiterung neu zu starten.
+
+![Roo Code Update-Reload-Hinweis](/img/roo_code_auto_update_2.png)
+
+Nach dem Neustart von Visual Studio Code ist die neueste Roo-Code-Version einsatzbereit.
