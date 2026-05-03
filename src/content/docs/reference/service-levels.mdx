@@ -1,24 +1,26 @@
 ---
 title: "Service Levels"
-description: "Availability targets, support response times, and maintenance policies for AI Foundation Services by plan tier."
+description: "Availability targets, support response times, and maintenance policies for AI Foundation Services by plan."
 ---
 
-Service level commitments vary by plan tier. This page summarizes availability targets, support response times, and operational policies.
+Service level commitments vary by plan. This page summarizes availability targets, support response times, and operational policies.
 
 ## Availability
 
 {/* TODO: confirm exact SLA percentages with team */}
 
-| Plan Tier | Availability Target | Monthly Downtime Budget |
+| Plan | Availability Target | Monthly Downtime Budget |
 |---|---|---|
-| Basic | Best-effort | — |
-| Standard 1000 | 99.5% | ~3h 39min |
-| Standard 2000 | 99.5% | ~3h 39min |
-| Standard 3000 | 99.9% | ~43min |
-| Standard 4000 | 99.9% | ~43min |
+| Essential | 99.5% | ~3h 39min |
+| Professional | 99.9% | ~43min |
+| Agentic | 99.9% | ~43min |
 
 :::note
-Availability targets for Azure-hosted models (GPT, o-series) are subject to upstream provider SLAs. The targets above apply to T-Cloud-hosted open-source models.
+Availability targets for Azure-hosted models (e.g. GPT-5.2, o-series) are subject to upstream provider SLAs. The targets above apply to T-Cloud-hosted open-source models.
+:::
+
+:::note
+**Preview models** (the Test catalog, e.g. `Gemma 4`) carry no availability commitment. Telekom may adjust or restrict preview-model usage at any time without prior notice.
 :::
 
 
@@ -28,17 +30,17 @@ Availability targets for Azure-hosted models (GPT, o-series) are subject to upst
 
 Response times are measured from ticket creation to first meaningful response during business hours (Mon–Fri, 08:00–18:00 CET).
 
-| Severity | Description | Basic | Standard 1000–2000 | Standard 3000–4000 |
+| Severity | Description | Essential | Professional | Agentic |
 |---|---|---|---|---|
-| **P1 — Critical** | Service fully unavailable | Best-effort | 4 hours | 1 hour |
-| **P2 — High** | Major feature degraded | Best-effort | 8 hours | 4 hours |
-| **P3 — Medium** | Minor issue, workaround available | Best-effort | 2 business days | 1 business day |
-| **P4 — Low** | General question or request | Best-effort | 5 business days | 3 business days |
+| **P1 — Critical** | Service fully unavailable | 8 hours | 4 hours | 1 hour |
+| **P2 — High** | Major feature degraded | 1 business day | 8 hours | 4 hours |
+| **P3 — Medium** | Minor issue, workaround available | 3 business days | 2 business days | 1 business day |
+| **P4 — Low** | General question or request | 5 business days | 5 business days | 3 business days |
 
 
 ## Planned Maintenance
 
-- **Maintenance windows** — Scheduled maintenance may occur on weekends between 22:00–06:00 CET. Customers on Standard tiers are notified at least 5 business days in advance.
+- **Maintenance windows** — Scheduled maintenance may occur on weekends between 22:00–06:00 CET. Customers are notified at least 5 business days in advance.
 - **Emergency maintenance** — Critical security patches or urgent fixes may be applied outside scheduled windows with best-effort advance notice.
 - **Impact** — Maintenance may cause brief service interruptions. We aim to keep downtime under 30 minutes per maintenance window.
 
@@ -46,8 +48,8 @@ Response times are measured from ticket creation to first meaningful response du
 ## Incident Communication
 
 - **Status page** — Real-time service health is available at the [Model Status](https://uptime.llmhub.t-systems.net/status/health) page.
-- **Notifications** — Standard-tier customers receive email notifications for P1/P2 incidents and planned maintenance.
-- **Post-incident reports** — Root cause analyses are shared for P1 incidents affecting Standard 3000+ customers.
+- **Notifications** — Professional and Agentic customers receive email notifications for P1/P2 incidents and planned maintenance.
+- **Post-incident reports** — Root cause analyses are shared for P1 incidents affecting Agentic customers.
 
 
 ## Escalation
