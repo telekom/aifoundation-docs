@@ -93,6 +93,8 @@ export default defineConfig({
 						{ label: 'API Endpoints', translations: { de: 'API-Endpunkte' }, slug: 'reference/api-endpoints' },
 						{ label: 'Error Codes', translations: { de: 'Fehlercodes' }, slug: 'reference/error-codes' },
 						{ label: 'Rate Limits', translations: { de: 'Rate-Limits' }, slug: 'reference/rate-limits' },
+						{ label: 'Service Levels', translations: { de: 'Service-Level' }, slug: 'reference/service-levels' },
+						{ label: 'Enterprise Trust', translations: { de: 'Enterprise Trust' }, slug: 'reference/enterprise-trust' },
 					],
 				},
 				{

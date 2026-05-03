@@ -1,0 +1,102 @@
+---
+title: "Enterprise Trust"
+description: "Security, compliance, data sovereignty, and AI Act alignment for AI Foundation Services as defined in the Service Description."
+---
+
+AI Foundation Services gives you a single OpenAI-compatible API across two clearly separated categories of models — those operated by Telekom in the EU/EEA, and those forwarded to third-party providers under their own terms. This page summarizes the trust and compliance posture; the [Service Description (PDF)](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) (v1.20) is the binding source.
+
+
+## Two Model Categories — Pick the Right One for Your Data
+
+The Service Description splits the catalog into two categories with materially different data-sovereignty profiles. **Selecting a model is selecting its data-handling regime.**
+
+### Category 1 — EU/EEA & adequacy-decision processing
+
+Operated by Telekom on T-Cloud Public. Examples:
+
+- Meta Llama 3.3 70B Instruct
+- Mistral Small 3
+- Alibaba Qwen3 (VL, Coder, Next variants)
+- OpenAI GPT-OSS-120B
+- DeutschlandGPT Llama-BildungsLLM
+- OpenAI Whisper Large v3 / v3 Turbo (STT)
+- Jina embeddings v2, BAAI BGE m3 (embeddings)
+
+For these models:
+
+- Data processing happens **inside the EU/EEA or in countries with an EU adequacy decision**
+- Customer prompts and returned results are **not stored**, **not viewable** by Telekom or third parties, and **not used for training**
+
+### Category 2 — Third-party providers, sub-processors worldwide
+
+Forwarded by Telekom directly to the third-party provider, who runs the model on its own infrastructure. Examples:
+
+- OpenAI GPT-4o, GPT-4.1 family, GPT-Image-1, o1/o3/o4 family, GPT-5 family, Ada-Text — on Microsoft Azure (France/Sweden)
+- Anthropic Claude (3.7, 4, 4.5, 4.6 Sonnet/Haiku/Opus) — on Google Cloud or Microsoft Azure
+- Google Gemini 2.5 / 3 family — on Google Cloud
+- Mistral Medium 3 — on Google Cloud
+
+For these models:
+
+- The third-party provider may operate **sub-processors worldwide**, so customer data may be processed worldwide
+- By selecting a Category 2 model, the customer **accepts the third-party provider's terms, license, and data-protection policies**
+- Outages of these third-party providers are excused from Telekom's [availability calculation](/reference/service-levels#excused-events)
+
+:::caution
+Certain data categories (for example social or health data under German law) **may not legally be processed outside the EU/EEA**. Reviewing the legal basis for using a specific model is the customer's sole responsibility.
+:::
+
+
+## EU AI Act Alignment
+
+- Telekom delivers the service in line with its applicable obligations under [Regulation (EU) 2024/1689](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689) (the AI Act).
+- The customer is contractually required to use the service in compliance with the AI Act.
+- The service is **not designed or permitted for high-risk AI systems** as defined by the AI Act, nor for any prohibited use case.
+- The service is **not a medical device** under MDR and may not be used for diagnosis, prevention, monitoring, prediction, prognosis, treatment, or alleviation of disease.
+
+
+## Certifications
+
+T-Systems operations are **ISO 27001** certified, covering information security management for the infrastructure and processes underlying AI Foundation Services.
+
+For the complete list of certifications applicable to T-Systems infrastructure, see the [T-Systems Certificates](https://www.t-systems.com/de/en/company/about-t-systems/t-systems-certificates) page.
+
+:::note
+Certification scope depends on the specific service and infrastructure layer. For questions about which certifications apply to your use case, contact the AIFS team.
+:::
+
+
+## GDPR & Data Processing
+
+- AI Foundation Services is delivered in compliance with [EU Regulation 2016/679 (GDPR)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679).
+- A **Data Processing Agreement (DPA)** based on Telekom's template is available on request — required if the customer processes personal data through the service.
+- Telekom acts as a data processor; the customer remains the data controller.
+- The customer is responsible for confirming that the data they submit is lawful to process, including processing-location restrictions.
+
+
+## Data Handling Summary
+
+| Aspect | Category 1 (EU-operated) | Category 2 (Third-party) |
+|---|---|---|
+| **Processing location** | EU/EEA or adequacy-decision country | Determined by third-party provider; may be worldwide |
+| **Storage** | Not stored | Per third-party provider's terms |
+| **Visibility** | Not viewable by Telekom or third parties | Per third-party provider's terms |
+| **Training use** | Not used for model training | Per third-party provider's terms |
+| **Encryption in transit** | TLS-secured (HTTPS) | TLS-secured (HTTPS) |
+| **Authentication** | API keys via [Self-Service Portal](https://apikey.llmhub.t-systems.net) | API keys via [Self-Service Portal](https://apikey.llmhub.t-systems.net) |
+
+
+## Termination & Data Deletion
+
+The service can be terminated with one month's notice to month-end. **Upon termination, all access is deactivated and customer data is deleted.** See [Service Levels: Termination](/reference/service-levels#termination).
+
+
+## Compliance & Procurement
+
+For enterprise procurement teams evaluating AI Foundation Services:
+
+- **Service Description (PDF)** — The [Leistungsbeschreibung](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) is the binding contractual document covering scope, SLAs, terms, and pricing.
+- **Compliance questionnaires** — Contact us to receive completed security questionnaires (CAIQ, VSA, or custom formats).
+- **Data processing agreement** — Request a DPA tailored to your requirements.
+- **Security documentation** — Available under NDA.
+- **Contact** — [ai@t-systems.com](mailto:ai@t-systems.com) or via the [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/).

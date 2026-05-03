@@ -16,7 +16,9 @@ exclude = [
 include_mail = false
 
 # Accept common success codes
-accept = [200, 204, 301, 302, 307, 308]
+# 202 included for upstream sites (e.g. EUR-Lex) that render pages async and
+# return Accepted on first request; the URL still exists and resolves.
+accept = [200, 202, 204, 301, 302, 307, 308]
 
 # Timeout per request
 timeout = 30

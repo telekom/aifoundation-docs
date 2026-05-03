@@ -1,0 +1,101 @@
+---
+title: "Service Levels"
+description: "Availability target, service credits, support hours, and maintenance policy for AI Foundation Services as defined in the Service Description."
+---
+
+This page summarizes the service level commitments from the [Service Description (PDF)](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) (v1.20). The PDF is the binding source — this page is a developer-friendly summary.
+
+
+## Availability
+
+The minimum availability of the LLM-Serving-Service at the service handover point (the API endpoint in T-Systems' data center) is **99.9%** during business hours within a calendar month, calculated as:
+
+> (Total service minutes − Total downtime minutes) ÷ Total service minutes × 100%
+
+Availability applies to all plans with a minimum monthly revenue commitment (Essential, Professional, Agentic).
+
+| Plan | Minimum Revenue | Availability Target |
+|---|---|---|
+| Essential | €1,000/month | 99.9% |
+| Professional | €3,000/month | 99.9% |
+| Agentic | €5,000/month | 99.9% |
+
+:::note
+Availability is measured against **business hours** (Mon–Fri, 9:00–17:00 CET/CEST, excluding German federal holidays), not 24/7.
+:::
+
+:::note
+**Test models** carry no availability commitment. Telekom may limit, restrict, or discontinue test-model access at any time without notice.
+:::
+
+
+### Excused events
+
+The following downtime is excluded from the availability calculation:
+
+- Outages caused by scheduled maintenance
+- Outages caused by the customer, customer's staff, or third parties attributable to the customer
+- Outages caused by force majeure or third parties outside Telekom's control
+- Outages of third-party LLM providers (i.e. models operated outside the EU/EEA — see [Enterprise Trust](/reference/enterprise-trust))
+
+
+### Service credits
+
+If Telekom fails to meet the 99.9% availability target and is solely responsible for the breach, customers may claim service credits within three months of the affected billing period:
+
+| Availability in Billing Period | Service Credit |
+|---|---|
+| `<99.9%` – 99.7% | 5% of minimum revenue |
+| `<99.7%` – 95% | 10% of minimum revenue |
+| `<95%` | 25% of minimum revenue |
+
+Credits are applied to the next monthly invoice or refunded after service termination. Service credits are the exclusive remedy for availability shortfalls.
+
+
+## Customer Support
+
+Customer support is the central contact point for the customer's named administrators (up to 5) as **2nd-level support**. The customer provides 1st-level support to its own users.
+
+| Aspect | Detail |
+|---|---|
+| **Hours** | Mon–Fri, 9:00–17:00 CET/CEST (excl. German federal holidays) |
+| **Channel** | Email address provided during onboarding |
+| **Scope** | Incident handling and service requests |
+| **Process** | Ticket opened → analysis → status email → closure |
+
+:::caution
+**No committed resolution times.** Per the Service Description, Telekom does not commit to specific resolution times for incidents and may resolve issues by providing a workaround. Tickets are processed only within business hours.
+:::
+
+
+## Planned Maintenance
+
+- Telekom performs regular maintenance and notifies the customer in advance when maintenance may interrupt service.
+- Telekom aims to minimize maintenance impact.
+- Maintenance does **not** count as downtime in the availability calculation.
+
+
+## Reporting
+
+For plans with minimum revenue, Telekom provides a **monthly availability report** on request, sent by email five business days after month-end. The report includes:
+
+- Availability summary (target met or not)
+- Per-month details with a 6-month history of incidents and outage durations
+- Minute-level downtime log within business hours for the current month
+- Change history
+
+Request the report from your support contact.
+
+
+## Termination
+
+The service can be terminated with **one month's notice to month-end** by emailing the contact address provided during onboarding, citing the contract number. Upon termination, all access is deactivated and customer data is deleted.
+
+
+## Escalation & Custom SLAs
+
+For urgent issues or enterprise-specific SLA requirements:
+
+- **Support portal** — Open a ticket through the [T-Cloud Marketplace](https://marketplace.otc.t-systems.com/)
+- **Direct contact** — [ai@t-systems.com](mailto:ai@t-systems.com)
+- **Custom SLAs** — Enterprise customers with [dedicated GPU instances](/files/Leistungsbeschreibung-LLM-Serving-Service.pdf) can negotiate custom availability targets and support terms
